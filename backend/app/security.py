@@ -19,6 +19,9 @@ def new_key(scope: str) -> tuple[str, str]:
     if scope == "ingest":
         random_part = base62(32)
         full = "trk_ing_" + random_part
+    elif scope == "admin":
+        random_part = base62(32)
+        full = "trk_adm_" + random_part
     else:
         random_part = base62(33)
         full = "trk_rd_" + random_part

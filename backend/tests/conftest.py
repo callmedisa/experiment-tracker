@@ -107,6 +107,8 @@ class Project:
         self.read_key = data["keys"]["read"]["key"]
         self.ingest_key_id = data["keys"]["ingest"]["id"]
         self.read_key_id = data["keys"]["read"]["id"]
+        self.admin_key = data["keys"]["admin"]["key"]
+        self.admin_key_id = data["keys"]["admin"]["id"]
         self.ingest = {"Authorization": f"Bearer {self.ingest_key}"}
 
 

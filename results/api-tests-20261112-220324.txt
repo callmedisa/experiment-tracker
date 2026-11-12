@@ -1,0 +1,279 @@
+time="2026-11-12T22:03:24+05:00" level=warning msg="Found orphan containers ([soup-task-api-run-4da1c12fa9b6]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container soup-task-postgres-1  Running
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-8.4.2, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+tracker settings used by this run: session_ttl_s=43200, cookie_secure=False, stale_after_s=300, max_body_bytes=1000000, max_points=1000, resync_threshold=10000, stats_interval_s=5.0, revalidate_s=2.0, stream_page=500, rl_projects_per_min=100000, rl_session_per_min=100000, rl_auth_fail_per_min=100000, rl_ingest_per_s=100000, trusted_proxy_hops=1, allowed_origins=(), fault_hooks=True
+database: tracker_test (fresh, created by the test session)
+rootdir: /app
+configfile: pytest.ini
+testpaths: tests
+plugins: asyncio-1.4.1.post1, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 97 items
+
+tests/test_auth.py::test_create_project_returns_both_keys_in_the_specified_format PASSED [  1%]
+tests/test_auth.py::test_project_name_rules PASSED                       [  2%]
+tests/test_auth.py::test_keys_are_stored_only_as_hmac_hashes PASSED      [  3%]
+tests/test_auth.py::test_bad_keys_all_look_the_same PASSED               [  4%]
+tests/test_auth.py::test_ingest_key_cannot_sign_in_and_read_key_cannot_ingest PASSED [  5%]
+tests/test_auth.py::test_ingest_routes_ignore_cookies PASSED             [  6%]
+tests/test_auth.py::test_sign_in_sets_a_strict_httponly_cookie_and_whoami_works PASSED [  7%]
+tests/test_auth.py::test_session_cookie_value_is_not_stored_in_the_database PASSED [  8%]
+tests/test_auth.py::test_no_cookie_and_expired_session PASSED            [  9%]
+tests/test_auth.py::test_sign_out_needs_csrf_and_kills_the_session PASSED [ 10%]
+tests/test_auth.py::test_csrf_rules_for_cookie_mutations PASSED          [ 11%]
+tests/test_auth.py::test_revoked_key_ends_its_sessions PASSED            [ 12%]
+tests/test_auth.py::test_a_read_key_can_read_but_cannot_manage_keys PASSED [ 13%]
+tests/test_auth.py::test_keys_list_never_contains_secrets PASSED         [ 14%]
+tests/test_auth.py::test_create_key_returns_the_secret_once_and_it_works PASSED [ 15%]
+tests/test_auth.py::test_rotate_revokes_old_key_immediately_and_new_key_works PASSED [ 16%]
+tests/test_auth.py::test_revoke_ingest_key PASSED                        [ 17%]
+tests/test_auth.py::test_cannot_revoke_the_last_active_admin_key PASSED  [ 18%]
+tests/test_auth.py::test_two_concurrent_revokes_cannot_remove_the_last_two_admin_keys PASSED [ 19%]
+tests/test_auth.py::test_rotating_the_only_admin_key_is_allowed PASSED   [ 20%]
+tests/test_auth.py::test_foreign_and_malformed_key_ids_are_plain_404 PASSED [ 21%]
+tests/test_auth.py::test_last_used_at_is_written_at_most_once_a_minute PASSED [ 22%]
+tests/test_auth.py::test_authenticated_and_error_responses_are_never_cacheable PASSED [ 23%]
+tests/test_auth.py::test_error_bodies_have_the_uniform_shape PASSED      [ 24%]
+tests/test_auth.py::test_foreign_missing_and_malformed_run_ids_are_indistinguishable PASSED [ 25%]
+tests/test_auth.py::test_get_run_shape_and_stale PASSED                  [ 26%]
+tests/test_auth.py::test_rate_limit_on_project_creation PASSED           [ 27%]
+tests/test_auth.py::test_failed_key_lookups_are_limited_per_ip PASSED    [ 28%]
+tests/test_auth.py::test_good_keys_do_not_consume_the_failure_budget PASSED [ 29%]
+tests/test_auth.py::test_session_attempts_are_limited PASSED             [ 30%]
+tests/test_auth.py::test_ingest_rate_limit_is_per_project PASSED         [ 31%]
+tests/test_auth.py::test_trusted_proxy_setting_uses_forwarded_for PASSED [ 32%]
+tests/test_auth.py::test_runs_list_aggregates_and_isolation PASSED       [ 34%]
+tests/test_config.py::test_default_pepper_logs_a_loud_warning PASSED     [ 35%]
+tests/test_config.py::test_custom_pepper_is_silent_and_never_logged PASSED [ 36%]
+tests/test_ingest.py::test_accepts_batch_and_assigns_consecutive_seq PASSED [ 37%]
+tests/test_ingest.py::test_second_batch_continues_numbering PASSED       [ 38%]
+tests/test_ingest.py::test_ts_is_optional_and_never_replaced_by_server_time PASSED [ 39%]
+tests/test_ingest.py::test_batch_retry_returns_original_and_stores_nothing PASSED [ 40%]
+tests/test_ingest.py::test_batch_retry_many_times_counts_every_retry PASSED [ 41%]
+tests/test_ingest.py::test_batch_retry_after_run_closed_still_gets_original_answer PASSED [ 42%]
+tests/test_ingest.py::test_same_batch_id_with_different_points_is_batch_conflict PASSED [ 43%]
+tests/test_ingest.py::test_batch_id_is_scoped_to_the_run PASSED          [ 44%]
+tests/test_ingest.py::test_resplit_batch_under_new_batch_id_is_deduped_by_point_id PASSED [ 45%]
+tests/test_ingest.py::test_fully_duplicate_batch_has_no_seq_range PASSED [ 46%]
+tests/test_ingest.py::test_same_point_repeated_inside_one_batch PASSED   [ 47%]
+tests/test_ingest.py::test_point_conflict_rejects_whole_batch_and_stores_nothing PASSED [ 48%]
+tests/test_ingest.py::test_point_conflict_on_metric_or_step_change_with_custom_id PASSED [ 49%]
+tests/test_ingest.py::test_conflict_inside_one_batch PASSED              [ 50%]
+tests/test_ingest.py::test_custom_point_ids_may_share_metric_and_step PASSED [ 51%]
+tests/test_ingest.py::test_minus_zero_is_not_silently_treated_as_same_as_zero PASSED [ 52%]
+tests/test_ingest.py::test_is_late_across_batches_and_within_a_batch PASSED [ 53%]
+tests/test_ingest.py::test_is_late_is_decided_per_metric PASSED          [ 54%]
+tests/test_ingest.py::test_late_point_still_gets_a_new_seq PASSED        [ 55%]
+tests/test_ingest.py::test_duplicate_does_not_change_late_state PASSED   [ 56%]
+tests/test_ingest.py::test_concurrent_distinct_batches_keep_seq_contiguous_and_blocks_unbroken PASSED [ 57%]
+tests/test_ingest.py::test_concurrent_identical_batch_is_stored_exactly_once PASSED [ 58%]
+tests/test_ingest.py::test_concurrent_overlapping_batches_under_different_ids_do_not_duplicate_or_leave_holes PASSED [ 59%]
+tests/test_ingest.py::test_concurrent_conflicting_writers_one_wins_others_get_409 PASSED [ 60%]
+tests/test_ingest.py::test_failure_mid_batch_stores_nothing_and_keeps_seq_contiguous PASSED [ 61%]
+tests/test_ingest.py::test_response_lost_after_commit_then_retry_does_not_double_count PASSED [ 62%]
+tests/test_ingest.py::test_many_random_failures_never_break_contiguity PASSED [ 63%]
+tests/test_ingest.py::test_fault_header_is_ignored_when_hooks_are_disabled PASSED [ 64%]
+tests/test_ingest.py::test_nan_and_infinity_are_rejected_naming_the_field PASSED [ 65%]
+tests/test_ingest.py::test_rejects_bad_shapes PASSED                     [ 67%]
+tests/test_ingest.py::test_batch_size_limits PASSED                      [ 68%]
+tests/test_ingest.py::test_closed_run_rejects_metrics PASSED             [ 69%]
+tests/test_ingest.py::test_batch_racing_a_finish_is_all_or_nothing PASSED [ 70%]
+tests/test_ingest.py::test_run_id_format_and_creation PASSED             [ 71%]
+tests/test_isolation.py::test_every_read_route_gives_the_same_404_for_foreign_missing_and_malformed_ids PASSED [ 72%]
+tests/test_isolation.py::test_b_marker_data_never_appears_in_any_response_to_a PASSED [ 73%]
+tests/test_isolation.py::test_runs_list_and_keys_list_contain_only_the_callers_project PASSED [ 74%]
+tests/test_isolation.py::test_a_cannot_write_to_or_finish_bs_run_with_any_id_variant PASSED [ 75%]
+tests/test_isolation.py::test_a_cannot_pass_a_project_id_anywhere PASSED [ 76%]
+tests/test_isolation.py::test_ingest_key_cannot_read_and_read_key_cannot_ingest_on_any_route PASSED [ 77%]
+tests/test_isolation.py::test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_session_key_on_every_session_route PASSED [ 78%]
+tests/test_isolation.py::test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin FAILED [ 79%]
+tests/test_isolation.py::test_foreign_key_ids_cannot_be_rotated_or_revoked PASSED [ 80%]
+tests/test_isolation.py::test_a_session_cookie_is_bound_to_its_own_project PASSED [ 81%]
+tests/test_isolation.py::test_logs_contain_no_keys_cookies_or_metric_payloads PASSED [ 82%]
+tests/test_stream.py::test_stats_first_then_replay_then_live_and_only_metric_has_id PASSED [ 83%]
+tests/test_stream.py::test_last_event_id_header_and_query_wins PASSED    [ 84%]
+tests/test_stream.py::test_stats_heartbeat_when_idle PASSED              [ 85%]
+tests/test_stream.py::test_late_flag_is_delivered PASSED                 [ 86%]
+tests/test_stream.py::test_duplicate_batch_is_sent_live_and_not_replayed PASSED [ 87%]
+tests/test_stream.py::test_closed_comes_after_the_last_event PASSED      [ 88%]
+tests/test_stream.py::test_resync_when_too_far_behind_or_cursor_ahead PASSED [ 89%]
+tests/test_stream.py::test_slow_reader_gets_resync_and_ingestion_is_not_slowed PASSED [ 90%]
+tests/test_stream.py::test_no_events_lost_or_duplicated_across_random_disconnects PASSED [ 91%]
+tests/test_stream.py::test_unauthenticated_foreign_and_wrong_credentials PASSED [ 92%]
+tests/test_stream.py::test_revoking_the_key_closes_open_streams PASSED   [ 93%]
+tests/test_stream.py::test_rotating_the_key_and_session_expiry_close_open_streams PASSED [ 94%]
+tests/test_stream.py::test_stream_still_delivers_when_the_listener_connection_dies PASSED [ 95%]
+tests/test_stream.py::test_stream_headers PASSED                         [ 96%]
+tests/test_stream.py::test_events_paging_and_limits PASSED               [ 97%]
+tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing PASSED [ 98%]
+tests/test_stream.py::test_events_seqs_integrity_are_404_for_foreign_runs PASSED [100%]
+
+=================================== FAILURES ===================================
+____ test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin ____
+
+client = <httpx.AsyncClient object at 0xffff82d75c70>
+
+    async def test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin(client):
+        a, b, run_a, run_b = await two_projects(client)
+        await sign_in(client, a.admin_key)
+        other_key = (await client.post("/keys", json={"label": "o", "scope": "ingest"}, headers=CSRF)).json()
+        muts = [("post", "/keys", {"label": "x", "scope": "read"}), ("post", f"/keys/{other_key['id']}/rotate", None),
+                ("post", f"/keys/{other_key['id']}/revoke", None), ("delete", "/session", None)]
+        bad_headers = [{}, {"X-Requested-With": "tracker"}, {"Origin": "http://test"}, {"X-Requested-With": "tracker", "Origin": "http://evil.example"},
+                       {"X-Requested-With": "tracker", "Origin": "null"}, {"X-Requested-With": "tracker", "Origin": "http://test.evil.example"}]
+        for method, path, body in muts:
+            for h in bad_headers:
+                r = await client.request(method, path, json=body, headers=h)
+                assert r.status_code == 403 and r.json()["code"] == "csrf_failed", (method, path, h, r.status_code)
+        keys = (await client.get("/keys")).json()["keys"]          # nothing happened
+>       assert len(keys) == 3 and all(k["revoked_at"] is None for k in keys)
+E       AssertionError: assert (4 == 3)
+E        +  where 4 = len([{'created_at': '2026-11-12T17:03:29.129290+00:00', 'id': '64b9a0f9-40e6-4827-a505-38ba16f0ccfd', 'label': 'o', 'last_used_at': None, ...}, {'created_at': '2026-11-12T17:03:29.109005+00:00', 'id': 'b8ce5404-d062-4224-af5d-f902900f36ec', 'label': 'Default admin', 'last_used_at': '2026-11-12T17:03:29.126083+00:00', ...}, {'created_at': '2026-11-12T17:03:29.108733+00:00', 'id': 'd5ad1667-9623-40a6-9dc4-71047d4d22c7', 'label': 'Default read', 'last_used_at': None, ...}, {'created_at': '2026-11-12T17:03:29.108090+00:00', 'id': '8db5d860-aef5-489d-9fe0-83ee7c6ba52f', 'label': 'Default ingest', 'last_used_at': '2026-11-12T17:03:29.113514+00:00', ...}])
+
+tests/test_isolation.py:223: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:03:29,102 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:03:29,103 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:03:29,109 INFO tracker.access b237fb2093d44930 POST /projects 201 6ms
+2026-11-12 17:03:29,109 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:03:29,111 INFO tracker.access 4b373fcca1cc472a POST /projects 201 1ms
+2026-11-12 17:03:29,111 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:03:29,114 INFO tracker.access 53d956c29bd74dba POST /runs 201 4ms
+2026-11-12 17:03:29,114 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:03:29,117 INFO tracker.access 7b019cd0be0e4e0e POST /runs 201 2ms
+2026-11-12 17:03:29,117 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:03:29,122 INFO tracker.access 96f7fb1e076a47ea POST /runs/run_JufObc6Vd7RWQHgxDsc5oi/metrics 200 5ms
+2026-11-12 17:03:29,122 INFO httpx HTTP Request: POST http://test/runs/run_JufObc6Vd7RWQHgxDsc5oi/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:03:29,124 INFO tracker.access 26148c3734ad4bb2 POST /runs/run_9zFlboCXOz5dY8yUult4v0/metrics 200 2ms
+2026-11-12 17:03:29,125 INFO httpx HTTP Request: POST http://test/runs/run_9zFlboCXOz5dY8yUult4v0/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:03:29,127 INFO tracker.access d78116c6efca4204 POST /session 200 3ms
+2026-11-12 17:03:29,127 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:03:29,129 INFO tracker.access 3123449ed2af4f5a POST /keys 201 2ms
+2026-11-12 17:03:29,129 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 201 Created"
+2026-11-12 17:03:29,130 INFO tracker.access d5612136802e48bb POST /keys 403 1ms
+2026-11-12 17:03:29,130 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,131 INFO tracker.access 4f1cff2a0347461f POST /keys 403 1ms
+2026-11-12 17:03:29,131 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,132 INFO tracker.access cf465314069b40fd POST /keys 403 1ms
+2026-11-12 17:03:29,132 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,132 INFO tracker.access fbec441b741f4b0e POST /keys 403 0ms
+2026-11-12 17:03:29,132 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,133 INFO tracker.access dd621bec821e4972 POST /keys 403 1ms
+2026-11-12 17:03:29,133 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,134 INFO tracker.access 4ec76bda97e94f3b POST /keys 403 0ms
+2026-11-12 17:03:29,134 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,134 INFO tracker.access 7635041db9b64f69 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+2026-11-12 17:03:29,135 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,135 INFO tracker.access 1ac52c0af098461c POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+2026-11-12 17:03:29,135 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,136 INFO tracker.access e25c3d1755894e58 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 1ms
+2026-11-12 17:03:29,136 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,137 INFO tracker.access 2ccb22d858334514 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+2026-11-12 17:03:29,137 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,137 INFO tracker.access b8508c5be5ea42c3 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+2026-11-12 17:03:29,137 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,138 INFO tracker.access beb9e5c1aa4c419f POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 1ms
+2026-11-12 17:03:29,138 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,139 INFO tracker.access 7d7601740b1d4897 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 1ms
+2026-11-12 17:03:29,139 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,139 INFO tracker.access 28baf223aa214693 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+2026-11-12 17:03:29,140 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,140 INFO tracker.access 63283fff934545c7 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 1ms
+2026-11-12 17:03:29,140 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,141 INFO tracker.access dccae10618f04221 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+2026-11-12 17:03:29,141 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,142 INFO tracker.access ffe8d16bdd9e4242 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+2026-11-12 17:03:29,142 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,142 INFO tracker.access 80b5a5c6f31a4a1c POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+2026-11-12 17:03:29,142 INFO httpx HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,143 INFO tracker.access 3e0fa6d17c2b4ecb DELETE /session 403 1ms
+2026-11-12 17:03:29,143 INFO httpx HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,144 INFO tracker.access b60840721b4c4166 DELETE /session 403 1ms
+2026-11-12 17:03:29,144 INFO httpx HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,144 INFO tracker.access ce890e5fa05f4249 DELETE /session 403 0ms
+2026-11-12 17:03:29,145 INFO httpx HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,145 INFO tracker.access bef6cb5e2bb54790 DELETE /session 403 1ms
+2026-11-12 17:03:29,145 INFO httpx HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,146 INFO tracker.access 4f1c54cb168c4349 DELETE /session 403 1ms
+2026-11-12 17:03:29,146 INFO httpx HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,147 INFO tracker.access 5c9a0312fe69464e DELETE /session 403 1ms
+2026-11-12 17:03:29,147 INFO httpx HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+2026-11-12 17:03:29,149 INFO tracker.access 143ee16ef88141b2 GET /keys 200 2ms
+2026-11-12 17:03:29,149 INFO httpx HTTP Request: GET http://test/keys "HTTP/1.1 200 OK"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 b237fb2093d44930 POST /projects 201 6ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 4b373fcca1cc472a POST /projects 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 53d956c29bd74dba POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 7b019cd0be0e4e0e POST /runs 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 96f7fb1e076a47ea POST /runs/run_JufObc6Vd7RWQHgxDsc5oi/metrics 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_JufObc6Vd7RWQHgxDsc5oi/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 26148c3734ad4bb2 POST /runs/run_9zFlboCXOz5dY8yUult4v0/metrics 200 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_9zFlboCXOz5dY8yUult4v0/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 d78116c6efca4204 POST /session 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 3123449ed2af4f5a POST /keys 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 d5612136802e48bb POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 4f1cff2a0347461f POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 cf465314069b40fd POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 fbec441b741f4b0e POST /keys 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 dd621bec821e4972 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 4ec76bda97e94f3b POST /keys 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 7635041db9b64f69 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 1ac52c0af098461c POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 e25c3d1755894e58 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 2ccb22d858334514 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 b8508c5be5ea42c3 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 beb9e5c1aa4c419f POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/rotate "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 7d7601740b1d4897 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 28baf223aa214693 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 63283fff934545c7 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 dccae10618f04221 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 ffe8d16bdd9e4242 POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 80b5a5c6f31a4a1c POST /keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/64b9a0f9-40e6-4827-a505-38ba16f0ccfd/revoke "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 3e0fa6d17c2b4ecb DELETE /session 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 b60840721b4c4166 DELETE /session 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 ce890e5fa05f4249 DELETE /session 403 0ms
+INFO     httpx:_client.py:1740 HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 bef6cb5e2bb54790 DELETE /session 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 4f1c54cb168c4349 DELETE /session 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 5c9a0312fe69464e DELETE /session 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: DELETE http://test/session "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 143ee16ef88141b2 GET /keys 200 2ms
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/keys "HTTP/1.1 200 OK"
+=========================== short test summary info ============================
+FAILED tests/test_isolation.py::test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin
+======================== 1 failed, 96 passed in 14.25s =========================
+

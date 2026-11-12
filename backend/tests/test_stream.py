@@ -63,7 +63,7 @@ async def setup(live, **over):
     app, url = await live(**{**FAST, **over})
     c = httpx.AsyncClient(base_url=url, timeout=10)
     p = await new_project(c)
-    assert (await sign_in(c, p.read_key)).status_code == 200
+    assert (await sign_in(c, p.admin_key)).status_code == 200
     run_id = (await c.post("/runs", json={"name": "r"}, headers=p.ingest)).json()["id"]
     return app, url, c, p, run_id
 

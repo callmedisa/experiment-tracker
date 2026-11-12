@@ -7,7 +7,7 @@ import { Banner, Icon } from "../components/ui";
 import { S, fmt } from "../strings";
 
 /** One-time keys live only in memory (module variable): never in the URL, storage or history state. */
-export let pendingKeys: { name: string; ingest: string; read: string } | null = null;
+export let pendingKeys: { name: string; ingest: string; read: string; admin: string } | null = null;
 export const clearPendingKeys = () => { pendingKeys = null; };
 
 export default function Landing() {
@@ -30,8 +30,8 @@ export default function Landing() {
     if (!/^[A-Za-z0-9-]{3,40}$/.test(name)) { setNameErr(S.signin.errName); return; }
     setBusy("create");
     try {
-      const r = await api<{ project: { name: string }; keys: { ingest: { key: string }; read: { key: string } } }>("/projects", { method: "POST", body: { name } });
-      pendingKeys = { name: r.project.name, ingest: r.keys.ingest.key, read: r.keys.read.key };
+      const r = await api<{ project: { name: string }; keys: { ingest: { key: string }; read: { key: string }; admin: { key: string } } }>("/projects", { method: "POST", body: { name } });
+      pendingKeys = { name: r.project.name, ingest: r.keys.ingest.key, read: r.keys.read.key, admin: r.keys.admin.key };
       nav("/keys-created");
     } catch (e) {
       const err = e as ApiError;
@@ -80,7 +80,7 @@ export default function Landing() {
             <button className="btn btn-primary btn-lg" disabled={busy !== ""}>{busy === "create" ? "Creating…" : S.signin.createCta}</button>
           </form>
           <form className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }} onSubmit={signIn} noValidate>
-            <div><h2 className="t-20">{S.signin.keyTitle}</h2><p className="muted" style={{ marginTop: 4 }}>Paste a read key. It starts with <span className="mono">trk_</span>.</p></div>
+            <div><h2 className="t-20">{S.signin.keyTitle}</h2><p className="muted" style={{ marginTop: 4 }}>Paste a read or admin key. It starts with <span className="mono">trk_</span>.</p></div>
             <div className="field">
               <label className="label" htmlFor="pkey">{S.signin.keyLabel}</label>
               <input id="pkey" className={`input mono ${keyErr ? "is-error" : ""}`} value={key} onChange={(e) => setKey(e.target.value)} placeholder="trk_…" autoComplete="off" spellCheck={false} aria-invalid={!!keyErr} aria-describedby="pkey-h" type="password" />

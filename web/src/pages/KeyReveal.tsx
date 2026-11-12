@@ -57,7 +57,7 @@ export default function KeyReveal() {
 
   async function cont() {
     setErr("");
-    try { await api("/session", { method: "POST", body: { key: k!.read } }); nav("/runs"); }
+    try { await api("/session", { method: "POST", body: { key: k!.admin } }); nav("/runs"); }
     catch { setErr(S.signin.errNetwork); }
   }
 
@@ -71,6 +71,7 @@ export default function KeyReveal() {
           <Banner tone="warn" icon="warn"><strong>These keys are shown once.</strong> {S.reveal.warning.replace("These keys are shown once. ", "")}</Banner>
           <Secret id="ingest-key" title={S.reveal.ingestTitle} scope="ingest" help={S.reveal.ingestHelp} value={k.ingest} />
           <Secret id="read-key" title={S.reveal.readTitle} scope="read" help={S.reveal.readHelp} value={k.read} />
+          <Secret id="admin-key" title={S.reveal.adminTitle} scope="admin" help={S.reveal.adminHelp} value={k.admin} />
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <h2 className="t-13" style={{ fontWeight: 600, fontSize: 14, flex: 1 }}>{S.reveal.snippetTitle}</h2>
             <div className="seg" role="group" aria-label="Language">

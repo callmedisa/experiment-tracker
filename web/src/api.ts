@@ -47,4 +47,4 @@ export interface RunInfo {
   last_seq: number; count: number; duplicates_ignored: number; last_event_at: string | null; server_time: string; stale: boolean; stale_after_s: number;
 }
 
-export interface KeyRow { id: string; label: string; scope: "ingest" | "read"; prefix: string; created_at: string; last_used_at: string | null; revoked_at: string | null; key?: string }
+export interface KeyRow { id: string; label: string; scope: "ingest" | "read" | "admin"; prefix: string; created_at: string; last_used_at: string | null; revoked_at: string | null; key?: string }

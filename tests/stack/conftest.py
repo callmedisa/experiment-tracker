@@ -25,13 +25,13 @@ class Proj:
         r = self.c.post("/projects", json={"name": "stack-" + secrets.token_hex(4)})
         assert r.status_code == 201, r.text
         d = r.json()
-        self.id, self.ingest, self.read = d["project"]["id"], d["keys"]["ingest"], d["keys"]["read"]
+        self.id, self.ingest, self.read, self.admin = d["project"]["id"], d["keys"]["ingest"], d["keys"]["read"], d["keys"]["admin"]
         self.bearer = {"Authorization": "Bearer " + self.ingest["key"]}
         self.run_id = self.c.post("/runs", json={"name": "r"}, headers=self.bearer).json()["id"]
         self.c.post(f"/runs/{self.run_id}/metrics", headers=self.bearer,
                     json={"batch_id": "b1", "points": [{"metric": "stack-marker-metric", "step": i, "value": 7.0 + i} for i in range(5)]})
         self.signed = httpx.Client(base_url=base + "/api", timeout=15)       # a client holding this project's read session
-        assert self.signed.post("/session", json={"key": self.read["key"]}).status_code == 200
+        assert self.signed.post("/session", json={"key": self.admin["key"]}).status_code == 200  # admin: the stack tests also manage keys
 
     def csrf(self):
         return hdr(self.base)

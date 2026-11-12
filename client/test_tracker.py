@@ -99,3 +99,13 @@ def test_finish_flushes_first():
     run.log(0, loss=1.0)
     run.finish()
     assert [p for p, _ in t.requests] == ["/runs", "/runs/run_x/metrics", "/runs/run_x/finish"]
+
+
+def test_unsent_points_stay_buffered_after_giving_up_and_go_out_on_the_next_flush():
+    run, t, _ = make(["500"] * 3, batch_size=2, max_attempts=3)
+    run.log(0, loss=1.0)
+    with pytest.raises(tracker.TrackerError):
+        run.log(1, loss=0.9)  # batch of 2 fills up, the server is down, the client gives up
+    assert len(run._buf) == 2  # nothing was dropped
+    run.flush()  # the server is back
+    assert t.stored == 2 and run._buf == []

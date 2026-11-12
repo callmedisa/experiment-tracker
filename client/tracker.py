@@ -58,9 +58,13 @@ class Run:
             self.flush()
 
     def flush(self) -> None:
+        # Points leave the buffer only AFTER the server acknowledged them. If the server stays down past max_attempts,
+        # send_batch raises TrackerError and the unsent points are still here: calling flush() again later resends them
+        # (same content, same batch_id, so nothing is stored twice).
         while self._buf:
-            chunk, self._buf = self._buf[: self.batch_size], self._buf[self.batch_size:]
+            chunk = self._buf[: self.batch_size]
             self.send_batch(chunk)
+            del self._buf[: len(chunk)]
 
     def send_batch(self, points: list[dict], batch_id: Optional[str] = None) -> dict:
         """Send one batch, retrying with the SAME batch_id until it is acknowledged."""

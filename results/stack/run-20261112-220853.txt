@@ -1,0 +1,20 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- <repo>/.venv/bin/python
+rootdir: <repo>
+plugins: anyio-4.16.0
+collecting ... collected 12 items
+
+tests/stack/test_stack_isolation.py::test_no_shared_cache_in_the_compose_config PASSED [  8%]
+tests/stack/test_stack_isolation.py::test_same_url_with_a_and_b_cookies_never_serves_the_other_projects_body PASSED [ 16%]
+tests/stack/test_stack_isolation.py::test_conditional_requests_and_cache_headers_do_not_leak_or_revalidate PASSED [ 25%]
+tests/stack/test_stack_isolation.py::test_static_app_shell_is_not_cached_and_api_errors_are_private PASSED [ 33%]
+tests/stack/test_stack_isolation.py::test_csrf_through_the_gateway PASSED [ 41%]
+tests/stack/test_stack_isolation.py::test_malformed_ids_are_the_same_404_through_the_gateway_as_missing_ids PASSED [ 50%]
+tests/stack/test_stack_isolation.py::test_unknown_vs_foreign_vs_malformed_run_ids_take_the_same_time PASSED [ 58%]
+tests/stack/test_stack_isolation.py::test_container_logs_contain_no_secrets_cookies_or_payloads PASSED [ 66%]
+tests/stack/test_stack_isolation.py::test_stream_is_not_buffered_by_nginx_and_has_the_right_headers PASSED [ 75%]
+tests/stack/test_stack_isolation.py::test_rotating_or_revoking_a_key_closes_open_streams_through_nginx PASSED [ 83%]
+tests/stack/test_stack_isolation.py::test_old_ingest_key_is_dead_after_rotation_through_the_gateway PASSED [ 91%]
+tests/stack/test_zz_db_restart.py::test_signed_in_session_survives_a_postgres_restart PASSED [100%]
+
+============================= 12 passed in 19.85s ==============================

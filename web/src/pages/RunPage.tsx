@@ -75,7 +75,7 @@ function RunView({ store }: { store: RunStore }) {
     switch (state) {
       case "live": return <span className="chip chip-success chip-lg" title={S.conn.tipLive}><span className="live-dot" aria-hidden="true" />{S.conn.live}</span>;
       case "connecting": return <span className="chip chip-warn chip-lg" title={S.conn.tipReconnecting}><Icon n="spin" className="ic spin" />{S.conn.connecting}</span>;
-      case "reconnecting": return <span className="chip chip-warn chip-lg" title={S.conn.tipReconnecting}><Icon n="spin" className="ic spin" />{S.conn.reconnecting} <span className="num">attempt {conn.attempt} · {retryIn} s</span></span>;
+      case "reconnecting": return <span className="chip chip-warn chip-lg" title={S.conn.tipReconnecting}><Icon n="spin" className="ic spin" />{S.conn.reconnecting} <span className="num">attempt {conn.attempt} · {retryIn > 0 ? `next try in ${retryIn} s` : "trying now, waiting for the server"}</span></span>;
       case "catching_up": return <span className="chip chip-accent chip-lg" title={S.conn.tipCatching}><Icon n="down" />{S.conn.catching} <span className="num">{conn.replayDone}/{conn.replayTotal}</span></span>;
       case "offline": return <span className="chip chip-lg" title={S.conn.tipOffline}><Icon n="off" />{S.conn.offline}</span>;
       case "resync": return <span className="chip chip-danger chip-lg" title={S.conn.tipResync}><Icon n="warn" />{S.conn.resync}</span>;

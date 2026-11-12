@@ -161,8 +161,8 @@ def test_container_logs_contain_no_secrets_cookies_or_payloads(two):
     time.sleep(1)
     logs = compose_logs()
     assert "POST /runs" in logs or "/api/runs" in logs, "no request lines in the container logs: the check would be vacuous"
-    secrets_ = [a.ingest["key"], a.read["key"], b.ingest["key"], b.read["key"], new["key"], token, marker, "98765.4321",
-                a.read["key"][-12:], a.ingest["key"][-12:]]
+    secrets_ = [a.ingest["key"], a.read["key"], a.admin["key"], b.ingest["key"], b.read["key"], b.admin["key"], new["key"], token, marker, "98765.4321",
+                a.admin["key"][-12:], a.read["key"][-12:], a.ingest["key"][-12:]]
     for s in secrets_:
         assert s not in logs, f"{s[:10]}... found in container logs"
 

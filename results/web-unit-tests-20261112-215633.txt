@@ -1,0 +1,13 @@
+
+ RUN  v2.1.9 <repo>/web
+
+ ✓ test/chartNav.test.ts (6 tests) 2ms
+ ✓ test/runData.test.ts (5 tests) 2ms
+ ✓ test/connection.test.ts (10 tests) 4ms
+ ✓ test/checksum.test.ts (6 tests) 6ms
+
+ Test Files  4 passed (4)
+      Tests  27 passed (27)
+   Start at  21:56:34
+   Duration  245ms (transform 105ms, setup 0ms, collect 143ms, tests 14ms, environment 0ms, prepare 200ms)
+

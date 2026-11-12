@@ -10,19 +10,29 @@ const SHOTS = resolve(REPO, "results/ui");
 
 async function project(page: Page, request: any, name: string) {
   const p = await (await request.post("/api/projects", { data: { name: `${name}-${Date.now() % 1000000}` } })).json();
-  expect((await page.context().request.post("/api/session", { data: { key: p.keys.read.key } })).status()).toBe(200);
+  // admin key: the Keys page needs it (a read session can look at runs but not manage keys)
+  expect((await page.context().request.post("/api/session", { data: { key: p.keys.admin.key } })).status()).toBe(200);
   return { p, ingest: { Authorization: `Bearer ${p.keys.ingest.key}` } };
 }
 const row = (page: Page, label: string) => page.getByTestId("key-row").filter({ hasText: label });
 
 test.describe("keys page", () => {
+  test("a read-key session cannot manage keys: the page says so and offers no Create button", async ({ page, request }) => {
+    const p = await (await request.post("/api/projects", { data: { name: `keys-read-${Date.now() % 1000000}` } })).json();
+    expect((await page.context().request.post("/api/session", { data: { key: p.keys.read.key } })).status()).toBe(200);
+    await page.goto("/keys");
+    await expect(page.getByText(/Managing keys needs an admin key/)).toBeVisible();
+    await expect(page.getByTestId("create-key")).toHaveCount(0);
+    expect((await page.context().request.post("/api/keys", { data: { label: "x", scope: "admin" }, headers: CSRF })).status()).toBe(403);
+  });
+
   test("list, create, copy, use the new key, validation", async ({ page, request }) => {
     const { p } = await project(page, request, "keys-create");
     await page.goto("/keys");
-    await expect(page.getByTestId("key-row")).toHaveCount(2);
-    await expect(row(page, "Default read")).toContainText("this session");
-    await expect(row(page, "Default read")).toContainText(`trk_rd_${p.keys.read.prefix}…`);
-    await expect(page.locator("body")).not.toContainText(p.keys.read.key);               // the list never shows full keys
+    await expect(page.getByTestId("key-row")).toHaveCount(3);
+    await expect(row(page, "Default admin")).toContainText("this session");
+    await expect(row(page, "Default admin")).toContainText(`trk_adm_${p.keys.admin.prefix}…`);
+    await expect(page.locator("body")).not.toContainText(p.keys.admin.key);               // the list never shows full keys
 
     await page.getByTestId("create-key").click();
     await page.getByRole("button", { name: "Create key" }).last().click();               // empty label
@@ -63,7 +73,7 @@ test.describe("keys page", () => {
     expect(secret).not.toBe(p.keys.ingest.key);
   });
 
-  test("revoke needs the typed label; the last read key cannot be revoked", async ({ page, request }) => {
+  test("revoke needs the typed label; the last admin key cannot be revoked", async ({ page, request }) => {
     await project(page, request, "keys-revoke");
     await page.goto("/keys");
     await page.getByTestId("create-key").click();
@@ -77,21 +87,21 @@ test.describe("keys page", () => {
     await expect(go).toBeEnabled();
     await go.click();
     await expect(row(page, "temp-key")).toContainText("revoked");
-    // the only read key is the one this session uses
-    await page.getByRole("button", { name: "Revoke Default read" }).click();
-    await page.getByLabel(/Type .* to confirm/).fill("Default read");
+    // the only admin key is the one this session uses
+    await page.getByRole("button", { name: "Revoke Default admin" }).click();
+    await page.getByLabel(/Type .* to confirm/).fill("Default admin");
     await page.getByRole("button", { name: "Revoke key" }).click();
-    await expect(page.getByText("Create another read key before revoking the last one")).toBeVisible();
+    await expect(page.getByText("Create another admin key before revoking the last one")).toBeVisible();
     expect(new URL(page.url()).pathname).toBe("/keys");                                // still signed in
   });
 
   test("rotating the key of the current session: the new key stays on screen until copied, then sign-in", async ({ page, request }) => {
     await project(page, request, "keys-self");
     await page.goto("/keys");
-    await page.getByRole("button", { name: "Rotate Default read" }).click();
+    await page.getByRole("button", { name: "Rotate Default admin" }).click();
     await page.getByRole("button", { name: "Rotate key" }).click();
     const secret = await page.getByTestId("new-key").inputValue();
-    expect(secret).toMatch(/^trk_rd_/);
+    expect(secret).toMatch(/^trk_adm_/);
     await expect(page.getByRole("dialog")).toContainText("signed out when you continue");
     await page.waitForTimeout(2500);                                                   // the session is dead now; nothing may redirect yet
     expect(new URL(page.url()).pathname).toBe("/keys");
@@ -107,7 +117,7 @@ test.describe("keys page", () => {
     const { p } = await project(page, request, "keys-fixed");
     for (let i = 0; i < 14; i++) await page.context().request.post("/api/keys", { data: { label: `filler-${i}`, scope: "ingest" }, headers: CSRF });
     await page.goto("/keys");
-    await expect(page.getByTestId("key-row")).toHaveCount(16);
+    await expect(page.getByTestId("key-row")).toHaveCount(17);
     const tall = await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight + 100);
     expect(tall, "the page must be taller than the viewport for this check to mean anything").toBe(true);
     await page.getByRole("button", { name: "Rotate Default ingest" }).scrollIntoViewIfNeeded();

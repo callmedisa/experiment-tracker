@@ -1,0 +1,915 @@
+time="2026-11-12T22:02:22+05:00" level=warning msg="Found orphan containers ([soup-task-api-run-4da1c12fa9b6]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container soup-task-postgres-1  Running
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-8.4.2, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+tracker settings used by this run: session_ttl_s=43200, cookie_secure=False, stale_after_s=300, max_body_bytes=1000000, max_points=1000, resync_threshold=10000, stats_interval_s=5.0, revalidate_s=2.0, stream_page=500, rl_projects_per_min=100000, rl_session_per_min=100000, rl_auth_fail_per_min=100000, rl_ingest_per_s=100000, trusted_proxy_hops=1, allowed_origins=(), fault_hooks=True
+database: tracker_test (fresh, created by the test session)
+rootdir: /app
+configfile: pytest.ini
+testpaths: tests
+plugins: asyncio-1.4.1.post1, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 96 items
+
+tests/test_auth.py::test_create_project_returns_both_keys_in_the_specified_format PASSED [  1%]
+tests/test_auth.py::test_project_name_rules PASSED                       [  2%]
+tests/test_auth.py::test_keys_are_stored_only_as_hmac_hashes FAILED      [  3%]
+tests/test_auth.py::test_bad_keys_all_look_the_same PASSED               [  4%]
+tests/test_auth.py::test_ingest_key_cannot_sign_in_and_read_key_cannot_ingest PASSED [  5%]
+tests/test_auth.py::test_ingest_routes_ignore_cookies PASSED             [  6%]
+tests/test_auth.py::test_sign_in_sets_a_strict_httponly_cookie_and_whoami_works PASSED [  7%]
+tests/test_auth.py::test_session_cookie_value_is_not_stored_in_the_database PASSED [  8%]
+tests/test_auth.py::test_no_cookie_and_expired_session PASSED            [  9%]
+tests/test_auth.py::test_sign_out_needs_csrf_and_kills_the_session PASSED [ 10%]
+tests/test_auth.py::test_csrf_rules_for_cookie_mutations FAILED          [ 11%]
+tests/test_auth.py::test_revoked_read_key_ends_its_sessions FAILED       [ 12%]
+tests/test_auth.py::test_keys_list_never_contains_secrets FAILED         [ 13%]
+tests/test_auth.py::test_create_key_returns_the_secret_once_and_it_works FAILED [ 14%]
+tests/test_auth.py::test_rotate_revokes_old_key_immediately_and_new_key_works FAILED [ 15%]
+tests/test_auth.py::test_revoke_ingest_key FAILED                        [ 16%]
+tests/test_auth.py::test_cannot_revoke_the_last_active_read_key FAILED   [ 17%]
+tests/test_auth.py::test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys FAILED [ 18%]
+tests/test_auth.py::test_rotating_the_only_read_key_is_allowed FAILED    [ 19%]
+tests/test_auth.py::test_foreign_and_malformed_key_ids_are_plain_404 FAILED [ 20%]
+tests/test_auth.py::test_last_used_at_is_written_at_most_once_a_minute PASSED [ 21%]
+tests/test_auth.py::test_authenticated_and_error_responses_are_never_cacheable PASSED [ 22%]
+tests/test_auth.py::test_error_bodies_have_the_uniform_shape PASSED      [ 23%]
+tests/test_auth.py::test_foreign_missing_and_malformed_run_ids_are_indistinguishable PASSED [ 25%]
+tests/test_auth.py::test_get_run_shape_and_stale PASSED                  [ 26%]
+tests/test_auth.py::test_rate_limit_on_project_creation PASSED           [ 27%]
+tests/test_auth.py::test_failed_key_lookups_are_limited_per_ip PASSED    [ 28%]
+tests/test_auth.py::test_good_keys_do_not_consume_the_failure_budget PASSED [ 29%]
+tests/test_auth.py::test_session_attempts_are_limited PASSED             [ 30%]
+tests/test_auth.py::test_ingest_rate_limit_is_per_project PASSED         [ 31%]
+tests/test_auth.py::test_trusted_proxy_setting_uses_forwarded_for PASSED [ 32%]
+tests/test_auth.py::test_runs_list_aggregates_and_isolation PASSED       [ 33%]
+tests/test_config.py::test_default_pepper_logs_a_loud_warning PASSED     [ 34%]
+tests/test_config.py::test_custom_pepper_is_silent_and_never_logged PASSED [ 35%]
+tests/test_ingest.py::test_accepts_batch_and_assigns_consecutive_seq PASSED [ 36%]
+tests/test_ingest.py::test_second_batch_continues_numbering PASSED       [ 37%]
+tests/test_ingest.py::test_ts_is_optional_and_never_replaced_by_server_time PASSED [ 38%]
+tests/test_ingest.py::test_batch_retry_returns_original_and_stores_nothing PASSED [ 39%]
+tests/test_ingest.py::test_batch_retry_many_times_counts_every_retry PASSED [ 40%]
+tests/test_ingest.py::test_batch_retry_after_run_closed_still_gets_original_answer PASSED [ 41%]
+tests/test_ingest.py::test_same_batch_id_with_different_points_is_batch_conflict PASSED [ 42%]
+tests/test_ingest.py::test_batch_id_is_scoped_to_the_run PASSED          [ 43%]
+tests/test_ingest.py::test_resplit_batch_under_new_batch_id_is_deduped_by_point_id PASSED [ 44%]
+tests/test_ingest.py::test_fully_duplicate_batch_has_no_seq_range PASSED [ 45%]
+tests/test_ingest.py::test_same_point_repeated_inside_one_batch PASSED   [ 46%]
+tests/test_ingest.py::test_point_conflict_rejects_whole_batch_and_stores_nothing PASSED [ 47%]
+tests/test_ingest.py::test_point_conflict_on_metric_or_step_change_with_custom_id PASSED [ 48%]
+tests/test_ingest.py::test_conflict_inside_one_batch PASSED              [ 50%]
+tests/test_ingest.py::test_custom_point_ids_may_share_metric_and_step PASSED [ 51%]
+tests/test_ingest.py::test_minus_zero_is_not_silently_treated_as_same_as_zero PASSED [ 52%]
+tests/test_ingest.py::test_is_late_across_batches_and_within_a_batch PASSED [ 53%]
+tests/test_ingest.py::test_is_late_is_decided_per_metric PASSED          [ 54%]
+tests/test_ingest.py::test_late_point_still_gets_a_new_seq PASSED        [ 55%]
+tests/test_ingest.py::test_duplicate_does_not_change_late_state PASSED   [ 56%]
+tests/test_ingest.py::test_concurrent_distinct_batches_keep_seq_contiguous_and_blocks_unbroken PASSED [ 57%]
+tests/test_ingest.py::test_concurrent_identical_batch_is_stored_exactly_once PASSED [ 58%]
+tests/test_ingest.py::test_concurrent_overlapping_batches_under_different_ids_do_not_duplicate_or_leave_holes PASSED [ 59%]
+tests/test_ingest.py::test_concurrent_conflicting_writers_one_wins_others_get_409 PASSED [ 60%]
+tests/test_ingest.py::test_failure_mid_batch_stores_nothing_and_keeps_seq_contiguous PASSED [ 61%]
+tests/test_ingest.py::test_response_lost_after_commit_then_retry_does_not_double_count PASSED [ 62%]
+tests/test_ingest.py::test_many_random_failures_never_break_contiguity PASSED [ 63%]
+tests/test_ingest.py::test_fault_header_is_ignored_when_hooks_are_disabled PASSED [ 64%]
+tests/test_ingest.py::test_nan_and_infinity_are_rejected_naming_the_field PASSED [ 65%]
+tests/test_ingest.py::test_rejects_bad_shapes PASSED                     [ 66%]
+tests/test_ingest.py::test_batch_size_limits PASSED                      [ 67%]
+tests/test_ingest.py::test_closed_run_rejects_metrics PASSED             [ 68%]
+tests/test_ingest.py::test_batch_racing_a_finish_is_all_or_nothing PASSED [ 69%]
+tests/test_ingest.py::test_run_id_format_and_creation PASSED             [ 70%]
+tests/test_isolation.py::test_every_read_route_gives_the_same_404_for_foreign_missing_and_malformed_ids PASSED [ 71%]
+tests/test_isolation.py::test_b_marker_data_never_appears_in_any_response_to_a PASSED [ 72%]
+tests/test_isolation.py::test_runs_list_and_keys_list_contain_only_the_callers_project FAILED [ 73%]
+tests/test_isolation.py::test_a_cannot_write_to_or_finish_bs_run_with_any_id_variant PASSED [ 75%]
+tests/test_isolation.py::test_a_cannot_pass_a_project_id_anywhere PASSED [ 76%]
+tests/test_isolation.py::test_ingest_key_cannot_read_and_read_key_cannot_ingest_on_any_route PASSED [ 77%]
+tests/test_isolation.py::test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_read_key_on_every_session_route FAILED [ 78%]
+tests/test_isolation.py::test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin FAILED [ 79%]
+tests/test_isolation.py::test_foreign_key_ids_cannot_be_rotated_or_revoked FAILED [ 80%]
+tests/test_isolation.py::test_a_session_cookie_is_bound_to_its_own_project PASSED [ 81%]
+tests/test_isolation.py::test_logs_contain_no_keys_cookies_or_metric_payloads FAILED [ 82%]
+tests/test_stream.py::test_stats_first_then_replay_then_live_and_only_metric_has_id PASSED [ 83%]
+tests/test_stream.py::test_last_event_id_header_and_query_wins PASSED    [ 84%]
+tests/test_stream.py::test_stats_heartbeat_when_idle PASSED              [ 85%]
+tests/test_stream.py::test_late_flag_is_delivered PASSED                 [ 86%]
+tests/test_stream.py::test_duplicate_batch_is_sent_live_and_not_replayed PASSED [ 87%]
+tests/test_stream.py::test_closed_comes_after_the_last_event PASSED      [ 88%]
+tests/test_stream.py::test_resync_when_too_far_behind_or_cursor_ahead PASSED [ 89%]
+tests/test_stream.py::test_slow_reader_gets_resync_and_ingestion_is_not_slowed PASSED [ 90%]
+tests/test_stream.py::test_no_events_lost_or_duplicated_across_random_disconnects PASSED [ 91%]
+tests/test_stream.py::test_unauthenticated_foreign_and_wrong_credentials PASSED [ 92%]
+tests/test_stream.py::test_revoking_the_key_closes_open_streams FAILED   [ 93%]
+tests/test_stream.py::test_rotating_the_key_and_session_expiry_close_open_streams FAILED [ 94%]
+tests/test_stream.py::test_stream_still_delivers_when_the_listener_connection_dies PASSED [ 95%]
+tests/test_stream.py::test_stream_headers PASSED                         [ 96%]
+tests/test_stream.py::test_events_paging_and_limits PASSED               [ 97%]
+tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing PASSED [ 98%]
+tests/test_stream.py::test_events_seqs_integrity_are_404_for_foreign_runs PASSED [100%]
+
+=================================== FAILURES ===================================
+___________________ test_keys_are_stored_only_as_hmac_hashes ___________________
+
+client = <httpx.AsyncClient object at 0xffff8cc0fda0>
+proj = <conftest.Project object at 0xffff8cc60e90>
+db = <sqlalchemy.ext.asyncio.engine.AsyncEngine object at 0xffff8cb85350>
+app = <fastapi.applications.FastAPI object at 0xffff8cc10050>
+
+    async def test_keys_are_stored_only_as_hmac_hashes(client, proj, db, app):
+        async with db.connect() as c:
+            rows = (await c.execute(text("SELECT key_hash, prefix FROM api_keys WHERE project_id=:p"), {"p": proj.id})).all()
+>       assert len(rows) == 2
+E       AssertionError: assert 3 == 2
+E        +  where 3 = len([('23a1a87b031113224e759f58eeb29028cc2da074a924acfb0b8494cbd0236169', '37op'), ('f23601ecd473fb2aea0584b6a1e8819681aac3e448b44101f4d8c4834477f285', '7GAQ'), ('dc92edc7202853393865159dd77cb5a9be40bf0164f8f5963fde011d71450916', 'ncuj')])
+
+tests/test_auth.py:35: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,359 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,359 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,371 INFO tracker.access df829ffc7b98450d POST /projects 201 11ms
+2026-11-12 17:02:25,371 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 df829ffc7b98450d POST /projects 201 11ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+_____________________ test_csrf_rules_for_cookie_mutations _____________________
+
+client = <httpx.AsyncClient object at 0xffff8cc04cb0>
+proj = <conftest.Project object at 0xffff8ccbeba0>
+
+    async def test_csrf_rules_for_cookie_mutations(client, proj):
+        await sign_in(client, proj.read_key)
+        body = {"label": "ci", "scope": "ingest"}
+        for headers in ({}, {"X-Requested-With": "tracker"}, {"Origin": "http://test"},
+                        {"X-Requested-With": "tracker", "Origin": "http://evil.example"},
+                        {"X-Requested-With": "xhr", "Origin": "http://test"}):
+            r = await client.post("/keys", json=body, headers=headers)
+            assert r.status_code == 403 and r.json()["code"] == "csrf_failed", headers
+>       assert (await client.post("/keys", json=body, headers=CSRF)).status_code == 201
+E       assert 403 == 201
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:124: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,646 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,647 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,654 INFO tracker.access 320311c308a1438d POST /projects 201 7ms
+2026-11-12 17:02:25,654 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 320311c308a1438d POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,658 INFO tracker.access 331d1fca752747a5 POST /session 200 4ms
+2026-11-12 17:02:25,659 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,660 INFO tracker.access 425499a1cc5c43fa POST /keys 403 1ms
+2026-11-12 17:02:25,660 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:25,661 INFO tracker.access 143c16c356974557 POST /keys 403 1ms
+2026-11-12 17:02:25,661 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:25,662 INFO tracker.access 453d6be96b5e4a93 POST /keys 403 1ms
+2026-11-12 17:02:25,662 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:25,662 INFO tracker.access ac31112504cb488d POST /keys 403 1ms
+2026-11-12 17:02:25,663 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:25,663 INFO tracker.access 6737abfcff9640d3 POST /keys 403 1ms
+2026-11-12 17:02:25,663 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:25,664 INFO tracker.access 5562abb683934366 POST /keys 403 1ms
+2026-11-12 17:02:25,664 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 331d1fca752747a5 POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 425499a1cc5c43fa POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 143c16c356974557 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 453d6be96b5e4a93 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 ac31112504cb488d POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 6737abfcff9640d3 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 5562abb683934366 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+___________________ test_revoked_read_key_ends_its_sessions ____________________
+
+client = <httpx.AsyncClient object at 0xffff8ccf94f0>
+proj = <conftest.Project object at 0xffff8ca6bb00>
+
+    async def test_revoked_read_key_ends_its_sessions(client, proj):
+        await sign_in(client, proj.read_key)
+        other = await client.post("/keys", json={"label": "second", "scope": "read"}, headers=CSRF)
+>       assert other.status_code == 201
+E       assert 403 == 201
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:131: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,671 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,671 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,679 INFO tracker.access dadda0f053854fda POST /projects 201 7ms
+2026-11-12 17:02:25,679 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 dadda0f053854fda POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,683 INFO tracker.access 1e678165901c474a POST /session 200 4ms
+2026-11-12 17:02:25,684 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,685 INFO tracker.access 256bc263b6e44918 POST /keys 403 1ms
+2026-11-12 17:02:25,685 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 1e678165901c474a POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 256bc263b6e44918 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+____________________ test_keys_list_never_contains_secrets _____________________
+
+client = <httpx.AsyncClient object at 0xffff8cc343e0>
+proj = <conftest.Project object at 0xffff8cc8db80>
+
+    async def test_keys_list_never_contains_secrets(client, proj):
+        await sign_in(client, proj.read_key)
+        r = await client.get("/keys")
+>       assert r.status_code == 200 and len(r.json()["keys"]) == 2
+E       assert (403 == 200)
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:145: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,692 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,692 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,702 INFO tracker.access e6ae0083ced14747 POST /projects 201 10ms
+2026-11-12 17:02:25,702 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 e6ae0083ced14747 POST /projects 201 10ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,708 INFO tracker.access 137775b85d2b4aab POST /session 200 6ms
+2026-11-12 17:02:25,709 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,711 INFO tracker.access 06dff64c726f4432 GET /keys 403 2ms
+2026-11-12 17:02:25,711 INFO httpx HTTP Request: GET http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 137775b85d2b4aab POST /session 200 6ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 06dff64c726f4432 GET /keys 403 2ms
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/keys "HTTP/1.1 403 Forbidden"
+_____________ test_create_key_returns_the_secret_once_and_it_works _____________
+
+client = <httpx.AsyncClient object at 0xffff8cb127b0>
+proj = <conftest.Project object at 0xffff8ccbddc0>
+
+    async def test_create_key_returns_the_secret_once_and_it_works(client, proj):
+        await sign_in(client, proj.read_key)
+        r = await client.post("/keys", json={"label": "ci", "scope": "ingest"}, headers=CSRF)
+>       assert r.status_code == 201
+E       assert 403 == 201
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:153: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,719 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,720 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,728 INFO tracker.access b22b67a355ce4307 POST /projects 201 8ms
+2026-11-12 17:02:25,728 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 b22b67a355ce4307 POST /projects 201 8ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,732 INFO tracker.access 898234a300594adb POST /session 200 4ms
+2026-11-12 17:02:25,733 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,734 INFO tracker.access fe993dad54eb401b POST /keys 403 1ms
+2026-11-12 17:02:25,734 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 898234a300594adb POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 fe993dad54eb401b POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+__________ test_rotate_revokes_old_key_immediately_and_new_key_works ___________
+
+client = <httpx.AsyncClient object at 0xffff8cc9f290>
+proj = <conftest.Project object at 0xffff8c847770>
+
+    async def test_rotate_revokes_old_key_immediately_and_new_key_works(client, proj):
+        await sign_in(client, proj.read_key)
+        r = await client.post(f"/keys/{proj.ingest_key_id}/rotate", headers=CSRF)
+>       assert r.status_code == 201 and r.json()["scope"] == "ingest" and r.json()["label"] == "Default ingest"
+E       assert (403 == 201)
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:165: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,740 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,741 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,748 INFO tracker.access 419c48d5b5274bbf POST /projects 201 7ms
+2026-11-12 17:02:25,748 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 419c48d5b5274bbf POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,752 INFO tracker.access 25dc4121bdb3490f POST /session 200 4ms
+2026-11-12 17:02:25,752 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,754 INFO tracker.access 133aedcddcfd4212 POST /keys/77a3b059-e5c9-4058-a85c-38a922388873/rotate 403 1ms
+2026-11-12 17:02:25,754 INFO httpx HTTP Request: POST http://test/keys/77a3b059-e5c9-4058-a85c-38a922388873/rotate "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 25dc4121bdb3490f POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 133aedcddcfd4212 POST /keys/77a3b059-e5c9-4058-a85c-38a922388873/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/77a3b059-e5c9-4058-a85c-38a922388873/rotate "HTTP/1.1 403 Forbidden"
+____________________________ test_revoke_ingest_key ____________________________
+
+client = <httpx.AsyncClient object at 0xffff8c875af0>
+proj = <conftest.Project object at 0xffff8c8121e0>
+
+    async def test_revoke_ingest_key(client, proj):
+        await sign_in(client, proj.read_key)
+        r = await client.post(f"/keys/{proj.ingest_key_id}/revoke", headers=CSRF)
+>       assert r.status_code == 200
+E       assert 403 == 200
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:177: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,760 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,760 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,768 INFO tracker.access 4166790d8acb43af POST /projects 201 7ms
+2026-11-12 17:02:25,768 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 4166790d8acb43af POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,773 INFO tracker.access 8b37974059ad4ab6 POST /session 200 5ms
+2026-11-12 17:02:25,773 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,775 INFO tracker.access 1f5b663a7a784700 POST /keys/90301b8a-f572-478b-b837-602d517d2d03/revoke 403 1ms
+2026-11-12 17:02:25,775 INFO httpx HTTP Request: POST http://test/keys/90301b8a-f572-478b-b837-602d517d2d03/revoke "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 8b37974059ad4ab6 POST /session 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 1f5b663a7a784700 POST /keys/90301b8a-f572-478b-b837-602d517d2d03/revoke 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/90301b8a-f572-478b-b837-602d517d2d03/revoke "HTTP/1.1 403 Forbidden"
+_________________ test_cannot_revoke_the_last_active_read_key __________________
+
+client = <httpx.AsyncClient object at 0xffff8cc9fda0>
+proj = <conftest.Project object at 0xffff8cc37f80>
+
+    async def test_cannot_revoke_the_last_active_read_key(client, proj):
+        await sign_in(client, proj.read_key)
+        r = await client.post(f"/keys/{proj.read_key_id}/revoke", headers=CSRF)
+>       assert r.status_code == 409 and r.json()["code"] == "last_read_key"
+E       assert (403 == 409)
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:186: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,782 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,782 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,789 INFO tracker.access 9f621818ed4e4343 POST /projects 201 7ms
+2026-11-12 17:02:25,789 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 9f621818ed4e4343 POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,794 INFO tracker.access f44100a565d64986 POST /session 200 4ms
+2026-11-12 17:02:25,794 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,795 INFO tracker.access 7d764718a7ff4ea7 POST /keys/c9947e20-1d9e-4fb1-8f06-a507a81b541c/revoke 403 1ms
+2026-11-12 17:02:25,795 INFO httpx HTTP Request: POST http://test/keys/c9947e20-1d9e-4fb1-8f06-a507a81b541c/revoke "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 f44100a565d64986 POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 7d764718a7ff4ea7 POST /keys/c9947e20-1d9e-4fb1-8f06-a507a81b541c/revoke 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/c9947e20-1d9e-4fb1-8f06-a507a81b541c/revoke "HTTP/1.1 403 Forbidden"
+_______ test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys _______
+
+client = <httpx.AsyncClient object at 0xffff8c84f8f0>
+proj = <conftest.Project object at 0xffff8c82ce00>
+app = <fastapi.applications.FastAPI object at 0xffff8cc8d5b0>
+db = <sqlalchemy.ext.asyncio.engine.AsyncEngine object at 0xffff8c71a810>
+
+    async def test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys(client, proj, app, db):
+        # Two read keys A (default) and B, each with its own session. Each session tries to revoke the OTHER key at once.
+        # Whichever commits first may also kill the other request's own session (401), or hit the guard (409).
+        # What must never happen: both revokes succeed, leaving the project with no read key.
+        await sign_in(client, proj.read_key)
+        b = (await client.post("/keys", json={"label": "second", "scope": "read"}, headers=CSRF)).json()
+        async with client_for(app) as c2:
+>           assert (await sign_in(c2, b["key"])).status_code == 200
+                                      ^^^^^^^^
+E           KeyError: 'key'
+
+tests/test_auth.py:197: KeyError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,802 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,802 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,812 INFO tracker.access d0b898f7561541ae POST /projects 201 10ms
+2026-11-12 17:02:25,813 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 d0b898f7561541ae POST /projects 201 10ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,818 INFO tracker.access d9a40a95dbd14668 POST /session 200 5ms
+2026-11-12 17:02:25,818 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,820 INFO tracker.access c18c28a7bb8e4217 POST /keys 403 1ms
+2026-11-12 17:02:25,820 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 d9a40a95dbd14668 POST /session 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 c18c28a7bb8e4217 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+__________________ test_rotating_the_only_read_key_is_allowed __________________
+
+client = <httpx.AsyncClient object at 0xffff8c869c70>
+proj = <conftest.Project object at 0xffff8c917200>
+app = <fastapi.applications.FastAPI object at 0xffff8c8693d0>
+
+    async def test_rotating_the_only_read_key_is_allowed(client, proj, app):
+        await sign_in(client, proj.read_key)
+        r = await client.post(f"/keys/{proj.read_key_id}/rotate", headers=CSRF)
+>       assert r.status_code == 201
+E       assert 403 == 201
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:213: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,827 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,827 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,836 INFO tracker.access f4b7385adbd2410c POST /projects 201 8ms
+2026-11-12 17:02:25,836 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 f4b7385adbd2410c POST /projects 201 8ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,841 INFO tracker.access 9fd6586de32640bc POST /session 200 4ms
+2026-11-12 17:02:25,841 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,842 INFO tracker.access 6e9234c6e8c04dde POST /keys/23a718d1-583e-4a18-9d5c-9201c4cdc951/rotate 403 1ms
+2026-11-12 17:02:25,843 INFO httpx HTTP Request: POST http://test/keys/23a718d1-583e-4a18-9d5c-9201c4cdc951/rotate "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 9fd6586de32640bc POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 6e9234c6e8c04dde POST /keys/23a718d1-583e-4a18-9d5c-9201c4cdc951/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/23a718d1-583e-4a18-9d5c-9201c4cdc951/rotate "HTTP/1.1 403 Forbidden"
+_______________ test_foreign_and_malformed_key_ids_are_plain_404 _______________
+
+client = <httpx.AsyncClient object at 0xffff8cb137d0>
+proj = <conftest.Project object at 0xffff8c875880>
+
+    async def test_foreign_and_malformed_key_ids_are_plain_404(client, proj):
+        other = await new_project(client)
+        await sign_in(client, proj.read_key)
+        bodies = set()
+        for kid in (other.ingest_key_id, "00000000-0000-0000-0000-000000000000", "not-a-uuid", "1"):
+            for path in ("rotate", "revoke"):
+                r = await client.post(f"/keys/{kid}/{path}", headers=CSRF)
+>               assert r.status_code == 404, (kid, path)
+E               AssertionError: ('a5e2ca24-9506-4d1f-beb5-9bae436c488f', 'rotate')
+E               assert 403 == 404
+E                +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_auth.py:227: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:25,849 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:25,849 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:25,856 INFO tracker.access 4f4b141c17994c60 POST /projects 201 7ms
+2026-11-12 17:02:25,856 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 4f4b141c17994c60 POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:25,859 INFO tracker.access 4050e4ce3d734936 POST /projects 201 2ms
+2026-11-12 17:02:25,859 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:25,863 INFO tracker.access a84df2673e0e4e4c POST /session 200 4ms
+2026-11-12 17:02:25,863 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:25,865 INFO tracker.access 1e27c5d9e9f74a50 POST /keys/a5e2ca24-9506-4d1f-beb5-9bae436c488f/rotate 403 1ms
+2026-11-12 17:02:25,865 INFO httpx HTTP Request: POST http://test/keys/a5e2ca24-9506-4d1f-beb5-9bae436c488f/rotate "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 4050e4ce3d734936 POST /projects 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 a84df2673e0e4e4c POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 1e27c5d9e9f74a50 POST /keys/a5e2ca24-9506-4d1f-beb5-9bae436c488f/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/a5e2ca24-9506-4d1f-beb5-9bae436c488f/rotate "HTTP/1.1 403 Forbidden"
+________ test_runs_list_and_keys_list_contain_only_the_callers_project _________
+
+client = <httpx.AsyncClient object at 0xffff8c84f3b0>
+
+    async def test_runs_list_and_keys_list_contain_only_the_callers_project(client):
+        a, b, run_a, run_b = await two_projects(client)
+        for _ in range(4):
+            await client.post("/runs", json={"name": "b-extra"}, headers=b.ingest)
+        await sign_in(client, a.read_key)
+        runs = (await client.get("/runs")).json()["runs"]
+        assert [r["id"] for r in runs] == [run_a]
+>       keys = (await client.get("/keys")).json()["keys"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'keys'
+
+tests/test_isolation.py:136: KeyError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:28,527 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:28,528 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:28,535 INFO tracker.access 6b27d94fd3b14329 POST /projects 201 7ms
+2026-11-12 17:02:28,535 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,536 INFO tracker.access c4d7664cf7c04401 POST /projects 201 1ms
+2026-11-12 17:02:28,537 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,540 INFO tracker.access de0a7b0945df4f8e POST /runs 201 4ms
+2026-11-12 17:02:28,540 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,542 INFO tracker.access 6eeb8aadc09143a7 POST /runs 201 2ms
+2026-11-12 17:02:28,542 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,549 INFO tracker.access b6ffaa749a254003 POST /runs/run_GDyfLkCSjPDg4AmVSZLApC/metrics 200 6ms
+2026-11-12 17:02:28,549 INFO httpx HTTP Request: POST http://test/runs/run_GDyfLkCSjPDg4AmVSZLApC/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,552 INFO tracker.access 11fd438f20af4467 POST /runs/run_zPX6OdbLYNzki4ONYCbYHv/metrics 200 2ms
+2026-11-12 17:02:28,552 INFO httpx HTTP Request: POST http://test/runs/run_zPX6OdbLYNzki4ONYCbYHv/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,553 INFO tracker.access 69ad503b424d41f7 POST /runs 201 1ms
+2026-11-12 17:02:28,553 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,554 INFO tracker.access b28cb315e8b741ef POST /runs 201 1ms
+2026-11-12 17:02:28,554 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,555 INFO tracker.access fca87781051b43ae POST /runs 201 1ms
+2026-11-12 17:02:28,555 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,556 INFO tracker.access 5c1dd4409bcd4b96 POST /runs 201 1ms
+2026-11-12 17:02:28,556 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,559 INFO tracker.access 815a391a8a1645e0 POST /session 200 3ms
+2026-11-12 17:02:28,559 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,564 INFO tracker.access 1a8486c0c04c4627 GET /runs 200 5ms
+2026-11-12 17:02:28,564 INFO httpx HTTP Request: GET http://test/runs "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,565 INFO tracker.access 204ca33c3f694ee4 GET /keys 403 1ms
+2026-11-12 17:02:28,565 INFO httpx HTTP Request: GET http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 6b27d94fd3b14329 POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 c4d7664cf7c04401 POST /projects 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 de0a7b0945df4f8e POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 6eeb8aadc09143a7 POST /runs 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 b6ffaa749a254003 POST /runs/run_GDyfLkCSjPDg4AmVSZLApC/metrics 200 6ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_GDyfLkCSjPDg4AmVSZLApC/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 11fd438f20af4467 POST /runs/run_zPX6OdbLYNzki4ONYCbYHv/metrics 200 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_zPX6OdbLYNzki4ONYCbYHv/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 69ad503b424d41f7 POST /runs 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 b28cb315e8b741ef POST /runs 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 fca87781051b43ae POST /runs 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 5c1dd4409bcd4b96 POST /runs 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 815a391a8a1645e0 POST /session 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 1a8486c0c04c4627 GET /runs 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 204ca33c3f694ee4 GET /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/keys "HTTP/1.1 403 Forbidden"
+_ test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_read_key_on_every_session_route _
+
+client = <httpx.AsyncClient object at 0xffff8c4a1c10>
+
+    async def test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_read_key_on_every_session_route(client):
+        a, b, run_a, run_b = await two_projects(client)
+        await sign_in(client, a.read_key)
+        extra = (await client.post("/keys", json={"label": "keep", "scope": "read"}, headers=CSRF)).json()
+>       assert (await client.post(f"/keys/{a.ingest_key_id}/revoke", headers=CSRF)).status_code == 200
+E       assert 403 == 200
+E        +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_isolation.py:198: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:28,749 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:28,749 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:28,756 INFO tracker.access d2de88e6c3204081 POST /projects 201 7ms
+2026-11-12 17:02:28,756 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,758 INFO tracker.access 24ad39a3ab2f4554 POST /projects 201 1ms
+2026-11-12 17:02:28,758 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,762 INFO tracker.access 8d4d9d4702034a29 POST /runs 201 4ms
+2026-11-12 17:02:28,762 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,764 INFO tracker.access a06d6f753d4545bf POST /runs 201 2ms
+2026-11-12 17:02:28,764 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,770 INFO tracker.access e33d1d04f1ad41dc POST /runs/run_dR9xIjuYo2flFB4GMtztV5/metrics 200 5ms
+2026-11-12 17:02:28,770 INFO httpx HTTP Request: POST http://test/runs/run_dR9xIjuYo2flFB4GMtztV5/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,773 INFO tracker.access ac01abd2a6724118 POST /runs/run_6Rz4UppvMYBs2XYQPwL3Jp/metrics 200 3ms
+2026-11-12 17:02:28,773 INFO httpx HTTP Request: POST http://test/runs/run_6Rz4UppvMYBs2XYQPwL3Jp/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,776 INFO tracker.access 38a4bd6de95248b1 POST /session 200 3ms
+2026-11-12 17:02:28,776 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,800 INFO tracker.access b0ea6b00e6d14e62 POST /keys 403 24ms
+2026-11-12 17:02:28,801 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:28,802 INFO tracker.access d4dd5a7b7ece4a86 POST /keys/c3a7baeb-a8f5-4a7d-81d8-6e4872fba8d8/revoke 403 1ms
+2026-11-12 17:02:28,802 INFO httpx HTTP Request: POST http://test/keys/c3a7baeb-a8f5-4a7d-81d8-6e4872fba8d8/revoke "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 d2de88e6c3204081 POST /projects 201 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 24ad39a3ab2f4554 POST /projects 201 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 8d4d9d4702034a29 POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 a06d6f753d4545bf POST /runs 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 e33d1d04f1ad41dc POST /runs/run_dR9xIjuYo2flFB4GMtztV5/metrics 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_dR9xIjuYo2flFB4GMtztV5/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 ac01abd2a6724118 POST /runs/run_6Rz4UppvMYBs2XYQPwL3Jp/metrics 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_6Rz4UppvMYBs2XYQPwL3Jp/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 38a4bd6de95248b1 POST /session 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 b0ea6b00e6d14e62 POST /keys 403 24ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 d4dd5a7b7ece4a86 POST /keys/c3a7baeb-a8f5-4a7d-81d8-6e4872fba8d8/revoke 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/c3a7baeb-a8f5-4a7d-81d8-6e4872fba8d8/revoke "HTTP/1.1 403 Forbidden"
+____ test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin ____
+
+client = <httpx.AsyncClient object at 0xffff8cc12ba0>
+
+    async def test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin(client):
+        a, b, run_a, run_b = await two_projects(client)
+        await sign_in(client, a.read_key)
+        other_key = (await client.post("/keys", json={"label": "o", "scope": "ingest"}, headers=CSRF)).json()
+>       muts = [("post", "/keys", {"label": "x", "scope": "read"}), ("post", f"/keys/{other_key['id']}/rotate", None),
+                                                                                      ^^^^^^^^^^^^^^^
+                ("post", f"/keys/{other_key['id']}/revoke", None), ("delete", "/session", None)]
+E       KeyError: 'id'
+
+tests/test_isolation.py:214: KeyError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:28,808 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:28,808 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:28,820 INFO tracker.access fa50740b78fe43ce POST /projects 201 12ms
+2026-11-12 17:02:28,820 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,822 INFO tracker.access 0d7597851e644891 POST /projects 201 2ms
+2026-11-12 17:02:28,823 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,827 INFO tracker.access 248c9b3766d04084 POST /runs 201 4ms
+2026-11-12 17:02:28,827 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,829 INFO tracker.access 90c0e01c434b4076 POST /runs 201 2ms
+2026-11-12 17:02:28,829 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,834 INFO tracker.access fcca729225c940fe POST /runs/run_ljQ8htP1Lmpj1nmUUpsSZe/metrics 200 5ms
+2026-11-12 17:02:28,834 INFO httpx HTTP Request: POST http://test/runs/run_ljQ8htP1Lmpj1nmUUpsSZe/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,837 INFO tracker.access 64251ff7aaef4443 POST /runs/run_ZLhbZy6Bkshv8AbBmKYRnw/metrics 200 2ms
+2026-11-12 17:02:28,837 INFO httpx HTTP Request: POST http://test/runs/run_ZLhbZy6Bkshv8AbBmKYRnw/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,840 INFO tracker.access 5346506e83eb42d6 POST /session 200 3ms
+2026-11-12 17:02:28,840 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,842 INFO tracker.access 2ee296fa6de44cab POST /keys 403 1ms
+2026-11-12 17:02:28,842 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 fa50740b78fe43ce POST /projects 201 12ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 0d7597851e644891 POST /projects 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 248c9b3766d04084 POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 90c0e01c434b4076 POST /runs 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 fcca729225c940fe POST /runs/run_ljQ8htP1Lmpj1nmUUpsSZe/metrics 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_ljQ8htP1Lmpj1nmUUpsSZe/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 64251ff7aaef4443 POST /runs/run_ZLhbZy6Bkshv8AbBmKYRnw/metrics 200 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_ZLhbZy6Bkshv8AbBmKYRnw/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 5346506e83eb42d6 POST /session 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 2ee296fa6de44cab POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+______________ test_foreign_key_ids_cannot_be_rotated_or_revoked _______________
+
+client = <httpx.AsyncClient object at 0xffff8cc63410>
+
+    async def test_foreign_key_ids_cannot_be_rotated_or_revoked(client):
+        a, b, run_a, run_b = await two_projects(client)
+        await sign_in(client, a.read_key)
+        for kid in (b.ingest_key_id, b.read_key_id):
+            for action in ("rotate", "revoke"):
+                r = await client.post(f"/keys/{kid}/{action}", headers=CSRF)
+>               assert r.status_code == 404 and r.json()["code"] == "not_found"
+E               assert (403 == 404)
+E                +  where 403 = <Response [403 Forbidden]>.status_code
+
+tests/test_isolation.py:233: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:28,848 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:28,849 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:28,855 INFO tracker.access a0a342af38984201 POST /projects 201 6ms
+2026-11-12 17:02:28,855 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,857 INFO tracker.access 3dfc93e502134a49 POST /projects 201 2ms
+2026-11-12 17:02:28,857 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,861 INFO tracker.access fcda780b3e18427b POST /runs 201 4ms
+2026-11-12 17:02:28,861 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,863 INFO tracker.access 0933ec912d5c4dd3 POST /runs 201 2ms
+2026-11-12 17:02:28,863 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,871 INFO tracker.access 8b8655c4ab5940d6 POST /runs/run_e9fv47ervjB6Z4XIqBZT2d/metrics 200 8ms
+2026-11-12 17:02:28,871 INFO httpx HTTP Request: POST http://test/runs/run_e9fv47ervjB6Z4XIqBZT2d/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,874 INFO tracker.access eab7f5e3cf3e43ac POST /runs/run_t1lhvqZ8vJ3lMNQltziXF6/metrics 200 3ms
+2026-11-12 17:02:28,874 INFO httpx HTTP Request: POST http://test/runs/run_t1lhvqZ8vJ3lMNQltziXF6/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,878 INFO tracker.access 3ae83599ded947f4 POST /session 200 3ms
+2026-11-12 17:02:28,878 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,880 INFO tracker.access 11746d957bc343c1 POST /keys/839b7531-6501-46c5-9125-e0bc34a11acd/rotate 403 1ms
+2026-11-12 17:02:28,880 INFO httpx HTTP Request: POST http://test/keys/839b7531-6501-46c5-9125-e0bc34a11acd/rotate "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 a0a342af38984201 POST /projects 201 6ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 3dfc93e502134a49 POST /projects 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 fcda780b3e18427b POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 0933ec912d5c4dd3 POST /runs 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 8b8655c4ab5940d6 POST /runs/run_e9fv47ervjB6Z4XIqBZT2d/metrics 200 8ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_e9fv47ervjB6Z4XIqBZT2d/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 eab7f5e3cf3e43ac POST /runs/run_t1lhvqZ8vJ3lMNQltziXF6/metrics 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_t1lhvqZ8vJ3lMNQltziXF6/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 3ae83599ded947f4 POST /session 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 11746d957bc343c1 POST /keys/839b7531-6501-46c5-9125-e0bc34a11acd/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/839b7531-6501-46c5-9125-e0bc34a11acd/rotate "HTTP/1.1 403 Forbidden"
+_____________ test_logs_contain_no_keys_cookies_or_metric_payloads _____________
+
+client = <httpx.AsyncClient object at 0xffff8c902180>
+caplog = <_pytest.logging.LogCaptureFixture object at 0xffff8b1901a0>
+
+    async def test_logs_contain_no_keys_cookies_or_metric_payloads(client, caplog):
+        caplog.set_level(logging.DEBUG)
+        a, b, run_a, run_b = await two_projects(client)
+        r = await sign_in(client, a.read_key)
+        token = client.cookies.get("tracker_session")
+        new_ing = (await client.post("/keys", json={"label": "n", "scope": "ingest"}, headers=CSRF)).json()
+        rot = (await client.post(f"/keys/{a.ingest_key_id}/rotate", headers=CSRF)).json()
+        marker = "MARKER_METRIC_f00dcafe"
+>       new_auth = {"Authorization": f"Bearer {rot['key']}"}      # the rotated key (the old one is revoked now)
+                                               ^^^^^^^^^^
+E       KeyError: 'key'
+
+tests/test_isolation.py:263: KeyError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:28,936 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:28,936 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:28,945 INFO tracker.access 0163c2d5ce91433b POST /projects 201 8ms
+2026-11-12 17:02:28,945 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,947 INFO tracker.access 06617d49b8644ae1 POST /projects 201 2ms
+2026-11-12 17:02:28,947 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,952 INFO tracker.access daab5248362941b9 POST /runs 201 5ms
+2026-11-12 17:02:28,952 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,954 INFO tracker.access 6bbb618e16e54963 POST /runs 201 2ms
+2026-11-12 17:02:28,955 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:28,961 INFO tracker.access 07066045f4ba4c63 POST /runs/run_YbcETyVRk0Zxi6x3efWTmo/metrics 200 6ms
+2026-11-12 17:02:28,961 INFO httpx HTTP Request: POST http://test/runs/run_YbcETyVRk0Zxi6x3efWTmo/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,964 INFO tracker.access f68ddd3c7bf94848 POST /runs/run_3HWx0WWehgEASIOEJdxtn0/metrics 200 3ms
+2026-11-12 17:02:28,965 INFO httpx HTTP Request: POST http://test/runs/run_3HWx0WWehgEASIOEJdxtn0/metrics "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,968 INFO tracker.access e456b7f8e0b241f6 POST /session 200 4ms
+2026-11-12 17:02:28,968 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:28,970 INFO tracker.access c8e8787bd4914352 POST /keys 403 1ms
+2026-11-12 17:02:28,970 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:28,972 INFO tracker.access 1e71dfaab1074b6a POST /keys/dbf0678c-5b5e-4e0d-a82e-95b25b964e6d/rotate 403 1ms
+2026-11-12 17:02:28,972 INFO httpx HTTP Request: POST http://test/keys/dbf0678c-5b5e-4e0d-a82e-95b25b964e6d/rotate "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+INFO     tracker.access:main.py:48 0163c2d5ce91433b POST /projects 201 8ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 06617d49b8644ae1 POST /projects 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 daab5248362941b9 POST /runs 201 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 6bbb618e16e54963 POST /runs 201 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 07066045f4ba4c63 POST /runs/run_YbcETyVRk0Zxi6x3efWTmo/metrics 200 6ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_YbcETyVRk0Zxi6x3efWTmo/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 f68ddd3c7bf94848 POST /runs/run_3HWx0WWehgEASIOEJdxtn0/metrics 200 3ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_3HWx0WWehgEASIOEJdxtn0/metrics "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 e456b7f8e0b241f6 POST /session 200 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 c8e8787bd4914352 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 1e71dfaab1074b6a POST /keys/dbf0678c-5b5e-4e0d-a82e-95b25b964e6d/rotate 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/dbf0678c-5b5e-4e0d-a82e-95b25b964e6d/rotate "HTTP/1.1 403 Forbidden"
+__________________ test_revoking_the_key_closes_open_streams ___________________
+
+live = <function live.<locals>._start at 0xffff8a78a0c0>
+
+    async def test_revoking_the_key_closes_open_streams(live):
+        app, url, c, p, rid = await setup(live)
+        second = (await c.post("/keys", json={"label": "second", "scope": "read"}, headers=csrf(url))).json()
+        viewer = httpx.AsyncClient(base_url=url)
+>       assert (await sign_in(viewer, second["key"])).status_code == 200
+                                      ^^^^^^^^^^^^^
+E       KeyError: 'key'
+
+tests/test_stream.py:292: KeyError
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:35,787 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:35,788 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:35,814 INFO tracker.access 6fd9a2dec74b4ce2 POST /projects 201 10ms
+2026-11-12 17:02:35,814 INFO httpx HTTP Request: POST http://127.0.0.1:60697/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:35,821 INFO tracker.access bf9b99a4d5c4457b POST /session 200 7ms
+2026-11-12 17:02:35,821 INFO httpx HTTP Request: POST http://127.0.0.1:60697/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:35,826 INFO tracker.access 7f353f6bb4434323 POST /runs 201 4ms
+2026-11-12 17:02:35,826 INFO httpx HTTP Request: POST http://127.0.0.1:60697/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:35,830 INFO tracker.access 1d820912f80247aa POST /keys 403 2ms
+2026-11-12 17:02:35,830 INFO httpx HTTP Request: POST http://127.0.0.1:60697/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 6fd9a2dec74b4ce2 POST /projects 201 10ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:60697/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 bf9b99a4d5c4457b POST /session 200 7ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:60697/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 7f353f6bb4434323 POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:60697/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 1d820912f80247aa POST /keys 403 2ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:60697/keys "HTTP/1.1 403 Forbidden"
+_________ test_rotating_the_key_and_session_expiry_close_open_streams __________
+
+live = <function live.<locals>._start at 0xffff8a74cc20>
+db = <sqlalchemy.ext.asyncio.engine.AsyncEngine object at 0xffff8cbf7a90>
+
+    async def test_rotating_the_key_and_session_expiry_close_open_streams(live, db):
+        app, url, c, p, rid = await setup(live)
+        v1, v2 = httpx.AsyncClient(base_url=url), httpx.AsyncClient(base_url=url)
+        k1 = (await c.post("/keys", json={"label": "a", "scope": "read"}, headers=csrf(url))).json()
+        k2 = (await c.post("/keys", json={"label": "b", "scope": "read"}, headers=csrf(url))).json()
+>       await sign_in(v1, k1["key"])
+                          ^^^^^^^^^
+E       KeyError: 'key'
+
+tests/test_stream.py:314: KeyError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-12 17:02:36,000 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:36,000 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+----------------------------- Captured stderr call -----------------------------
+2026-11-12 17:02:36,001 WARNING tracker SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+2026-11-12 17:02:36,001 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-12 17:02:36,029 INFO tracker.access d8d210a038124674 POST /projects 201 10ms
+2026-11-12 17:02:36,029 INFO httpx HTTP Request: POST http://127.0.0.1:53891/projects "HTTP/1.1 201 Created"
+2026-11-12 17:02:36,035 INFO tracker.access 4e6a6f96726b4f53 POST /session 200 5ms
+2026-11-12 17:02:36,035 INFO httpx HTTP Request: POST http://127.0.0.1:53891/session "HTTP/1.1 200 OK"
+2026-11-12 17:02:36,039 INFO tracker.access 47f61ba657ee4fc7 POST /runs 201 4ms
+2026-11-12 17:02:36,039 INFO httpx HTTP Request: POST http://127.0.0.1:53891/runs "HTTP/1.1 201 Created"
+2026-11-12 17:02:36,048 INFO tracker.access f73512e228994daa POST /keys 403 1ms
+2026-11-12 17:02:36,049 INFO httpx HTTP Request: POST http://127.0.0.1:53891/keys "HTTP/1.1 403 Forbidden"
+2026-11-12 17:02:36,050 INFO tracker.access d2e818dee4514511 POST /keys 403 1ms
+2026-11-12 17:02:36,050 INFO httpx HTTP Request: POST http://127.0.0.1:53891/keys "HTTP/1.1 403 Forbidden"
+------------------------------ Captured log call -------------------------------
+WARNING  tracker:main.py:54 SERVER_PEPPER is the public default from the repository. Key and session hashes can be checked by anyone who has a copy of the database. Set a random SERVER_PEPPER (make pepper). Changing it later invalidates every key and session.
+WARNING  tracker:main.py:82 FAULT_HOOKS are ENABLED: test use only
+INFO     tracker.access:main.py:48 d8d210a038124674 POST /projects 201 10ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:53891/projects "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 4e6a6f96726b4f53 POST /session 200 5ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:53891/session "HTTP/1.1 200 OK"
+INFO     tracker.access:main.py:48 47f61ba657ee4fc7 POST /runs 201 4ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:53891/runs "HTTP/1.1 201 Created"
+INFO     tracker.access:main.py:48 f73512e228994daa POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:53891/keys "HTTP/1.1 403 Forbidden"
+INFO     tracker.access:main.py:48 d2e818dee4514511 POST /keys 403 1ms
+INFO     httpx:_client.py:1740 HTTP Request: POST http://127.0.0.1:53891/keys "HTTP/1.1 403 Forbidden"
+=========================== short test summary info ============================
+FAILED tests/test_auth.py::test_keys_are_stored_only_as_hmac_hashes - Asserti...
+FAILED tests/test_auth.py::test_csrf_rules_for_cookie_mutations - assert 403 ...
+FAILED tests/test_auth.py::test_revoked_read_key_ends_its_sessions - assert 4...
+FAILED tests/test_auth.py::test_keys_list_never_contains_secrets - assert (40...
+FAILED tests/test_auth.py::test_create_key_returns_the_secret_once_and_it_works
+FAILED tests/test_auth.py::test_rotate_revokes_old_key_immediately_and_new_key_works
+FAILED tests/test_auth.py::test_revoke_ingest_key - assert 403 == 200
+FAILED tests/test_auth.py::test_cannot_revoke_the_last_active_read_key - asse...
+FAILED tests/test_auth.py::test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys
+FAILED tests/test_auth.py::test_rotating_the_only_read_key_is_allowed - asser...
+FAILED tests/test_auth.py::test_foreign_and_malformed_key_ids_are_plain_404
+FAILED tests/test_isolation.py::test_runs_list_and_keys_list_contain_only_the_callers_project
+FAILED tests/test_isolation.py::test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_read_key_on_every_session_route
+FAILED tests/test_isolation.py::test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin
+FAILED tests/test_isolation.py::test_foreign_key_ids_cannot_be_rotated_or_revoked
+FAILED tests/test_isolation.py::test_logs_contain_no_keys_cookies_or_metric_payloads
+FAILED tests/test_stream.py::test_revoking_the_key_closes_open_streams - KeyE...
+FAILED tests/test_stream.py::test_rotating_the_key_and_session_expiry_close_open_streams
+======================== 18 failed, 78 passed in 14.55s ========================
+

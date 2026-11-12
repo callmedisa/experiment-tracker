@@ -5,7 +5,7 @@ import { Dialog } from "../components/Dialog";
 import { Banner, CopyButton, Icon, ago } from "../components/ui";
 import { S, fmt } from "../strings";
 
-const shown = (k: Pick<KeyRow, "scope" | "prefix">) => `${k.scope === "ingest" ? "trk_ing_" : "trk_rd_"}${k.prefix}…`;
+const shown = (k: Pick<KeyRow, "scope" | "prefix">) => `${k.scope === "ingest" ? "trk_ing_" : k.scope === "admin" ? "trk_adm_" : "trk_rd_"}${k.prefix}…`;
 const day = (iso: string) => new Date(iso).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
 const when = (d = new Date()) => d.toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
 /** "Last used" is written at most once a minute per key, so it is shown in whole minutes (owner-approved spec-gap). */
@@ -40,10 +40,11 @@ export default function Keys() {
     <>
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4, minWidth: 220 }}><h1 className="t-24">{S.keys.title}</h1><p className="muted t-13">{S.keys.sub}</p></div>
-        <button className="btn btn-primary" onClick={() => setModal({ kind: "create" })} data-testid="create-key"><Icon n="plus" />{S.keys.create}</button>
+        {err?.code !== "admin_required" && <button className="btn btn-primary" onClick={() => setModal({ kind: "create" })} data-testid="create-key"><Icon n="plus" />{S.keys.create}</button>}
       </div>
       {toast && <Banner tone="success" icon="tick">{toast}</Banner>}
-      {err && <Banner tone="danger" icon="warn" role="alert" action={<button className="btn btn-sm" onClick={load}>{S.runs.retry}</button>}>{err.code === "network" ? S.signin.errNetwork : fmt(S.sys.error, { id: err.requestId ?? "—" })}</Banner>}
+      {err?.code === "admin_required" && <Banner tone="warn" icon="warn" role="alert">{S.keys.needAdmin}</Banner>}
+      {err && err.code !== "admin_required" && <Banner tone="danger" icon="warn" role="alert" action={<button className="btn btn-sm" onClick={load}>{S.runs.retry}</button>}>{err.code === "network" ? S.signin.errNetwork : fmt(S.sys.error, { id: err.requestId ?? "—" })}</Banner>}
       {keys === null && !err && <div className="tbl-wrap" aria-busy="true">{[0, 1, 2].map((i) => <div key={i} className="sk" style={{ height: 24, margin: 12 }} />)}</div>}
       {keys && (
         <div className="tbl-wrap">
@@ -93,7 +94,7 @@ export default function Keys() {
 
 function CreateDialog({ onClose, onCreated }: { onClose: () => void; onCreated: (k: KeyRow) => void }) {
   const [label, setLabel] = useState("");
-  const [scope, setScope] = useState<"ingest" | "read">("ingest");
+  const [scope, setScope] = useState<"ingest" | "read" | "admin">("ingest");
   const [err, setErr] = useState(""); const [busy, setBusy] = useState(false);
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -103,7 +104,7 @@ function CreateDialog({ onClose, onCreated }: { onClose: () => void; onCreated: 
     try { onCreated(await api<KeyRow>("/keys", { method: "POST", body: { label: l, scope } })); }
     catch (e2) { setErr(S.sys.error.replace("{id}", (e2 as ApiError).requestId ?? "—")); setBusy(false); }
   }
-  const opt = (v: "ingest" | "read", help: string) => (
+  const opt = (v: "ingest" | "read" | "admin", help: string) => (
     <label style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "10px 12px", border: `1px solid ${scope === v ? "var(--accent)" : "var(--border-strong)"}`, borderRadius: 6, background: scope === v ? "var(--accent-subtle)" : undefined, cursor: "pointer" }}>
       <input type="radio" name="scope" checked={scope === v} onChange={() => setScope(v)} style={{ marginTop: 3, accentColor: "var(--accent)" }} />
       <span><strong className="t-13">{v}</strong><span className="t-12 muted" style={{ display: "block" }}>{help}</span></span>
@@ -117,7 +118,7 @@ function CreateDialog({ onClose, onCreated }: { onClose: () => void; onCreated: 
             <input id="ck-l" className={`input ${err ? "is-error" : ""}`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="ci-runner" autoComplete="off" data-autofocus maxLength={60} />
             {err ? <span className="help-error" role="alert"><Icon n="warn" />{err}</span> : <span className="help">{S.keys.labelHelp}</span>}</div>
           <fieldset style={{ border: 0, padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-            <legend className="label" style={{ marginBottom: 6 }}>{S.keys.scope}</legend>{opt("ingest", S.keys.scopeIngest)}{opt("read", S.keys.scopeRead)}
+            <legend className="label" style={{ marginBottom: 6 }}>{S.keys.scope}</legend>{opt("ingest", S.keys.scopeIngest)}{opt("read", S.keys.scopeRead)}{opt("admin", S.keys.scopeAdmin)}
           </fieldset>
         </div>
         <div className="dialog-f"><button type="button" className="btn btn-ghost" onClick={onClose}>{S.keys.cancel}</button><button className="btn btn-primary" disabled={busy}>{S.keys.create}</button></div>
@@ -152,7 +153,7 @@ function RevokeDialog({ k, onClose, onDone }: { k: KeyRow; onClose: () => void; 
   async function go() {
     setBusy(true);
     try { await api(`/keys/${k.id}/revoke`, { method: "POST" }); onDone(); }
-    catch (e) { const a = e as ApiError; setErr(a.code === "last_read_key" ? S.keys.errLast : S.sys.error.replace("{id}", a.requestId ?? "—")); setBusy(false); }
+    catch (e) { const a = e as ApiError; setErr(a.code === "last_admin_key" ? S.keys.errLast : S.sys.error.replace("{id}", a.requestId ?? "—")); setBusy(false); }
   }
   return (
     <Dialog role="alertdialog" labelledBy="vk-t" describedBy="vk-d" onClose={onClose}>

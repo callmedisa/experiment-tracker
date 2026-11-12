@@ -625,3 +625,11 @@ Scan result: the e-mail address does not occur in any file of the working tree (
 NOT removed and needs the owner's decision: both git commits carry the owner's configured author name and e-mail address (git log shows them). Removing them means rewriting history (git commit --amend / filter-repo with another identity); I did not do it.
 Evidence: git diff of this commit
 Status: resolved (except the commit author, open)
+
+## Final pass: admin scope, client buffer, retry label (2026-11-12)
+- A read key could create, rotate and revoke keys, which made "read cannot ingest" bypassable. Added an `admin` key scope (migration 0002, `trk_adm_` + 32 chars). Sign-in accepts read or admin; every `/keys` route needs an admin session (403 `admin_required`); the last-key guard now protects the last admin key (`last_admin_key`). Projects get three keys at creation. New API test (read key gets 403 on all key routes and nothing changes) and a browser test.
+- Client: `flush()` removed points from its buffer before the server acknowledged them, so a long outage lost them. It now removes them after the acknowledgement. New test.
+- UI: "attempt 1 · 0 s" was shown while a connection attempt hung behind nginx; it now says "trying now, waiting for the server".
+- Not changed: `react-router` (advisories, fix is a major version, code paths not used), retention, rate limits across processes.
+- Results after the change: API 97, web 27, client 11, E2E 20, stack 12, all passed.
+

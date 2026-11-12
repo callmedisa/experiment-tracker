@@ -37,7 +37,7 @@ From TZ_dev.md §4–5, plus the owner-approved changes in JOURNAL.md.
 2. `NOTIFY` is best effort; its delay is unmeasured.
 3. Resync costs as much as replay. No retention: tables only grow.
 4. Gap-free `seq` proves the server has no holes, not that the browser applied everything.
-5. Tenancy is demo-grade: a read key can create and revoke keys, so "read cannot ingest" is bypassable; lost keys are unrecoverable.
+5. Key scopes: ingest writes, read views, admin views and manages keys (migration 0002; at first a read key could manage keys, which made "read cannot ingest" bypassable). Lost keys are unrecoverable.
 6. Isolation relies on every query carrying `project_id`; no row-level security. Timing equality is statistical; other side channels remain.
 7. Rate limits live in one process: one API instance only.
 8. `GET /runs` with 500 runs and sparklines is unmeasured.

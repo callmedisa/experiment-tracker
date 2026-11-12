@@ -70,13 +70,13 @@ test("overflow: a reader that falls more than 10,000 events behind gets a resync
 });
 
 test("old key after rotation: REST is 401 and the open page is signed out within seconds", async ({ browser, request }) => {
-  // project with two read keys: one for this page's session, one to operate the keys
+  // a read key for this page's session, an admin key to operate the keys
   const ctxAdmin = await browser.newContext({ baseURL: ORIGIN });
   const ctxViewer = await browser.newContext({ baseURL: ORIGIN });
   const p = await (await request.post("/api/projects", { data: { name: `rot-${Date.now() % 1000000}` } })).json();
   const bearer = { Authorization: `Bearer ${p.keys.ingest.key}` };
   const runId = (await (await request.post("/api/runs", { data: { name: "rot" }, headers: bearer })).json()).id as string;
-  await ctxAdmin.request.post("/api/session", { data: { key: p.keys.read.key } });
+  await ctxAdmin.request.post("/api/session", { data: { key: p.keys.admin.key } });
   const viewerKey = await (await ctxAdmin.request.post("/api/keys", { data: { label: "viewer", scope: "read" }, headers: CSRF })).json();
   await ctxViewer.request.post("/api/session", { data: { key: viewerKey.key } });
   const page = await ctxViewer.newPage();

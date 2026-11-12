@@ -113,7 +113,7 @@ async def test_every_read_route_gives_the_same_404_for_foreign_missing_and_malfo
 
 async def test_b_marker_data_never_appears_in_any_response_to_a(client):
     a, b, run_a, run_b = await two_projects(client)
-    await sign_in(client, a.read_key)
+    await sign_in(client, a.admin_key)
     blobs = []
     for _, call in READ_ROUTES:
         for rid in [run_b, *sibling_ids(run_b)]:
@@ -122,7 +122,7 @@ async def test_b_marker_data_never_appears_in_any_response_to_a(client):
     blobs.append((await client.get("/keys")).text)
     blobs.append((await client.get("/session")).text)
     joined = "\n".join(blobs)
-    for secret in ("secret-metric", run_b, b.id, b.name, b.ingest_key, b.read_key, b.ingest_key_id, b.read_key_id):
+    for secret in ("secret-metric", run_b, b.id, b.name, b.ingest_key, b.read_key, b.admin_key, b.ingest_key_id, b.read_key_id, b.admin_key_id):
         assert secret not in joined, f"B's {secret!r} leaked into a response seen by A"
 
 
@@ -130,11 +130,11 @@ async def test_runs_list_and_keys_list_contain_only_the_callers_project(client):
     a, b, run_a, run_b = await two_projects(client)
     for _ in range(4):
         await client.post("/runs", json={"name": "b-extra"}, headers=b.ingest)
-    await sign_in(client, a.read_key)
+    await sign_in(client, a.admin_key)
     runs = (await client.get("/runs")).json()["runs"]
     assert [r["id"] for r in runs] == [run_a]
     keys = (await client.get("/keys")).json()["keys"]
-    assert {k["id"] for k in keys} == {a.ingest_key_id, a.read_key_id}
+    assert {k["id"] for k in keys} == {a.ingest_key_id, a.read_key_id, a.admin_key_id}
 
 
 # ---------- writing to B's run as A ----------
@@ -191,25 +191,25 @@ async def test_ingest_key_cannot_read_and_read_key_cannot_ingest_on_any_route(cl
         assert r.status_code == 401 and r.json()["code"] == "invalid_key", path
 
 
-async def test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_read_key_on_every_session_route(client):
+async def test_revoked_ingest_key_fails_on_every_ingest_route_and_revoked_session_key_on_every_session_route(client):
     a, b, run_a, run_b = await two_projects(client)
-    await sign_in(client, a.read_key)
-    extra = (await client.post("/keys", json={"label": "keep", "scope": "read"}, headers=CSRF)).json()
+    await sign_in(client, a.admin_key)
+    extra = (await client.post("/keys", json={"label": "keep", "scope": "admin"}, headers=CSRF)).json()
     assert (await client.post(f"/keys/{a.ingest_key_id}/revoke", headers=CSRF)).status_code == 200
     for method, path, body in INGEST_ROUTES:
         r = await client.request(method, path.format(r=run_a), json=body, headers=a.ingest)
         assert r.status_code == 401 and r.json()["code"] == "key_revoked", path
-    assert (await client.post(f"/keys/{a.read_key_id}/revoke", headers=CSRF)).status_code == 200   # the session's own key
+    assert (await client.post(f"/keys/{a.admin_key_id}/revoke", headers=CSRF)).status_code == 200   # the session's own key
     for method, path in SESSION_ROUTES:
         r = await client.request(method, path.format(r=run_a))
         assert r.status_code == 401 and r.json()["code"] == "key_revoked", path
-    assert (await sign_in(client, a.read_key)).json()["code"] == "key_revoked"
+    assert (await sign_in(client, a.admin_key)).json()["code"] == "key_revoked"
     assert (await sign_in(client, extra["key"])).status_code == 200      # the kept key still works
 
 
 async def test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin(client):
     a, b, run_a, run_b = await two_projects(client)
-    await sign_in(client, a.read_key)
+    await sign_in(client, a.admin_key)
     other_key = (await client.post("/keys", json={"label": "o", "scope": "ingest"}, headers=CSRF)).json()
     muts = [("post", "/keys", {"label": "x", "scope": "read"}), ("post", f"/keys/{other_key['id']}/rotate", None),
             ("post", f"/keys/{other_key['id']}/revoke", None), ("delete", "/session", None)]
@@ -220,20 +220,21 @@ async def test_every_cookie_mutation_needs_the_csrf_header_and_a_matching_origin
             r = await client.request(method, path, json=body, headers=h)
             assert r.status_code == 403 and r.json()["code"] == "csrf_failed", (method, path, h, r.status_code)
     keys = (await client.get("/keys")).json()["keys"]          # nothing happened
-    assert len(keys) == 3 and all(k["revoked_at"] is None for k in keys)
+    assert len(keys) == 4 and all(k["revoked_at"] is None for k in keys)
     assert (await client.get("/session")).status_code == 200
 
 
 async def test_foreign_key_ids_cannot_be_rotated_or_revoked(client):
     a, b, run_a, run_b = await two_projects(client)
-    await sign_in(client, a.read_key)
-    for kid in (b.ingest_key_id, b.read_key_id):
+    await sign_in(client, a.admin_key)
+    for kid in (b.ingest_key_id, b.read_key_id, b.admin_key_id):
         for action in ("rotate", "revoke"):
             r = await client.post(f"/keys/{kid}/{action}", headers=CSRF)
             assert r.status_code == 404 and r.json()["code"] == "not_found"
     ok = await client.post("/runs", json={"name": "still-works"}, headers=b.ingest)
     assert ok.status_code == 201
     await sign_in(client, b.read_key)  # b's read key untouched too
+    await sign_in(client, b.admin_key)
 
 
 async def test_a_session_cookie_is_bound_to_its_own_project(client, app):
@@ -255,7 +256,7 @@ async def test_a_session_cookie_is_bound_to_its_own_project(client, app):
 async def test_logs_contain_no_keys_cookies_or_metric_payloads(client, caplog):
     caplog.set_level(logging.DEBUG)
     a, b, run_a, run_b = await two_projects(client)
-    r = await sign_in(client, a.read_key)
+    r = await sign_in(client, a.admin_key)
     token = client.cookies.get("tracker_session")
     new_ing = (await client.post("/keys", json={"label": "n", "scope": "ingest"}, headers=CSRF)).json()
     rot = (await client.post(f"/keys/{a.ingest_key_id}/rotate", headers=CSRF)).json()
@@ -269,5 +270,5 @@ async def test_logs_contain_no_keys_cookies_or_metric_payloads(client, caplog):
     await client.get("/runs", headers={"Authorization": f"Bearer {b.ingest_key}"})
     text_ = "\n".join(f"{rec.name}|{rec.getMessage()}|{rec.exc_text or ''}" for rec in caplog.records if rec.name != "httpx")
     assert text_.strip(), "no application log lines captured: the check would be vacuous"
-    for secret in (a.ingest_key, a.read_key, b.ingest_key, b.read_key, new_ing["key"], rot["key"], token, marker, "123456.789", a.read_key[-12:], a.ingest_key[-12:]):
+    for secret in (a.ingest_key, a.read_key, a.admin_key, b.ingest_key, b.read_key, b.admin_key, new_ing["key"], rot["key"], token, marker, "123456.789", a.admin_key[-12:], a.read_key[-12:], a.ingest_key[-12:]):
         assert secret not in text_, f"secret {secret[:12]}... found in logs"

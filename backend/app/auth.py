@@ -45,7 +45,7 @@ def _bearer(request: Request) -> str | None:
     return None
 
 
-async def lookup_key(request: Request, raw: str | None, scope: str) -> Principal:
+async def lookup_key(request: Request, raw: str | None, scope: str | tuple[str, ...]) -> Principal:
     """Bearer-key lookup. Unknown key, wrong secret, malformed header and wrong scope all give the same 401."""
     st = request.app.state
     ip = client_ip(request)
@@ -67,7 +67,7 @@ async def lookup_key(request: Request, raw: str | None, scope: str) -> Principal
     if row.revoked_at is not None:
         st.fail_limiter.hit(ip)
         raise AppError(401, "key_revoked", "This key has been revoked")
-    if row.scope != scope:
+    if row.scope not in ((scope,) if isinstance(scope, str) else scope):
         st.fail_limiter.hit(ip)
         raise AppError(401, "invalid_key", "Invalid key")
     await _touch_last_used(st, row.id)
@@ -135,3 +135,11 @@ async def session_principal(request: Request) -> Principal:
     if request.method not in SAFE_METHODS:
         _check_csrf(request)
     return Principal(row.project_id, row.key_id, row.scope, session_id=row.id)
+
+
+async def admin_principal(request: Request) -> Principal:
+    """Key management needs a session opened with an ADMIN key. A read key can look at runs but cannot touch keys."""
+    p = await session_principal(request)
+    if p.scope != "admin":
+        raise AppError(403, "admin_required", "This action needs an admin key")
+    return p

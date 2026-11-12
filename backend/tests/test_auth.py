@@ -16,7 +16,8 @@ async def test_create_project_returns_both_keys_in_the_specified_format(client):
     k = r.json()["keys"]
     assert k["ingest"]["key"].startswith("trk_ing_") and len(k["ingest"]["key"]) == 40
     assert k["read"]["key"].startswith("trk_rd_") and len(k["read"]["key"]) == 40
-    assert k["ingest"]["scope"] == "ingest" and k["read"]["scope"] == "read"
+    assert k["ingest"]["scope"] == "ingest" and k["read"]["scope"] == "read" and k["admin"]["scope"] == "admin"
+    assert k["admin"]["key"].startswith("trk_adm_") and len(k["admin"]["key"]) == 40
     assert k["ingest"]["key"].removeprefix("trk_ing_")[:4] == k["ingest"]["prefix"]
     assert r.headers["cache-control"] == "private, no-store"
 
@@ -32,13 +33,13 @@ async def test_project_name_rules(client):
 async def test_keys_are_stored_only_as_hmac_hashes(client, proj, db, app):
     async with db.connect() as c:
         rows = (await c.execute(text("SELECT key_hash, prefix FROM api_keys WHERE project_id=:p"), {"p": proj.id})).all()
-    assert len(rows) == 2
+    assert len(rows) == 3
     pepper = app.state.settings.pepper.encode()
-    expected = {hmac.new(pepper, k.encode(), hashlib.sha256).hexdigest() for k in (proj.ingest_key, proj.read_key)}
+    expected = {hmac.new(pepper, k.encode(), hashlib.sha256).hexdigest() for k in (proj.ingest_key, proj.read_key, proj.admin_key)}
     assert {r.key_hash for r in rows} == expected
     async with db.connect() as c:  # the plaintext key must be nowhere in the table
         dump = (await c.execute(text("SELECT to_jsonb(a)::text FROM api_keys a WHERE project_id=:p"), {"p": proj.id})).scalars().all()
-    assert not any(proj.ingest_key in d or proj.read_key in d for d in dump)
+    assert not any(k in d for d in dump for k in (proj.ingest_key, proj.read_key, proj.admin_key))
 
 
 # ---------- key checks on ingest routes ----------
@@ -114,7 +115,7 @@ async def test_sign_out_needs_csrf_and_kills_the_session(client, proj):
 
 
 async def test_csrf_rules_for_cookie_mutations(client, proj):
-    await sign_in(client, proj.read_key)
+    await sign_in(client, proj.admin_key)
     body = {"label": "ci", "scope": "ingest"}
     for headers in ({}, {"X-Requested-With": "tracker"}, {"Origin": "http://test"},
                     {"X-Requested-With": "tracker", "Origin": "http://evil.example"},
@@ -125,30 +126,49 @@ async def test_csrf_rules_for_cookie_mutations(client, proj):
     assert (await client.get("/keys")).status_code == 200  # reads need no CSRF header
 
 
-async def test_revoked_read_key_ends_its_sessions(client, proj):
-    await sign_in(client, proj.read_key)
-    other = await client.post("/keys", json={"label": "second", "scope": "read"}, headers=CSRF)
+async def test_revoked_key_ends_its_sessions(client, proj):
+    await sign_in(client, proj.admin_key)
+    other = await client.post("/keys", json={"label": "second", "scope": "admin"}, headers=CSRF)
     assert other.status_code == 201
-    r = await client.post(f"/keys/{proj.read_key_id}/revoke", headers=CSRF)  # own key; another read key exists
+    r = await client.post(f"/keys/{proj.admin_key_id}/revoke", headers=CSRF)  # own key; another admin key exists
     assert r.status_code == 200 and r.json()["revoked_at"]
     me = await client.get("/session")
     assert me.status_code == 401 and me.json()["code"] == "key_revoked"
-    again = await sign_in(client, proj.read_key)
+    again = await sign_in(client, proj.admin_key)
     assert again.status_code == 401 and again.json()["code"] == "key_revoked"
+
+
+async def test_a_read_key_can_read_but_cannot_manage_keys(client, proj):
+    """The point of the admin scope: the key you paste into dashboards or share with viewers cannot mint, rotate or revoke keys."""
+    assert (await sign_in(client, proj.read_key)).json()["key"]["scope"] == "read"
+    assert (await client.get("/runs")).status_code == 200
+    attempts = [
+        client.get("/keys"),
+        client.post("/keys", json={"label": "evil", "scope": "admin"}, headers=CSRF),
+        client.post("/keys", json={"label": "evil", "scope": "ingest"}, headers=CSRF),
+        client.post(f"/keys/{proj.ingest_key_id}/rotate", headers=CSRF),
+        client.post(f"/keys/{proj.ingest_key_id}/revoke", headers=CSRF),
+        client.post(f"/keys/{proj.admin_key_id}/revoke", headers=CSRF),
+    ]
+    for coro in attempts:
+        r = await coro
+        assert r.status_code == 403 and r.json()["code"] == "admin_required", r.text
+    # nothing changed: the ingest key still works
+    assert (await client.post("/runs", json={"name": "x"}, headers=proj.ingest)).status_code == 201
 
 
 # ---------- key management ----------
 
 async def test_keys_list_never_contains_secrets(client, proj):
-    await sign_in(client, proj.read_key)
+    await sign_in(client, proj.admin_key)
     r = await client.get("/keys")
-    assert r.status_code == 200 and len(r.json()["keys"]) == 2
-    assert proj.ingest_key not in r.text and proj.read_key not in r.text and "key_hash" not in r.text
+    assert r.status_code == 200 and len(r.json()["keys"]) == 3
+    assert all(k not in r.text for k in (proj.ingest_key, proj.read_key, proj.admin_key)) and "key_hash" not in r.text
     assert all("key" not in k for k in r.json()["keys"])
 
 
 async def test_create_key_returns_the_secret_once_and_it_works(client, proj):
-    await sign_in(client, proj.read_key)
+    await sign_in(client, proj.admin_key)
     r = await client.post("/keys", json={"label": "ci", "scope": "ingest"}, headers=CSRF)
     assert r.status_code == 201
     new = r.json()["key"]
@@ -156,11 +176,11 @@ async def test_create_key_returns_the_secret_once_and_it_works(client, proj):
     ok = await client.post("/runs", json={"name": "x"}, headers={"Authorization": f"Bearer {new}"})
     assert ok.status_code == 201
     assert "key" not in next(k for k in (await client.get("/keys")).json()["keys"] if k["id"] == r.json()["id"])
-    assert (await client.post("/keys", json={"label": "x", "scope": "admin"}, headers=CSRF)).status_code == 422
+    assert (await client.post("/keys", json={"label": "x", "scope": "root"}, headers=CSRF)).status_code == 422
 
 
 async def test_rotate_revokes_old_key_immediately_and_new_key_works(client, proj):
-    await sign_in(client, proj.read_key)
+    await sign_in(client, proj.admin_key)
     r = await client.post(f"/keys/{proj.ingest_key_id}/rotate", headers=CSRF)
     assert r.status_code == 201 and r.json()["scope"] == "ingest" and r.json()["label"] == "Default ingest"
     new = r.json()["key"]
@@ -172,7 +192,7 @@ async def test_rotate_revokes_old_key_immediately_and_new_key_works(client, proj
 
 
 async def test_revoke_ingest_key(client, proj):
-    await sign_in(client, proj.read_key)
+    await sign_in(client, proj.admin_key)
     r = await client.post(f"/keys/{proj.ingest_key_id}/revoke", headers=CSRF)
     assert r.status_code == 200
     bad = await client.post("/runs", json={"name": "x"}, headers=proj.ingest)
@@ -180,36 +200,36 @@ async def test_revoke_ingest_key(client, proj):
     assert (await client.post(f"/keys/{proj.ingest_key_id}/revoke", headers=CSRF)).json()["code"] == "already_revoked"
 
 
-async def test_cannot_revoke_the_last_active_read_key(client, proj):
-    await sign_in(client, proj.read_key)
-    r = await client.post(f"/keys/{proj.read_key_id}/revoke", headers=CSRF)
-    assert r.status_code == 409 and r.json()["code"] == "last_read_key"
+async def test_cannot_revoke_the_last_active_admin_key(client, proj):
+    await sign_in(client, proj.admin_key)
+    r = await client.post(f"/keys/{proj.admin_key_id}/revoke", headers=CSRF)
+    assert r.status_code == 409 and r.json()["code"] == "last_admin_key"
     assert (await client.get("/session")).status_code == 200  # nothing was revoked
 
 
-async def test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys(client, proj, app, db):
-    # Two read keys A (default) and B, each with its own session. Each session tries to revoke the OTHER key at once.
+async def test_two_concurrent_revokes_cannot_remove_the_last_two_admin_keys(client, proj, app, db):
+    # Two admin keys A (default) and B, each with its own session. Each session tries to revoke the OTHER key at once.
     # Whichever commits first may also kill the other request's own session (401), or hit the guard (409).
-    # What must never happen: both revokes succeed, leaving the project with no read key.
-    await sign_in(client, proj.read_key)
-    b = (await client.post("/keys", json={"label": "second", "scope": "read"}, headers=CSRF)).json()
+    # What must never happen: both revokes succeed, leaving the project with no admin key.
+    await sign_in(client, proj.admin_key)
+    b = (await client.post("/keys", json={"label": "second", "scope": "admin"}, headers=CSRF)).json()
     async with client_for(app) as c2:
         assert (await sign_in(c2, b["key"])).status_code == 200
         rs = await asyncio.gather(
             client.post(f"/keys/{b['id']}/revoke", headers=CSRF),
-            c2.post(f"/keys/{proj.read_key_id}/revoke", headers=CSRF))
+            c2.post(f"/keys/{proj.admin_key_id}/revoke", headers=CSRF))
     codes = sorted(r.status_code for r in rs)
     assert codes != [200, 200], codes
     assert all(c in (200, 401, 409) for c in codes), codes
     async with db.connect() as c:
-        active = (await c.execute(text("SELECT count(*) FROM api_keys WHERE project_id=:p AND scope='read' AND revoked_at IS NULL"),
+        active = (await c.execute(text("SELECT count(*) FROM api_keys WHERE project_id=:p AND scope='admin' AND revoked_at IS NULL"),
                                   {"p": proj.id})).scalar_one()
     assert active >= 1
 
 
-async def test_rotating_the_only_read_key_is_allowed(client, proj, app):
-    await sign_in(client, proj.read_key)
-    r = await client.post(f"/keys/{proj.read_key_id}/rotate", headers=CSRF)
+async def test_rotating_the_only_admin_key_is_allowed(client, proj, app):
+    await sign_in(client, proj.admin_key)
+    r = await client.post(f"/keys/{proj.admin_key_id}/rotate", headers=CSRF)
     assert r.status_code == 201
     new = r.json()["key"]
     c2 = client_for(app)  # fresh cookie jar
@@ -219,7 +239,7 @@ async def test_rotating_the_only_read_key_is_allowed(client, proj, app):
 
 async def test_foreign_and_malformed_key_ids_are_plain_404(client, proj):
     other = await new_project(client)
-    await sign_in(client, proj.read_key)
+    await sign_in(client, proj.admin_key)
     bodies = set()
     for kid in (other.ingest_key_id, "00000000-0000-0000-0000-000000000000", "not-a-uuid", "1"):
         for path in ("rotate", "revoke"):
