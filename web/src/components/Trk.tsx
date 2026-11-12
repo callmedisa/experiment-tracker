@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode, useEffect } from "react";
 import { useTheme } from "../lib/theme";
 
-/** The app root class from design/tracker.css: `.trk`, plus `.dark` for the dark theme. Every screen uses this wrapper. */
+/** The app root class from tracker.css: `.trk`, plus `.dark` for the dark theme. Every screen uses this wrapper. */
 export function Trk({ children, style, className = "" }: { children: ReactNode; style?: CSSProperties; className?: string }) {
   const mode = useTheme();
   useEffect(() => {

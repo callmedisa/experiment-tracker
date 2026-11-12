@@ -1,5 +1,5 @@
 /**
- * E2E consistency (TZ_dev.md §8.1): shuffled workload with duplicates and late points, a chaos proxy that cuts the
+ * E2E consistency (the dev spec §8.1): shuffled workload with duplicates and late points, a chaos proxy that cuts the
  * browser's SSE connection and the simulator's requests (including responses lost after the server processed them),
  * then: page count/checksum/chart series == the database, recomputed independently here.
  * Seeds: E2E_SEEDS="1,2,3" (default below). Raw per-seed evidence is written to results/e2e/.

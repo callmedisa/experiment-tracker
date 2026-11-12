@@ -1,4 +1,4 @@
-"""Isolation matrix (TZ_dev.md §8.2). Two projects, A and B, each with runs and keys. Acting as A, nothing of B's may be
+"""Isolation matrix (the dev spec §8.2). Two projects, A and B, each with runs and keys. Acting as A, nothing of B's may be
 readable or writable, and a foreign id must be indistinguishable from a missing or malformed one.
 (Timing, shared-cache and log checks need the real stack: see tests/stack/ in the repo root.)"""
 import asyncio

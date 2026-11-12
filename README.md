@@ -49,7 +49,7 @@ Not in `.env`: nothing else; the database password in `docker-compose.yml` (`tra
 backend/    FastAPI + SQLAlchemy + Alembic, tests/       web/       React + Vite + uPlot, e2e/ (Playwright), nginx.conf
 client/     tracker.py (Python client)                   chaos/     TCP chaos proxy (drop / block / flaky)
 tests/stack/ tests over the running stack               loadtest/  load.py
-design/     the provided design (not edited)             results/   raw outputs, never edited
+results/    raw outputs, never edited
 ```
 
 ## Known limitations (more in `JOURNAL.md`)

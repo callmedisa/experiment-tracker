@@ -1,0 +1,286 @@
+
+Running 20 tests using 1 worker
+
+  ✘  1 chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points (2ms)
+  ✘  2 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  3 consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  4 consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  5 consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  6 consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  7 consistency.spec.ts:54:3 › seed 6: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  8 consistency.spec.ts:54:3 › seed 7: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  9 consistency.spec.ts:54:3 › seed 8: page == database after cut connections, lost responses, duplicates and late points (2ms)
+  ✘  10 p1-ui.spec.ts:20:3 › keys page › a read-key session cannot manage keys: the page says so and offers no Create button (2ms)
+  ✘  11 p1-ui.spec.ts:29:3 › keys page › list, create, copy, use the new key, validation (2ms)
+  ✘  12 p1-ui.spec.ts:52:3 › keys page › rotate: alert dialog focus, Esc, reveal with old key revoked, old key dead (2ms)
+  ✘  13 p1-ui.spec.ts:76:3 › keys page › revoke needs the typed label; the last admin key cannot be revoked (2ms)
+  ✘  14 p1-ui.spec.ts:98:3 › keys page › rotating the key of the current session: the new key stays on screen until copied, then sign-in (2ms)
+  ✘  15 p1-ui.spec.ts:116:3 › keys page › dialogs keep focus inside, and (#25) stay in the viewport on a long page scrolled to the bottom (2ms)
+  ✘  16 p1-ui.spec.ts:144:3 › dark theme › follows the OS preference, toggles, persists, and the chart palette changes (2ms)
+  ✘  17 p1-ui.spec.ts:170:3 › mobile 390 › drawer navigation, no horizontal page scroll, run page and keys page usable (2ms)
+  ✘  18 silent-failures.spec.ts:20:1 › duplicates: the same batch again shows a toast, counts exactly, and a conflicting resend stores nothing (2ms)
+  ✘  19 silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database (1ms)
+  ✘  20 silent-failures.spec.ts:72:1 › old key after rotation: REST is 401 and the open page is signed out within seconds (2ms)
+
+
+  1) chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  2) consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  3) consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  4) consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  5) consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  6) consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  7) consistency.spec.ts:54:3 › seed 6: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  8) consistency.spec.ts:54:3 › seed 7: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  9) consistency.spec.ts:54:3 › seed 8: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  10) p1-ui.spec.ts:20:3 › keys page › a read-key session cannot manage keys: the page says so and offers no Create button 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  11) p1-ui.spec.ts:29:3 › keys page › list, create, copy, use the new key, validation ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  12) p1-ui.spec.ts:52:3 › keys page › rotate: alert dialog focus, Esc, reveal with old key revoked, old key dead 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  13) p1-ui.spec.ts:76:3 › keys page › revoke needs the typed label; the last admin key cannot be revoked 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  14) p1-ui.spec.ts:98:3 › keys page › rotating the key of the current session: the new key stays on screen until copied, then sign-in 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  15) p1-ui.spec.ts:116:3 › keys page › dialogs keep focus inside, and (#25) stay in the viewport on a long page scrolled to the bottom 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  16) p1-ui.spec.ts:144:3 › dark theme › follows the OS preference, toggles, persists, and the chart palette changes 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  17) p1-ui.spec.ts:170:3 › mobile 390 › drawer navigation, no horizontal page scroll, run page and keys page usable 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  18) silent-failures.spec.ts:20:1 › duplicates: the same batch again shows a toast, counts exactly, and a conflicting resend stores nothing 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  19) silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  20) silent-failures.spec.ts:72:1 › old key after rotation: REST is 401 and the open page is signed out within seconds 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/disa/Library/Caches/ms-playwright/chromium-1134/chrome-mac/Chromium.app/Contents/MacOS/Chromium
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+  20 failed
+    chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points 
+    consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 6: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 7: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 8: page == database after cut connections, lost responses, duplicates and late points 
+    p1-ui.spec.ts:20:3 › keys page › a read-key session cannot manage keys: the page says so and offers no Create button 
+    p1-ui.spec.ts:29:3 › keys page › list, create, copy, use the new key, validation ───────────────
+    p1-ui.spec.ts:52:3 › keys page › rotate: alert dialog focus, Esc, reveal with old key revoked, old key dead 
+    p1-ui.spec.ts:76:3 › keys page › revoke needs the typed label; the last admin key cannot be revoked 
+    p1-ui.spec.ts:98:3 › keys page › rotating the key of the current session: the new key stays on screen until copied, then sign-in 
+    p1-ui.spec.ts:116:3 › keys page › dialogs keep focus inside, and (#25) stay in the viewport on a long page scrolled to the bottom 
+    p1-ui.spec.ts:144:3 › dark theme › follows the OS preference, toggles, persists, and the chart palette changes 
+    p1-ui.spec.ts:170:3 › mobile 390 › drawer navigation, no horizontal page scroll, run page and keys page usable 
+    silent-failures.spec.ts:20:1 › duplicates: the same batch again shows a toast, counts exactly, and a conflicting resend stores nothing 
+    silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database 
+    silent-failures.spec.ts:72:1 › old key after rotation: REST is 401 and the open page is signed out within seconds 

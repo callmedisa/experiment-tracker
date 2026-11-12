@@ -22,7 +22,7 @@ class Settings:
     stats_interval_s: float = 5.0
     revalidate_s: float = 2.0
     stream_page: int = 500
-    # Rate limits (TZ_dev.md §5 defaults). Env-configurable; each results/ run must record the values.
+    # Rate limits (the dev spec §5 defaults). Env-configurable; each results/ run must record the values.
     rl_projects_per_min: int = 20  # POST /projects, per IP
     rl_session_per_min: int = 10  # POST /session attempts, per IP
     rl_auth_fail_per_min: int = 10  # failed key lookups, per IP

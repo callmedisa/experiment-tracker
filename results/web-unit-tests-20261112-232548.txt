@@ -1,0 +1,13 @@
+
+ RUN  v2.1.9 /Users/disa/std/soup-task/web
+
+ ✓ test/chartNav.test.ts (6 tests) 3ms
+ ✓ test/runData.test.ts (5 tests) 5ms
+ ✓ test/connection.test.ts (10 tests) 8ms
+ ✓ test/checksum.test.ts (6 tests) 15ms
+
+ Test Files  4 passed (4)
+      Tests  27 passed (27)
+   Start at  23:25:48
+   Duration  284ms (transform 105ms, setup 0ms, collect 148ms, tests 31ms, environment 0ms, prepare 324ms)
+

@@ -1,4 +1,4 @@
-/** Silent-failure checks that are visible in the UI (TZ_dev.md §8.3: duplicates, queue overflow / resync, old key after rotation). */
+/** Silent-failure checks that are visible in the UI (the dev spec §8.3: duplicates, queue overflow / resync, old key after rotation). */
 import { expect, test } from "@playwright/test";
 import type { APIRequestContext, Page } from "@playwright/test";
 import { checksumOf, dbRows, dbRun } from "./helpers";

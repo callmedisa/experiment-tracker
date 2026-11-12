@@ -15,7 +15,7 @@ def new_run_id() -> str:
 
 
 def new_key(scope: str) -> tuple[str, str]:
-    """Return (full_key, display_prefix). Both formats are 40 characters (TZ_dev.md §4)."""
+    """Return (full_key, display_prefix). Both formats are 40 characters (the dev spec §4)."""
     if scope == "ingest":
         random_part = base62(32)
         full = "trk_ing_" + random_part

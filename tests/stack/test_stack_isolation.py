@@ -1,5 +1,5 @@
 """Isolation checks that need the real stack: shared-cache paths through nginx, a statistical timing test, secrets in
-real container logs, and open streams closed on rotation through nginx (TZ_dev.md §8.2, §8.3.5)."""
+real container logs, and open streams closed on rotation through nginx (the dev spec §8.2, §8.3.5)."""
 import json
 import random
 import statistics

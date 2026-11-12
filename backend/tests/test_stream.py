@@ -1,4 +1,4 @@
-"""SSE stream over real HTTP: replay from the DB, stats, resync, closed, revalidation, wake-ups (TZ_dev.md §5.2, §8.3)."""
+"""SSE stream over real HTTP: replay from the DB, stats, resync, closed, revalidation, wake-ups (the dev spec §5.2, §8.3)."""
 import asyncio
 import hashlib
 import json

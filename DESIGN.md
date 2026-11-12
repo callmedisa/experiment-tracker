@@ -1,6 +1,6 @@
 # DESIGN — Tracker
 
-From TZ_dev.md §4–5, plus the owner-approved changes in JOURNAL.md.
+From the dev spec §4–5, plus the owner-approved changes in JOURNAL.md.
 
 ## 1. Event format and ordering
 **Guarantee:** every stored point gets one arrival number, with no gaps, and everyone sees points in that order.

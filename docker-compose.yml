@@ -21,7 +21,7 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://tracker:tracker@postgres:5432/tracker
       SERVER_PEPPER: ${SERVER_PEPPER:-dev-pepper-change-me}
-      # Rate limits (defaults from TZ_dev.md §5). Override in the environment; record values in results/.
+      # Rate limits (defaults from the dev spec §5). Override in the environment; record values in results/.
       RL_PROJECTS_PER_MIN: ${RL_PROJECTS_PER_MIN:-20}
       RL_SESSION_PER_MIN: ${RL_SESSION_PER_MIN:-10}
       RL_AUTH_FAIL_PER_MIN: ${RL_AUTH_FAIL_PER_MIN:-10}

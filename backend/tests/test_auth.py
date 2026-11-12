@@ -1,4 +1,4 @@
-"""Projects, keys, sessions, CSRF, rate limits, basic 404 uniformity (TZ_dev.md §4, §5, §7)."""
+"""Projects, keys, sessions, CSRF, rate limits, basic 404 uniformity (the dev spec §4, §5, §7)."""
 import asyncio
 import hashlib
 import hmac

@@ -1,221 +1,221 @@
 # JOURNAL.md
 
-Format per TZ_dev.md §0.1. Newest at the bottom. Never rewrite earlier entries; add follow-ups.
+Format per the dev spec §0.1. Newest at the bottom. Never rewrite earlier entries; add follow-ups.
 
 Note on timestamps: entries 1–N below were all written in one batch right after the first read-through of the spec and `design/`, at about 13:44 local time. They are not minute-accurate; later entries will be stamped when they happen.
 
 ## [13:44] decision — Session 1 scope: read + document only
-What happened: Owner asked for a read-through of TZ_dev.md and design/, then JOURNAL.md, AI_LOG.md and DESIGN.md only. No application code, no docker, no installs, no edits to TZ_dev.md or design/.
+What happened: Owner asked for a read-through of the dev spec and design/, then JOURNAL.md, AI_LOG.md and DESIGN.md only. No application code, no docker, no installs, no edits to the dev spec or design/.
 What I expected: n/a
-What I did: Read TZ_dev.md fully, every file in design/boards/ (incl. the small dark/mobile wrappers), design/tracker.css, design/canvas.json. Also read TZ_design.md in the repo root (an older design brief, not in the reading order). Did NOT open design/screenshots/*.png. The boards are not renderable here (they reference `./support.js` and a `/_blob/...` stylesheet that are not in the repo), so I judged them from markup only.
+What I did: Read the dev spec fully, every file in design/boards/ (incl. the small dark/mobile wrappers), tracker.css, design/canvas.json. Also read the design brief in the repo root (an older design brief, not in the reading order). Did NOT open design/screenshots/*.png. The boards are not renderable here (they reference `./support.js` and a `/_blob/...` stylesheet that are not in the repo), so I judged them from markup only.
 Evidence: n/a
 Status: resolved
 
-## [13:44] decision — TZ_design.md treated as non-authoritative
-What happened: `TZ_design.md` exists next to TZ_dev.md. TZ_dev.md §3 never mentions it.
-What I expected: Only TZ_dev.md + design/ to exist.
-What I did: Read it. It is the design brief the boards were made from, with no extra behavior requirements. Treated as background only; TZ_dev.md wins on behavior, design/ on looks.
-Evidence: /TZ_design.md
+## [13:44] decision — the design brief treated as non-authoritative
+What happened: the design brief exists next to the dev spec. the dev spec §3 never mentions it.
+What I expected: Only the dev spec + design/ to exist.
+What I did: Read it. It is the design brief the boards were made from, with no extra behavior requirements. Treated as background only; the dev spec wins on behavior, design/ on looks.
+Evidence: /the design brief
 Status: accepted-risk
 
 ## [13:44] spec-gap — Run page cannot know "stale" or "N s ago" without a trustworthy clock
 What happened: §4 says `stale` = running and no event for ≥ 5 min. §5.2 `stats` payload is `{last_seq, count, duplicates_ignored, status}`, with no `last_event_at` and no server time. RunPage design shows a stale banner ("No events for 12 min") and "Last event #N · 0.3 s ago". A run with zero events has no "last event" at all.
 What I expected: The fields needed by the screen to be in the API.
 What I did: Nothing in code. Proposed (not applied) in DESIGN: add additive `last_event_at` and `server_time` to `stats` and `GET /runs/{id}`/`GET /runs`; compute `stale` on the server (also return the configured threshold); for a run with no events use `created_at` as the baseline.
-Evidence: TZ_dev.md §4, §5.2; RunPage.dc.html banners `bStale`, `agoText`
+Evidence: the dev spec §4, §5.2; RunPage.dc.html banners `bStale`, `agoText`
 Status: open
 
 ## [13:44] spec-gap — IntegrityBar will show false warnings during normal streaming
 What happened: §6.2: "Received" = distinct points on the page (updates per event); "Stored" = latest `stats.count`. §5.2: `stats` is sent on connect, every 5 s and "after bursts". Between stats messages Received > Stored, and the design shows a warning icon + signed difference whenever they differ.
 What I expected: Equal counters in steady state.
 What I did: Proposed: Stored = max(last `stats.count`, highest seq received) (a page cannot receive what is not stored); raise the warning only for Received < Stored that persists longer than one stats interval; define "after bursts" as coalesced, at most 1 per second while seq advances.
-Evidence: TZ_dev.md §5.2, §6.2; RunPage.dc.html `intWarn`
+Evidence: the dev spec §5.2, §6.2; RunPage.dc.html `intWarn`
 Status: open
 
 ## [13:44] spec-gap — Verify under live traffic has no defined comparison point
 What happened: §5.3/§6.2: Verify = `GET /integrity` returning `{count, checksum, last_seq}`, compared with the page's `count/checksum`. While events are still arriving, the page and the server are never at the same seq, so a naive compare mismatches.
 What I expected: A rule for what is compared.
 What I did: Proposed: the page computes count/checksum over seqs ≤ response `last_seq`. If the page's `lastSeq` < response `last_seq`, wait for the stream and retry instead of declaring a mismatch. Only a persisting hole counts as a mismatch, and then `GET /seqs` produces `missing`. Note that with a contiguous seq, `/seqs` is always `1..last_seq`, so it is useful only as an independent cross-check.
-Evidence: TZ_dev.md §5.3, §6.2
+Evidence: the dev spec §5.3, §6.2
 Status: open
 
 ## [13:44] spec-gap — Checksum formatting and sort order are not reproducible as written
 What happened: §5.3: float formatting "`repr`/`%.17g` identically on server, browser and tests". JavaScript has neither: `String(1e-7)` is `1e-7` while Python `repr` is `1e-07`; `1.0` vs `1`; `-0.0` vs `0`. "Sorted by `point_id`" is undefined across Postgres collation, Python str order and JS UTF-16 order. `crypto.subtle` (SHA-256 in the browser) exists only in secure contexts, so it fails on plain http over a non-localhost host.
 What I expected: One canonical form that three implementations can produce.
 What I did: Proposed (not applied): serialize `value` as the 16-hex-digit IEEE-754 big-endian bits (identical in Python `struct` and JS `DataView`), sort by UTF-8 byte order of `point_id` in application code (never SQL `ORDER BY`), use a tiny pure-JS SHA-256 if `crypto.subtle` is missing. Restrict `point_id` charset so `|` cannot appear.
-Evidence: TZ_dev.md §5.3
+Evidence: the dev spec §5.3
 Status: open
 
 ## [13:44] spec-gap — Reusing a batch_id with different points is silently dropped
 What happened: §5.1: "`batch_id` makes a retried batch a no-op returning the original summary". `ingest_batches` stores only counts and seq range, so a different payload under the same `batch_id` (a client bug) is ignored without any signal. That contradicts the stated principle "conflicts are loud" for `point_id`.
 What I expected: Same strictness at batch level.
 What I did: Proposed schema addition: `ingest_batches.payload_hash`; same `batch_id` + different hash → `409 batch_conflict`, nothing stored. Needs the owner's OK because it adds a column and an error code not in §5.
-Evidence: TZ_dev.md §4 (`ingest_batches`), §5.1
+Evidence: the dev spec §4 (`ingest_batches`), §5.1
 Status: open
 
 ## [13:44] spec-gap — The seq-assignment recipe as written can leave holes
 What happened: §5.1 says `UPDATE runs SET last_seq = last_seq + :n ... RETURNING` serializes batches. But `:n` (number of accepted points) is only known after deduplicating against `UNIQUE (run_id, point_id)` and `ingest_batches`, and dedup done before the lock can race with a concurrent batch containing the same points. A wrong `n` then makes the insert fail or leaves the counter ahead of the rows (a hole).
 What I expected: A recipe that is safe under concurrency.
 What I did: Proposed order inside one transaction: `SELECT … FROM runs WHERE id AND project_id FOR UPDATE` first; then check status (closed → 409), look up `batch_id`, load existing `point_id`s, compute accepted list; then `UPDATE last_seq += n`; then insert with seq = old+1…old+n. Same lock order for `finish` so a batch racing a finish is decided after the lock.
-Evidence: TZ_dev.md §4 invariant, §5.1
+Evidence: the dev spec §4 invariant, §5.1
 Status: open
 
 ## [13:44] spec-gap — Duplicate corner cases are undefined
 What happened: §5.1 does not say: (a) what happens if one batch contains the same `point_id` twice (identical or different payload); (b) what `first_seq/last_seq` mean in `duplicate_batch` and in `ingest_batches` for a re-split batch that is partly or fully duplicate (zero accepted points means no seq range; the table columns are not marked nullable); (c) how much `duplicates_ignored` grows on a `batch_id` retry; (d) whether a `batch_id` retry on a run that has since closed returns the original reply or `409 run_closed`.
 What I expected: Rules for each.
 What I did: Proposed: (a) first occurrence accepted, later identical = duplicate, later different = `point_conflict`; (b) make `first_seq/last_seq` nullable, in `duplicate_batch` use the original range for a `batch_id` retry and the accepted range (possibly null) for point-level duplicates; (c) retry adds accepted+duplicates of the original batch (all its points); (d) `batch_id` lookup wins, return the original reply. Also: a batch_id retry writes no new `ingest_batches` row, so the number of retries is not recorded anywhere.
-Evidence: TZ_dev.md §4, §5.1, §5.2
+Evidence: the dev spec §4, §5.1, §5.2
 Status: open
 
 ## [13:44] spec-gap — Optional/nullable `ts` is unspecified
 What happened: The example point has `ts`, the table has `client_ts timestamptz`, nothing says whether `ts` is required or what to store when absent. The event log has a "client time" column.
 What I expected: A rule.
 What I did: Proposed: optional; absent → NULL, shown as "—"; never substituted by `received_at` (that would present server time as client time). `ts` is not part of conflict detection or the checksum, so a retry may carry a different `ts` without a 409.
-Evidence: TZ_dev.md §4, §5.1; RunPage.dc.html event table
+Evidence: the dev spec §4, §5.1; RunPage.dc.html event table
 Status: open
 
 ## [13:44] spec-gap — "Overflow" and "10,000 behind" are two different mechanisms; "retention" does not exist
 What happened: §5.2 says "bounded per-subscriber buffer; on overflow send resync" and also "RESYNC_THRESHOLD = 10,000 events behind … or a cursor older than retention". Since the stream replays from the DB and NOTIFY is only a wake-up, there is no growing per-subscriber buffer; the only thing that can pile up is the socket write queue. "Retention" is mentioned in §5.2, §8.1 and §11 but no retention job or setting is defined anywhere. At 10 ev/s per run, 10,000 events is about 17 minutes, so the §8.3.3 "paused reader → resync" test would never trip the threshold in a short run. Resync snapshot (§6.2) pages `/events` from 0, which costs the DB as much as replay.
 What I expected: One clear definition of "too far behind".
 What I did: Proposed: behind = (`last_seq − cursor` > threshold) OR (write queue above N bytes/events for longer than T s); cursor > `last_seq` also forces `resync`; no retention is implemented (events kept forever), so "older than retention" is dead code and documented as such; tests set a small threshold (e.g. 200) via config.
-Evidence: TZ_dev.md §5.2, §6.2, §8.3
+Evidence: the dev spec §5.2, §6.2, §8.3
 Status: open
 
 ## [13:44] spec-gap — `NOTIFY run_<id>` is unsafe as written
 What happened: Postgres folds unquoted identifiers to lower case; run ids are mixed-case base62 (`run_` + 22 chars), so `NOTIFY run_AbC…` and `LISTEN "run_AbC…"` can silently never match. "Each stream wakes" also suggests one LISTEN connection per stream, which eats Postgres `max_connections` (default 100) with a few dozen streams. A dropped listener connection loses wake-ups with no signal.
 What I expected: A wake-up mechanism that cannot stall.
 What I did: Proposed: one shared channel, `pg_notify('run_events', run_id)`, one listener connection per API process fanning out in memory; each stream also re-reads the DB on its 5 s stats tick, so a lost wake-up delays delivery by at most 5 s and never loses data.
-Evidence: TZ_dev.md §5.2
+Evidence: the dev spec §5.2
 Status: open
 
 ## [13:44] spec-gap — How "close streams on revoke within a few seconds" works is unspecified
 What happened: §5.2/§7 require closing open streams on revoke/rotate/expiry. No mechanism is given. A revoke can happen in another request (or another process).
 What I expected: A mechanism that does not depend on in-process state.
 What I did: Proposed: each stream re-validates its session and key (revoked_at, expires_at) from the DB every ≤ 2 s and closes with a final `closed`-like frame carrying no data beyond a generic reason (to avoid a close-reason side channel). Cost is about 25 small queries/s for 50 streams.
-Evidence: TZ_dev.md §5.2, §7
+Evidence: the dev spec §5.2, §7
 Status: open
 
 ## [13:44] spec-gap — A "read" key is effectively an admin key
 What happened: §5 puts `GET/POST /keys*` behind "session", and sessions come from read keys. So anyone with a read key can create ingest keys, rotate and revoke every key. "Read key cannot ingest" (§8.2) is therefore bypassable in two calls. Also: revoking the last active read key locks everyone out of the UI; and the sign-in page says "Lost your key? Whoever holds the project can rotate it", which is impossible when all read keys are lost (project unrecoverable).
 What I expected: Scope semantics that match the Create-key dialog ("read: can sign in and view runs. Can't write.").
 What I did: Followed the spec as written (any session may manage keys); proposed a guard that refuses to revoke/rotate-away the last active read key. Recorded as a known weak point in DESIGN.md. The isolation test "read key cannot ingest" will test the direct call only, and the note must say that key management is the bypass.
-Evidence: TZ_dev.md §5, §8.2; Keys.dc.html; SignIn.dc.html footer text
+Evidence: the dev spec §5, §8.2; Keys.dc.html; SignIn.dc.html footer text
 Status: open
 
 ## [13:44] spec-gap — Rotating your own session key collides with the one-time reveal
 What happened: §6.3: rotating/revoking the key of the current session signs the user out with the `revoked` banner. But rotate must show the new key once (KeyRevealPanel). If the session dies at rotate time, the next request (or the keys-list refetch) gets 401 and the §6.1 rule "401 key_revoked anywhere → redirect" fires before the user has copied the new key.
 What I expected: The new key to survive until the user dismisses the reveal.
 What I did: Proposed: the rotate response carries the new key; the client keeps it in memory, suppresses the 401 redirect and list refetch while the reveal dialog is open, and redirects to `/sign-in?reason=revoked` when "I've copied it" is clicked.
-Evidence: TZ_dev.md §6.1, §6.3; Keys.dc.html `doRotate`, `mReveal`
+Evidence: the dev spec §6.1, §6.3; Keys.dc.html `doRotate`, `mReveal`
 Status: open
 
 ## [13:44] spec-gap — Project creation: auto sign-in and error states undefined
 What happened: Design "Continue to runs" goes straight to the runs list, but §6.3 says sign-in needs a pasted read key, and the key is exchanged for a cookie. Nothing says whether `POST /projects` also sets a session. There is also no microcopy for create-project errors (invalid name, 429 rate limit, network).
 What I expected: A flow from "I've saved both keys" to `/runs`.
 What I did: Proposed: on Continue, the UI calls `POST /session` with the read key it still holds in memory, then navigates; the key is dropped from memory afterwards. Create-project errors reuse the key field style and the 429 page copy; exact strings to be added to `strings.ts` and logged as deviations.
-Evidence: TZ_dev.md §5, §6.3; SignIn.dc.html, KeyReveal.dc.html
+Evidence: the dev spec §5, §6.3; SignIn.dc.html, KeyReveal.dc.html
 Status: open
 
 ## [13:44] spec-gap — Wrong-scope key has no error code
 What happened: An ingest key pasted into sign-in (`POST /session`, read key required) or a read key sent to an ingest route: §5 lists `invalid_key`, `key_revoked`, `session_expired`, `run_closed`, 404, 429, but no "wrong scope" code.
 What I expected: A defined response.
 What I did: Proposed: `401 invalid_key` for both (no extra code, no distinguishing body), but the sign-in UI copy ("That doesn't look like a Tracker key…") is then misleading for an ingest key; a hint like "this looks like an ingest key" can be shown client-side from the `trk_ing_` prefix without asking the server.
-Evidence: TZ_dev.md §5; SignIn.dc.html
+Evidence: the dev spec §5; SignIn.dc.html
 Status: open
 
 ## [13:44] spec-gap — Rate limits will throttle the project's own tests and sit behind a proxy
 What happened: §5 limits: `POST /projects` 20/min/IP, `POST /session` and failed key lookups 10/min/IP. Behind the compose proxy every request has the proxy's IP unless X-Forwarded-For is trusted. The isolation suite creates many projects and sends bad keys (revoked, rotated, wrong scope), which can trip 10/min quickly. The design's 429 page says "for this project", which is wrong for the pre-auth per-IP limits.
 What I expected: Limits that do not break the evidence-producing tests.
 What I did: Proposed: configurable limits via env, relaxed in the test profile (and the relaxation recorded in the results), a trusted-proxy setting for client IP, and a separate generic copy for pre-auth 429.
-Evidence: TZ_dev.md §5, §8.2; SystemPages.dc.html
+Evidence: the dev spec §5, §8.2; SystemPages.dc.html
 Status: open
 
 ## [13:44] spec-gap — Test hook cannot support the claims in §8.1
 What happened: §6.2 defines `window.__tracker = { lastSeq, count, checksum, state, missing }`. §8.1 asserts "chart series == DB" and that the UI "passes through live → reconnecting → catching_up → live". The hook exposes neither the chart's series nor the state history; polling `state` can miss a short state.
 What I expected: Hook fields matching the assertions.
 What I did: Proposed additions (only with `VITE_TEST_HOOKS=1`): `series` (per metric, ordered by step, as drawn) and `history` (array of `{state, t}` appended on every transition).
-Evidence: TZ_dev.md §6.2, §8.1
+Evidence: the dev spec §6.2, §8.1
 Status: open
 
 ## [13:44] spec-gap — Test "DB" ground truth must not be the server's own endpoint
 What happened: §8.1 compares page `count/checksum` with `db.count/checksum`. If "db" is `GET /integrity`, the test checks the UI against server code that is itself under test.
 What I expected: An independent source of truth.
 What I did: Proposed: the test harness reads rows straight from Postgres and recomputes count/checksum/chart-rule series in test code (a second implementation), and separately asserts `/integrity` equals that.
-Evidence: TZ_dev.md §5.3, §8.1
+Evidence: the dev spec §5.3, §8.1
 Status: open
 
 ## [13:44] spec-gap — "proxy" is two things, and "after commit, before response" is not deterministic with a TCP proxy
 What happened: §2 lists compose services "postgres, api, web, proxy" and also "toxiproxy (or custom TCP proxy)". Not stated: is `proxy` the same-origin gateway (static `web` + `/api` → api) or the chaos proxy, and in what chain? The §7 CSRF rule "matching Origin" must accept the origin the browser actually uses (through the chaos proxy). Dropping the simulator's POST "after commit but before the response" cannot be timed exactly by a TCP proxy; §8.3.4 (fail mid-batch) needs a server-side fault hook in any case.
 What I expected: One diagram of the chain and a deterministic way to lose a response.
 What I did: Proposed: browser → chaos proxy → gateway → api, with the Origin/Host allowlist configurable; a test-only fault hook in the API (env-gated, e.g. fail-after-commit and fail-mid-batch switches) as the primary way to produce lost-response cases; the TCP proxy only for connection-level cuts. Keep the hook disabled in the load/verdict runs.
-Evidence: TZ_dev.md §2, §7, §8.1, §8.3
+Evidence: the dev spec §2, §7, §8.1, §8.3
 Status: open
 
 ## [13:44] spec-gap — GapsPanel would be empty in the main scenario
 What happened: §6.2: a gap is a seq jump seen by the page, "this page session only". With replay from `after_seq=lastSeq` the page receives lastSeq+1 next, so a disconnect never produces a jump. The design (RunPage, RunStates) shows disconnect windows as gaps going pending → filling 21/37 → filled. §13 #6 settled late events, not this.
 What I expected: The panel to show something after a Wi-Fi drop.
 What I did: Proposed: record each disconnect→catch-up window as a gap (`from = lastSeq+1`, `to` known from the first `stats` after reconnect, statuses pending/filling/filled), plus real seq jumps as before (status `open` if `/events` cannot fill them). §8.3.1 "zero gaps after catch-up" is then defined as: final `missing` is empty, not "panel is empty".
-Evidence: TZ_dev.md §6.2, §13 #6; RunPage.dc.html `gaps`
+Evidence: the dev spec §6.2, §13 #6; RunPage.dc.html `gaps`
 Status: open
 
 ## [13:44] spec-gap — Design has a sixth connection look and a first-load flash
 What happened: RunPage shows a "Stream closed" chip for finished runs; ConnectionChip/§6.1 define exactly five states. §5.2 `closed` ordering vs replay is not stated. On first page load the stream opens with `after_seq=<snapshot last>` and the first `stats` could briefly show "Catching up 0/N".
 What I expected: Five states only, no flicker.
 What I did: Proposed: "Stream closed" is derived (run status ≠ running and `closed` received), not a sixth machine state; the server sends `closed` only after replaying up to the final `last_seq`; "Catching up" is shown only for reconnects, never for the first connect.
-Evidence: TZ_dev.md §5.2, §6.1; RunPage.dc.html `cDone`; Components.dc.html props
+Evidence: the dev spec §5.2, §6.1; RunPage.dc.html `cDone`; Components.dc.html props
 Status: open
 
 ## [13:44] spec-gap — "Last used: 2 s ago / now" vs "updated at most once per minute"
 What happened: Keys board shows "2 s ago", "now". §5.1 limits `last_used_at` writes to once per minute per key. A read key is only used at sign-in, so its "last used" is the last sign-in, not browsing activity.
 What I expected: Consistent granularity.
 What I did: Proposed: display "last used" rounded to minutes ("< 1 min ago"); keep the throttle.
-Evidence: TZ_dev.md §5.1; Keys.dc.html
+Evidence: the dev spec §5.1; Keys.dc.html
 Status: open
 
 ## [13:44] spec-gap — Python client API shape is not pinned, and the curl snippet needs a run id
 What happened: §13 #1 says `client/tracker.py` provides `tracker.start/log/finish` and the UI snippet "must match exactly". The design shows `run = tracker.start(key=…, run="my-first-run")`, `run.log(step, loss=…, accuracy=…)`, `run.finish()`. Spec says module-level names; the design uses an object. `POST /runs {name}` returns an id, but the design curl posts to a run by name. A runnable curl needs a first step to create the run and then use the returned id.
 What I expected: One signature.
 What I did: Proposed: follow the design (`tracker.start(key, run) → Run`, `Run.log(step, **metrics)`, `Run.finish(status="finished")`); curl snippet shows `POST /runs` then `POST /runs/$RUN_ID/metrics`. Owner to confirm before coding.
-Evidence: TZ_dev.md §2, §13 #1, §6.3; Components.dc.html, KeyReveal.dc.html, RunsList.dc.html
+Evidence: the dev spec §2, §13 #1, §6.3; Components.dc.html, KeyReveal.dc.html, RunsList.dc.html
 Status: open
 
 ## [13:44] spec-gap — Default point_id makes the chart rule almost unreachable
 What happened: Default `point_id = '{metric}:{step}'` and "same point_id, different value → 409". So with default ids a corrected value for an existing (metric, step) is a conflict, and the §5.3 chart rule ("highest seq per (metric, step)") can only matter when clients send custom `point_id`s. If the E2E workload uses default ids only, the chart-rule half of the claim is never exercised.
 What I expected: The test workload to cover the rule.
 What I did: Noted for §8.1: the workload must include custom `point_id`s that share (metric, step) with different values, in addition to default ids.
-Evidence: TZ_dev.md §5.1, §5.3, §8.1
+Evidence: the dev spec §5.1, §5.3, §8.1
 Status: open
 
 ## [13:44] spec-gap — `.trk` root uses `container-type: inline-size`, which may break `position: fixed`
 What happened: tracker.css sets `container-type: inline-size` on `.trk`. By the CSS containment spec this applies layout containment, which makes the element the containing block for fixed-position descendants. Dialogs/scrims/toasts using `position: fixed` would then be positioned against `.trk` (as tall as the whole page), not the viewport. This is from my knowledge of the spec, not tested here.
 What I expected: Fixed dialogs and toasts to stay in the viewport.
 What I did: Nothing yet. Plan to verify in a browser when implementing; fallback: make `.trk` a viewport-height scroll container (`height: 100dvh; overflow: auto`) so "fixed" means "visible area" without editing tracker.css.
-Evidence: design/tracker.css line 28; Keys.dc.html scrim uses `position: absolute` inside the board
+Evidence: tracker.css line 28; Keys.dc.html scrim uses `position: absolute` inside the board
 Status: open
 
 ## [13:44] concern — GET /runs aggregates may be too heavy for a 2 s poll
 What happened: §5/§6.3: up to 500 runs, each with `events_count`, `last_event_at`, `primary_metric`, `latest_value` and a 30-point `spark`, one query, polled every 2 s per open tab. In the verdict workload that is 50 runs × 6,000 events after 10 min, and sparkline downsampling scans the primary metric's rows.
 What I expected: Cheap list reads.
 What I did: Nothing yet. Option: keep `last_event_at`/`latest_value`/`primary_metric` denormalized on `runs` (updated in the ingest transaction, which already holds the row lock) and compute `spark` from a bounded tail. Needs measurement before anyone calls it fine.
-Evidence: TZ_dev.md §5, §6.3
+Evidence: the dev spec §5, §6.3
 Status: open
 
 ## [13:44] concern — Scope vs the 5–7 h budget
 What happened: P0 alone covers backend auth/keys/sessions/ingestion/SSE, a React app with about 25 components and a five-state connection machine, virtualized table, custom chart with downsampling, zoom and keyboard navigation, chaos proxy, E2E with random seeds, a statistical timing test, five silent-failure tests, a 10-minute load test with latency/lost/duplicate/CPU/memory measurements, and four written documents.
 What I expected: A set that fits 5–7 h.
 What I did: Flagged to the owner in the session summary. No estimate was measured; this is a judgment from the task list.
-Evidence: TZ_dev.md §3 (tiers), §8, §10
+Evidence: the dev spec §3 (tiers), §8, §10
 Status: open
 
 ## [13:44] concern — Timing-based isolation test and the load measurements can be flaky or misleading
 What happened: §8.2 asks for a statistical timing comparison inside docker (shared CPU, jitter). §8.4 needs end-to-end stream delay, lost and duplicate events "measured, not assumed", plus DB CPU and API memory, for 10 minutes.
 What I expected: Reliable numbers.
 What I did: Nothing yet. Intent: pick the tolerance from a measured baseline, keep all raw samples in `results/`, and count loss/duplicates by comparing sent vs stored vs received per run with independent code.
-Evidence: TZ_dev.md §8.2, §8.4
+Evidence: the dev spec §8.2, §8.4
 Status: open
 
 ## [14:54] decision — Owner accepted all earlier proposals; they are now binding
-What happened: Owner replied to the session-1 summary: accept ALL `[P]` proposals in DESIGN.md and ALL proposals in the `spec-gap` entries above, with the notes below. TZ_dev.md is NOT edited; the accepted proposals override it where they differ (the earlier entries stay as written).
+What happened: Owner replied to the session-1 summary: accept ALL `[P]` proposals in DESIGN.md and ALL proposals in the `spec-gap` entries above, with the notes below. the dev spec is NOT edited; the accepted proposals override it where they differ (the earlier entries stay as written).
 What I expected: n/a
 What I did: Accepted proposals now binding (each refers to the spec-gap entry of the same title): stale/last_event_at/server_time; IntegrityBar Stored = max(stats.count, highest seq); Verify compares at response last_seq; checksum canonical form (IEEE-754 hex, UTF-8 byte sort, restricted point_id charset); `ingest_batches.payload_hash` + 409 batch_conflict; lock-first seq recipe; duplicate corner cases (a)-(d); optional/nullable ts; one definition of "too far behind", no retention; shared pg_notify channel + 5 s re-read; 2 s stream re-validation; guard for last read key; rotate-reveal handling; project-creation sign-in; wrong-scope = 401 invalid_key; env-configurable rate limits + trusted proxy setting; test-hook additions; independent test ground truth; env-gated fault hook; gaps from catch-up windows; "Stream closed" derived; last-used in minutes; Python client follows the design; custom point_ids in the E2E workload.
 Evidence: owner message after session 1
@@ -235,7 +235,7 @@ What I did: Nothing in code yet (UI is step 4). Note: this reduces the budget ri
 Evidence: owner message
 Status: resolved
 
-## [14:54] decision — Session 2 scope: TZ_dev.md §10 step 2 only
+## [14:54] decision — Session 2 scope: the dev spec §10 step 2 only
 What happened: Owner asked for: tighten DESIGN.md to about 600 words (no [P] markers, one plain "what this guarantees" sentence per section, no shorthand), then ONLY schema + Alembic migration, auth (projects, keys, sessions, rate limits), run creation, batch ingestion with the lock-first transaction, pytest API tests, docker compose with postgres + api only; raw test output into results/. No SSE, no UI, no chaos proxy, no load test. Then STOP and report.
 What I expected: n/a
 What I did: Starting. Deferred on purpose: SSE/`duplicate_batch` emission and `NOTIFY` (step 3), `GET /runs` list with aggregates and `/events`, `/integrity`, `/seqs` (step 3/5).
@@ -251,7 +251,7 @@ Status: resolved
 
 ## [15:01] problem — Run id containing a NUL byte gave 500 instead of the uniform 404
 What happened: First full run: 64 passed, 1 failed. `test_foreign_missing_and_malformed_run_ids_are_indistinguishable`: `GET /runs/run_%00` returned 500 `internal_error` (log: `unhandled DBAPIError`). Reproduced directly with asyncpg: `CharacterNotInRepertoireError: invalid byte sequence for encoding "UTF8": 0x00`. Postgres text cannot hold NUL, so the query itself blew up.
-What I expected: Every malformed id to give the same 404 body as an unknown id (TZ_dev.md §5, §8.2).
+What I expected: Every malformed id to give the same 404 body as an unknown id (the dev spec §5, §8.2).
 What I did: Added `_lookup_id()` in routes_runs.py: ids that are not `[A-Za-z0-9_]{1,64}` are looked up as the empty string, so they still do one DB query and take the same code path (rather than an early return with different timing). Same for every run route that takes an id. Key ids already go through UUID parsing and give 404.
 Evidence: results/api-tests-20261111-first-run-1-failure.txt (raw failing run, kept)
 Status: resolved
@@ -452,7 +452,7 @@ What I did: As listed.
 Evidence: chaos/proxy.py, client/tracker.py, web/e2e/, results/e2e/settings.txt
 Status: resolved
 
-## [16:43] concern — What the E2E consistency test would NOT catch (list required by TZ_dev.md §8.1; facts only)
+## [16:43] concern — What the E2E consistency test would NOT catch (list required by the dev spec §8.1; facts only)
 What happened: Not covered: clock skew between browser and server (the test compares data, not "N s ago"); outages longer than anything tested (longest block 2 s; there is no retention, so a cursor "older than retention" cannot occur); chart-library rendering bugs (it compares the series the page holds, not pixels drawn by uPlot); more than one API process; background-tab throttling or a sleeping laptop; the proxy buffering SSE in real deployments (nginx here has proxy_buffering off); resync under the E2E workload (threshold 10,000, never reached; resync was only checked by hand and by API tests); runs far larger than 840 events; a page that repairs lost events via gap-fill (see the mutation surprise); the `start()` race; browsers other than Chromium; TCP-level faults other than reset/close (no delay, packet loss or half-open connections); `NOTIFY` loss (that is the API-level listener test).
 What I expected: n/a
 What I did: Listed for NOTE.md; the owner decides what to keep.
@@ -501,7 +501,7 @@ What I did: As listed.
 Evidence: results/evidence-map.md
 Status: resolved
 
-## [17:22] concern — "What else could leak": checked vs not checked (facts only, list required by TZ_dev.md §8.2)
+## [17:22] concern — "What else could leak": checked vs not checked (facts only, list required by the dev spec §8.2)
 What happened: Checked: application and container logs for keys, session tokens and payload markers (the 500 path included); the 404 body, status and cache headers for foreign/missing/malformed run ids on 9 read routes, 2 write routes (in-process) and through nginx; timing of GET /runs/{id} only; shared-cache behaviour through nginx and the chaos proxy; `stats`/`events`/`stream` of foreign runs (404); cookie swapping between clients. NOT checked: timing of any route other than GET /runs/{id}, or of 401 for unknown vs wrong keys; error bodies other than 404 across projects (401/403/409/422 bodies are not compared; `point_conflict` lists the caller's own point ids); `last_used_at` (visible only to the key's own project, not tested as a side channel); run counts and id density (ids are random, nothing global is exposed, but there is no test that tries to count other projects' runs through any endpoint); SSE close behaviour as a side channel (the stream ends silently, no reason is sent, but revoked vs expired can be told apart afterwards via `GET /session`, which is the intended behaviour for the UI); 429 behaviour (limits are per IP and shared by everyone behind one IP, so one client can lock out another: noted in step 2, still true; not tested on the stack); 401 `key_revoked` vs `invalid_key` tells a caller that a key once existed (required by the spec); Postgres row-level security (not implemented); `Server`/`Via` headers of the API when reached directly on port 8000 (published for local tests only); browser-side leaks (referrer, history, localStorage: only the keys-page storage was checked, once, manually).
 What I expected: n/a
 What I did: Listed for NOTE.md; the owner decides which of these to conclude on.
@@ -621,7 +621,7 @@ Status: resolved
 
 ## [10:23] decision — Local paths removed from raw outputs (owner instruction); personal-data scan
 What happened: Owner asked to replace the absolute home path in results/ with a placeholder and scan results/ and JOURNAL.md for the e-mail address and other personal data. Replaced `/Users/<user>/…/<project>` with `<repo>` and the temporary clone path (it also contained the user name) with `<repo-clone>` in 12 text files, 16 replacements: results/clean-clone-real-20261112/{02-run.txt, run.sh, stack-run.txt, web-unit-tests-20261112-094217.txt}, results/e2e/{chart-interaction-mutation-zoom-not-kept.txt, mutation-checks-e2e-redo-20261111.txt, run-20261111-162558.txt}, results/stack/run-20261111-171630.txt, results/web-unit-tests-{20261111-160310, 20261111-171315, 20261111-211803, 20261111-224733}.txt. It was 9 files with the user path (my earlier "5 files" in this journal and in AI_LOG was wrong). Same replacement in one older JOURNAL line that quoted the path (a privacy edit, the meaning of the entry is unchanged). This is the only edit ever made to raw outputs; the test results themselves are unchanged.
-Scan result: the e-mail address does not occur in any file of the working tree (searched the whole tree, not only results/ and JOURNAL.md, for the address, its user part, "gmail", and the git user name). Other hits: the task contact address in TZ_dev.md (from the task text, not edited), the name "Disa" as a sample key label in design/boards/Keys.dc.html (provided design, not edited), system-Python paths `/Library/Frameworks/Python.framework/...` in results/smoke-compose-*.txt (no personal data, left), no host names, no IP addresses of the machine (an address seen in one nginx log line is the docker gateway). Not covered: the 7 PNG screenshots were searched for text strings only (none found), not looked at again; images could still show something I did not check.
+Scan result: the e-mail address does not occur in any file of the working tree (searched the whole tree, not only results/ and JOURNAL.md, for the address, its user part, "gmail", and the git user name). Other hits: the task contact address in the dev spec (from the task text, not edited), the name "Disa" as a sample key label in design/boards/Keys.dc.html (provided design, not edited), system-Python paths `/Library/Frameworks/Python.framework/...` in results/smoke-compose-*.txt (no personal data, left), no host names, no IP addresses of the machine (an address seen in one nginx log line is the docker gateway). Not covered: the 7 PNG screenshots were searched for text strings only (none found), not looked at again; images could still show something I did not check.
 NOT removed and needs the owner's decision: both git commits carry the owner's configured author name and e-mail address (git log shows them). Removing them means rewriting history (git commit --amend / filter-repo with another identity); I did not do it.
 Evidence: git diff of this commit
 Status: resolved (except the commit author, open)

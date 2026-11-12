@@ -1,4 +1,4 @@
-"""initial schema (TZ_dev.md §4 + owner-approved additions, see JOURNAL.md)
+"""initial schema (the dev spec §4 + owner-approved additions, see JOURNAL.md)
 
 Additions to §4: ingest_batches.payload_hash, nullable first_seq/last_seq,
 runs.last_event_at. Enums are TEXT + CHECK constraints (decision logged in JOURNAL.md).

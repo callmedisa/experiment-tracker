@@ -1,4 +1,4 @@
-"""The single authorization point (TZ_dev.md §7). Every route gets its project from here, never from the request."""
+"""The single authorization point (the dev spec §7). Every route gets its project from here, never from the request."""
 import hmac
 import time
 from dataclasses import dataclass

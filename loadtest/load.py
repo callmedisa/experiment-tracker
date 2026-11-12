@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Load test (TZ_dev.md §8.4). Run against the compose stack through the nginx gateway (the shipped topology).
+"""Load test (the dev spec §8.4). Run against the compose stack through the nginx gateway (the shipped topology).
 
   50 runs x 10 events/s = 500 events/s, batches of 10-50 points, for --duration seconds
   + one normal SSE reader per run that drops its connection every 20-60 s and resumes from its cursor

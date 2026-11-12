@@ -1,4 +1,4 @@
-"""Batch ingestion: idempotency, conflicts, seq contiguity, atomic rollback, late flags (TZ_dev.md §5.1, §8.3)."""
+"""Batch ingestion: idempotency, conflicts, seq contiguity, atomic rollback, late flags (the dev spec §5.1, §8.3)."""
 import asyncio
 
 from sqlalchemy import text

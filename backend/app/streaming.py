@@ -1,4 +1,4 @@
-"""SSE stream, replay, seqs and integrity (TZ_dev.md §5.2, §5.3; DESIGN.md §3)."""
+"""SSE stream, replay, seqs and integrity (the dev spec §5.2, §5.3; DESIGN.md §3)."""
 import asyncio
 import hashlib
 import json
