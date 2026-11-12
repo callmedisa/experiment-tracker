@@ -41,15 +41,25 @@ What the agent proposed, what the owner accepted / verified / changed / redid, a
 4. A first attempt to write several files in one shell command was blocked by the tool's safety check (the command contained no deletion; the parser could not verify it). Nothing ran. The files were written with the file-write tool instead.
 
 ## Things the agent claims that are NOT verified
-- That `container-type: inline-size` makes `position: fixed` relative to `.trk` (JOURNAL spec-gap on tracker.css). From memory of the CSS containment spec, not tested.
-- That Postgres folds unquoted `NOTIFY`/`LISTEN` channel identifiers to lower case, and that `crypto.subtle` is secure-context only. From memory, not tested.
-- That `GET /runs` aggregates could be slow; no measurement exists.
+Resolved since the first version of this list (see JOURNAL): `container-type` vs `position: fixed` was tested and my claim was wrong (spec-gap #25 entry, results/ui/fixed-position-experiment.md); `GET /runs` is still unmeasured at 500 runs (below).
+
+- That `crypto.subtle` is secure-context only, and that Postgres folds unquoted `NOTIFY`/`LISTEN` channel identifiers to lower case. From memory, not tested (the code works either way).
+- `GET /runs` with hundreds of runs: no measurement exists (the load test used 50 runs and did not load the list).
 - The 5–7 h scope concern is a judgment, not an estimate.
-- That the tests exercise the same code that runs under `docker compose up`: only partly (in-process vs real uvicorn); see JOURNAL concern "What the step-2 tests do NOT show".
+- That the tests exercise the same code that runs under `docker compose up`: mostly yes for E2E and stack tests (real nginx and uvicorn), only partly for the API tests (in-process, plus a real-uvicorn fixture for streams).
 - That the timing test proves timing equality: it is a statistical check of one route over 400 samples per variant on a laptop with Docker; a 0.2 ms difference was measurable (long ids).
 - That the E2E test would catch every kind of data loss: a page that silently drops events but repairs them through gap-fill is not caught (shown by mutation).
-- That the UI works in browsers other than the built-in one, or on mobile/dark: not checked.
-- That the 4 mutation checks mean the suite is thorough: they show these four breakages are caught, nothing more.
+- That the mutation checks mean the suites are thorough: they show that the listed breakages are caught, nothing more. Several isolation mutations (I-M5 and the "not run" rows in results/evidence-map.md) were not run.
+- Browsers and devices: Chromium only (the app pane and Playwright 129). Firefox, Safari, a real phone, a screen reader, an automated contrast check were not used. Dark theme was looked at on three pages only.
+- Zoom and keyboard stepping: x-axis zoom by mouse drag only; not tested with touch, wheel or a screen reader (the readout announces every step).
+- Everything ran on one laptop with Docker Desktop; the load test is one 10-minute run with the shipped defaults; no second run to show variance.
+- Rate limits, the stream hub and last-used throttling are in-process: only correct with ONE api process. Not tested with two.
+- The npm-audit exposure: 2 runtime findings (react-router) and 8 dev-tool findings, none upgraded; whether the router advisories are reachable here was not tested (results/npm-audit-summary.md).
+- The lost browser session is unexplained (JOURNAL, "Lost browser session"); I found and fixed a different bug (500 after a Postgres restart) while looking.
+- The public default SERVER_PEPPER is only warned about, not refused: a stack started without `make pepper` runs with it.
+- Expired session rows are never deleted (unbounded growth of the sessions table); the retention of runs and events is also unbounded.
+- Local path `/Users/disa` appears in 5 raw result files (never edited, as required); the repository is committed with them.
+- Not built: downsampling, Docs page, 404/500/429 artwork, y/wheel/touch zoom, mouse-hover readout.
 
 ## Process notes
 - Session 1 was restricted to documents only. Session 2 (owner-approved) allowed backend code, docker and installs for step 2 only. `TZ_dev.md` and `design/` were never edited.

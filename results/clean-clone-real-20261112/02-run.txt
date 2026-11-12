@@ -1,0 +1,115 @@
+
+######## 09:41:52 make setup
+added 108 packages, and audited 109 packages in 1s
+
+16 packages are looking for funding
+  run `npm fund` for details
+
+10 vulnerabilities (5 moderate, 3 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+cd web && npx playwright install chromium
+
+######## 09:41:59 quickstart: create project via API (UI step), then the python one-liner from the README
+ingest key obtained: trk_ing_eiU…
+quickstart python exit 0
+
+######## 09:41:59 make test-api
+tests/test_stream.py::test_slow_reader_gets_resync_and_ingestion_is_not_slowed PASSED [ 90%]
+tests/test_stream.py::test_no_events_lost_or_duplicated_across_random_disconnects PASSED [ 91%]
+tests/test_stream.py::test_unauthenticated_foreign_and_wrong_credentials PASSED [ 92%]
+tests/test_stream.py::test_revoking_the_key_closes_open_streams PASSED   [ 93%]
+tests/test_stream.py::test_rotating_the_key_and_session_expiry_close_open_streams PASSED [ 94%]
+tests/test_stream.py::test_stream_still_delivers_when_the_listener_connection_dies PASSED [ 95%]
+tests/test_stream.py::test_stream_headers PASSED                         [ 96%]
+tests/test_stream.py::test_events_paging_and_limits PASSED               [ 97%]
+tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing PASSED [ 98%]
+tests/test_stream.py::test_events_seqs_integrity_are_404_for_foreign_runs PASSED [100%]
+
+============================= 96 passed in 13.55s ==============================
+
+######## 09:42:16 make test-web
+ ✓ test/chartNav.test.ts (6 tests) 2ms
+ ✓ test/runData.test.ts (5 tests) 2ms
+ ✓ test/connection.test.ts (10 tests) 4ms
+ ✓ test/checksum.test.ts (6 tests) 6ms
+
+ Test Files  4 passed (4)
+      Tests  27 passed (27)
+   Start at  09:42:18
+   Duration  284ms (transform 132ms, setup 0ms, collect 200ms, tests 13ms, environment 0ms, prepare 326ms)
+
+
+######## 09:42:19 client tests
+collected 10 items
+
+client/test_tracker.py ..........                                        [100%]
+
+============================== 10 passed in 0.03s ==============================
+
+######## 09:42:19 make e2e
+ Container real-clone-1-web-1  Starting
+ Container real-clone-1-web-1  Started
+printf 'RL_PROJECTS_PER_MIN=100000 RL_SESSION_PER_MIN=100000 RL_AUTH_FAIL_PER_MIN=100000 RL_INGEST_PER_S=100000 FAULT_HOOKS=0 VITE_TEST_HOOKS=1 TRUSTED_PROXY_HOPS=1 RESYNC_THRESHOLD=10000\n' > results/e2e/settings.txt
+cd web && npx playwright test 2>&1 | tee ../results/e2e/run-$(date +%Y%m%d-%H%M%S).txt
+
+Running 19 tests using 1 worker
+
+  ✓  1 chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points (2.4s)
+  ✓  2 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (19.2s)
+  ✓  3 consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points (16.3s)
+  ✓  4 consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points (15.2s)
+  ✓  5 consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points (20.7s)
+  ✓  6 consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points (17.7s)
+  ✓  7 consistency.spec.ts:54:3 › seed 6: page == database after cut connections, lost responses, duplicates and late points (17.3s)
+  ✓  8 consistency.spec.ts:54:3 › seed 7: page == database after cut connections, lost responses, duplicates and late points (19.1s)
+  ✓  9 consistency.spec.ts:54:3 › seed 8: page == database after cut connections, lost responses, duplicates and late points (19.8s)
+  ✓  10 p1-ui.spec.ts:19:3 › keys page › list, create, copy, use the new key, validation (848ms)
+  ✓  11 p1-ui.spec.ts:42:3 › keys page › rotate: alert dialog focus, Esc, reveal with old key revoked, old key dead (596ms)
+  ✓  12 p1-ui.spec.ts:66:3 › keys page › revoke needs the typed label; the last read key cannot be revoked (839ms)
+  ✓  13 p1-ui.spec.ts:88:3 › keys page › rotating the key of the current session: the new key stays on screen until copied, then sign-in (3.3s)
+  ✓  14 p1-ui.spec.ts:106:3 › keys page › dialogs keep focus inside, and (#25) stay in the viewport on a long page scrolled to the bottom (649ms)
+  ✓  15 p1-ui.spec.ts:134:3 › dark theme › follows the OS preference, toggles, persists, and the chart palette changes (1.1s)
+  ✓  16 p1-ui.spec.ts:160:3 › mobile 390 › drawer navigation, no horizontal page scroll, run page and keys page usable (3.3s)
+  ✓  17 silent-failures.spec.ts:20:1 › duplicates: the same batch again shows a toast, counts exactly, and a conflicting resend stores nothing (2.3s)
+  ✓  18 silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database (1.2s)
+  ✓  19 silent-failures.spec.ts:72:1 › old key after rotation: REST is 401 and the open page is signed out within seconds (2.6s)
+
+  Slow test file: consistency.spec.ts (2.4m)
+  Consider splitting slow test files to speed up parallel execution
+  19 passed (2.8m)
+
+######## 09:45:22 make stack-tests
+ Container real-clone-1-web-1  Starting
+ Container real-clone-1-web-1  Started
+sleep 6
+printf 'RL_PROJECTS_PER_MIN=100000 RL_SESSION_PER_MIN=100000 RL_AUTH_FAIL_PER_MIN=100000 RL_INGEST_PER_S=100000 FAULT_HOOKS=0 TRUSTED_PROXY_HOPS=1 RESYNC_THRESHOLD=10000\n' > results/stack/settings.txt
+.venv/bin/python -m pytest tests/stack -v -p no:cacheprovider 2>&1 | tee results/stack/run-$(date +%Y%m%d-%H%M%S).txt
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- /private/tmp/claude-501/-Users-disa--claude-spares-spare-GKZI32/f2674275-2a1e-4ece-82fc-f2267e7e5036/scratchpad/real-clone-1/.venv/bin/python
+rootdir: /private/tmp/claude-501/-Users-disa--claude-spares-spare-GKZI32/f2674275-2a1e-4ece-82fc-f2267e7e5036/scratchpad/real-clone-1
+plugins: anyio-4.16.0
+collecting ... collected 12 items
+
+tests/stack/test_stack_isolation.py::test_no_shared_cache_in_the_compose_config PASSED [  8%]
+tests/stack/test_stack_isolation.py::test_same_url_with_a_and_b_cookies_never_serves_the_other_projects_body PASSED [ 16%]
+tests/stack/test_stack_isolation.py::test_conditional_requests_and_cache_headers_do_not_leak_or_revalidate PASSED [ 25%]
+tests/stack/test_stack_isolation.py::test_static_app_shell_is_not_cached_and_api_errors_are_private PASSED [ 33%]
+tests/stack/test_stack_isolation.py::test_csrf_through_the_gateway PASSED [ 41%]
+tests/stack/test_stack_isolation.py::test_malformed_ids_are_the_same_404_through_the_gateway_as_missing_ids PASSED [ 50%]
+tests/stack/test_stack_isolation.py::test_unknown_vs_foreign_vs_malformed_run_ids_take_the_same_time PASSED [ 58%]
+tests/stack/test_stack_isolation.py::test_container_logs_contain_no_secrets_cookies_or_payloads PASSED [ 66%]
+tests/stack/test_stack_isolation.py::test_stream_is_not_buffered_by_nginx_and_has_the_right_headers PASSED [ 75%]
+tests/stack/test_stack_isolation.py::test_rotating_or_revoking_a_key_closes_open_streams_through_nginx PASSED [ 83%]
+tests/stack/test_stack_isolation.py::test_old_ingest_key_is_dead_after_rotation_through_the_gateway PASSED [ 91%]
+tests/stack/test_zz_db_restart.py::test_signed_in_session_survives_a_postgres_restart PASSED [100%]
+
+============================= 12 passed in 19.64s ==============================
+
+######## 09:46:05 done

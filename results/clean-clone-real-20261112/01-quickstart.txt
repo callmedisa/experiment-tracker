@@ -1,0 +1,32 @@
+## make pepper
+wrote SERVER_PEPPER to .env
+## docker compose build --no-cache (cold)
+
+#33 [web stage-1 3/3] COPY --from=build /repo/web/dist /usr/share/nginx/html
+#33 DONE 0.0s
+
+#34 [web] exporting to image
+#34 exporting layers 0.0s done
+#34 writing image sha256:b331a4668007dddb355be8e0ebb42969789a4bdcb88cdd63acbd9ce941bd0828 done
+#34 naming to docker.io/library/real-clone-1-web done
+#34 DONE 0.0s
+
+#35 [web] resolving provenance for metadata file
+#35 DONE 0.0s
+ real-clone-1-api  Built
+ real-clone-1-chaos  Built
+ real-clone-1-web  Built
+## docker compose up -d
+ Container real-clone-1-postgres-1  Waiting
+ Container real-clone-1-postgres-1  Healthy
+ Container real-clone-1-api-1  Starting
+ Container real-clone-1-api-1  Started
+ Container real-clone-1-web-1  Starting
+ Container real-clone-1-web-1  Started
+ Container real-clone-1-chaos-1  Starting
+ Container real-clone-1-chaos-1  Started
+real-clone-1-api-1 Up 12 seconds
+real-clone-1-chaos-1 Up 12 seconds
+real-clone-1-postgres-1 Up 14 seconds (healthy)
+real-clone-1-web-1 Up 12 seconds
+## api log head

@@ -4,14 +4,14 @@ A small experiment tracker: a training script sends metrics, a web page shows th
 is what the server stored (Verify, checksum). Built for the Soup take-home; the written deliverables are `DESIGN.md`, `NOTE.md`,
 `SURPRISE.md`, `AI_LOG.md` and `JOURNAL.md`. Raw test output is in `results/`.
 
-## Quickstart (6 lines)
+## Quickstart
 
 ```bash
 make pepper                               # once: writes a random SERVER_PEPPER to .env (git-ignored); see "Secrets" below
 docker compose up --build                 # postgres, api, web (nginx), chaos proxy
 open http://localhost:8080                # create a project; copy both keys from the one-time page
-pip install ./client                      # the Python client (not on PyPI)
-python -c "import tracker; r = tracker.start(key='<ingest key>', run='hello', url='http://localhost:8080/api'); [r.log(s, loss=1/(s+1)) for s in range(50)]; r.finish()"
+python3 -m venv .venv && .venv/bin/pip install ./client   # the Python client (not on PyPI); `make setup` does this too
+.venv/bin/python -c "import tracker; r = tracker.start(key='<ingest key>', run='hello', url='http://localhost:8080/api'); [r.log(s, loss=1/(s+1)) for s in range(50)]; r.finish()"
 # then open the run in the web app: Runs -> hello
 ```
 
@@ -57,3 +57,5 @@ design/     the provided design (not edited)             results/   raw outputs,
 Demo-grade tenancy (a read key can manage keys); one API process (rate limits and the stream hub are in-process); no retention;
 Not built: downsampling, y/wheel/touch zoom, mouse-hover readout, the Docs page, system-page artwork (404/500/429 are plain); the run page loads all
 events of a run when it opens; the E2E and load tests ran on one laptop with Docker Desktop.
+
+Running the test suites rewrites some committed files in `results/` (`e2e/seed-*.json`, `stack/timing-*`, `ui/*.png`) with the new run's output; `git diff results/` shows the difference between the run in this repository and yours.
