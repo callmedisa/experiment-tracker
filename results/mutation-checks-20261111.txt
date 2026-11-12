@@ -1,0 +1,19 @@
+== M1: remove the row lock (with_for_update)
+FAILED tests/test_ingest.py::test_concurrent_identical_batch_is_stored_exactly_once
+FAILED tests/test_ingest.py::test_concurrent_overlapping_batches_under_different_ids_do_not_duplicate_or_leave_holes
+FAILED tests/test_ingest.py::test_concurrent_conflicting_writers_one_wins_others_get_409
+3 failed, 62 passed in 2.03s
+== M2: counter bumped by number of submitted points, not accepted
+FAILED tests/test_ingest.py::test_resplit_batch_under_new_batch_id_is_deduped_by_point_id
+FAILED tests/test_ingest.py::test_same_point_repeated_inside_one_batch
+2 failed, 63 passed in 2.03s
+== M3: is_late uses <= instead of <
+FAILED tests/test_ingest.py::test_is_late_across_batches_and_within_a_batch
+1 failed, 64 passed in 2.02s
+== M4: skip point_conflict check
+FAILED tests/test_ingest.py::test_point_conflict_rejects_whole_batch_and_stores_nothing
+FAILED tests/test_ingest.py::test_point_conflict_on_metric_or_step_change_with_custom_id
+FAILED tests/test_ingest.py::test_conflict_inside_one_batch
+FAILED tests/test_ingest.py::test_minus_zero_is_not_silently_treated_as_same_as_zero
+FAILED tests/test_ingest.py::test_concurrent_conflicting_writers_one_wins_others_get_409
+5 failed, 60 passed in 2.04s

@@ -1,0 +1,82 @@
+{
+  "seed": 2,
+  "flaky": {
+    "reset": 0.12,
+    "lost": 0.12
+  },
+  "run_id": "run_DdMABgLpkUzcMrKtd4k9kb",
+  "disruptions": [
+    "block 1s+drop(open=3) @2729ms",
+    "drop(open=1) @6566ms",
+    "drop(open=1) @7686ms",
+    "block 2s+drop(open=1) @8829ms",
+    "drop(open=1) @12887ms"
+  ],
+  "sim_exit": 0,
+  "sim_log": [
+    "RUN run_DdMABgLpkUzcMrKtd4k9kb",
+    "DONE {\"stats\": {\"batches\": 52, \"retries\": 11, \"accepted\": 998, \"duplicates\": 44}, \"unique_points\": 840, \"resends\": 7, \"resplits\": 6}"
+  ],
+  "db": {
+    "count": 840,
+    "checksum": "7994a91a5f488852aafdd5d1ed2abcbb0871bce80da26e7cc4033c5e4826e46f",
+    "last_seq": 840,
+    "duplicates_ignored": 313,
+    "status": "finished"
+  },
+  "page": {
+    "count": 840,
+    "checksum": "7994a91a5f488852aafdd5d1ed2abcbb0871bce80da26e7cc4033c5e4826e46f",
+    "last_seq": 840,
+    "missing": [],
+    "closed": true,
+    "history": [
+      "connecting",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live"
+    ]
+  },
+  "sim": {
+    "unique_points": 840,
+    "stats": {
+      "batches": 52,
+      "retries": 11,
+      "accepted": 998,
+      "duplicates": 44
+    },
+    "batches": 39,
+    "same_batch_resends": 7,
+    "resplit_resends": 6,
+    "held_back_late": 70
+  },
+  "chaos": {
+    "sim": {
+      "accepted": 65,
+      "dropped": 0,
+      "blocked": 0,
+      "reset": 5,
+      "lost": 6
+    },
+    "browser": {
+      "accepted": 13,
+      "dropped": 7,
+      "blocked": 6,
+      "reset": 0,
+      "lost": 0
+    }
+  }
+}

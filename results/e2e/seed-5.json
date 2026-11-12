@@ -1,0 +1,94 @@
+{
+  "seed": 5,
+  "flaky": {
+    "reset": 0.12,
+    "lost": 0.12
+  },
+  "run_id": "run_aMWvY2xnA3ecszxEoeVUaf",
+  "disruptions": [
+    "block 1s+drop(open=3) @1534ms",
+    "drop(open=1) @4306ms",
+    "drop(open=1) @5534ms",
+    "block 2s+drop(open=1) @6725ms",
+    "drop(open=1) @10058ms",
+    "drop(open=1) @11821ms",
+    "drop(open=1) @13816ms",
+    "drop(open=1) @15639ms"
+  ],
+  "sim_exit": 0,
+  "sim_log": [
+    "RUN run_aMWvY2xnA3ecszxEoeVUaf",
+    "DONE {\"stats\": {\"batches\": 43, \"retries\": 17, \"accepted\": 950, \"duplicates\": 13}, \"unique_points\": 840, \"resends\": 5, \"resplits\": 2}"
+  ],
+  "db": {
+    "count": 840,
+    "checksum": "c4605557cf2b7ad5b10e5d05295f2a59d312c6b4d124a839741ff5427f889731",
+    "last_seq": 840,
+    "duplicates_ignored": 378,
+    "status": "finished"
+  },
+  "page": {
+    "count": 840,
+    "checksum": "c4605557cf2b7ad5b10e5d05295f2a59d312c6b4d124a839741ff5427f889731",
+    "last_seq": 840,
+    "missing": [],
+    "closed": true,
+    "history": [
+      "connecting",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live"
+    ]
+  },
+  "sim": {
+    "unique_points": 840,
+    "stats": {
+      "batches": 43,
+      "retries": 17,
+      "accepted": 950,
+      "duplicates": 13
+    },
+    "batches": 36,
+    "same_batch_resends": 5,
+    "resplit_resends": 2,
+    "held_back_late": 70
+  },
+  "chaos": {
+    "sim": {
+      "accepted": 62,
+      "dropped": 0,
+      "blocked": 0,
+      "reset": 8,
+      "lost": 9
+    },
+    "browser": {
+      "accepted": 14,
+      "dropped": 10,
+      "blocked": 4,
+      "reset": 0,
+      "lost": 0
+    }
+  }
+}

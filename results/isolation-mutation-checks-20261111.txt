@@ -1,0 +1,22 @@
+== I-M1: _lock_run (ingest/finish) no longer filters by project
+            f = await client.post(f"/runs/{enc(rid)}/finish", json={"status": "failed"}, headers=a.ingest)
+FAILED tests/test_isolation.py::test_a_cannot_write_to_or_finish_bs_run_with_any_id_variant
+1 failed, 10 passed in 0.99s
+== I-M2: GET /runs/{id} no longer filters by project
+FAILED tests/test_isolation.py::test_every_read_route_gives_the_same_404_for_foreign_missing_and_malformed_ids
+FAILED tests/test_isolation.py::test_b_marker_data_never_appears_in_any_response_to_a
+FAILED tests/test_isolation.py::test_a_session_cookie_is_bound_to_its_own_project
+3 failed, 8 passed in 0.77s
+== I-M3: events/seqs/integrity/stream run lookup no longer filters by project
+== I-M4: the access log line includes the Authorization header
+FAILED tests/test_isolation.py::test_logs_contain_no_keys_cookies_or_metric_payloads
+1 failed, 10 passed in 0.95s
+== I-M5: stack-level: remove the Cache-Control default (middleware no longer sets it)
+== I-M3 (redo with per-call timeout): events/seqs/integrity/stream run lookup no longer filters by project
+== unmutated
+11 passed in 0.96s
+== I-M3 (redo, ASGI-level stream calls): events/seqs/integrity/stream run lookup no longer filters by project
+== unmutated
+11 passed in 1.20s
+== I-M3 (final redo, output captured to a file first): events/seqs/integrity/stream run lookup no longer filters by project
+pytest exit code: 1

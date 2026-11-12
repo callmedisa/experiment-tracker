@@ -1,0 +1,20 @@
+# Load run settings, recorded before the run (second full run, after fixing the sampler that blocked the event loop)
+started (UTC): 2026-11-11 15:24:17
+## docker
+NCPU=10 MemTotal=8218034176 Server=28.4.0 OS=Docker Desktop
+## api container environment
+FAULT_HOOKS=0
+RESYNC_THRESHOLD=10000
+REVALIDATE_S=2
+RL_AUTH_FAIL_PER_MIN=10
+RL_INGEST_PER_S=200
+RL_PROJECTS_PER_MIN=20
+RL_SESSION_PER_MIN=10
+STATS_INTERVAL_S=5
+TRUSTED_PROXY_HOPS=1
+## pre-existing data in the database (not cleaned)
+runs=277
+metric_events=430314
+db_size=218 MB
+## topology: load generator (host, python asyncio, httpx) -> nginx :8080 -> api :8000 -> postgres. Chaos proxy NOT in the path. Same machine as the generator.
+## command: .venv/bin/python loadtest/load.py --runs 50 --rate 10 --duration 600 --slow-readers 5 --drain 180 --out results/load/run-20261111-2024-final

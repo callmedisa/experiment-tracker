@@ -1,0 +1,8 @@
+1 after sign-in: 200
+2 after api restart: 200
+3 after postgres restart: 500
+4 second tab (jar2) signed in: 200
+4b first jar still valid: 200
+5 first jar after other tab signed out: 200
+cookie in jar1:
+expires epoch: 1794501276 now: ?

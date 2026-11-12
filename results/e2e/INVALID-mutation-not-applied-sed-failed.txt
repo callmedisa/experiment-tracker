@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points (1.7s)
+
+  1 passed (2.4s)

@@ -1,0 +1,10 @@
+== E-M1 (server): replay after a reconnect skips one event: 'seq > after' -> 'seq > after + 1'
+1
+  ✘  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (14.5s)
+    SyntaxError: Unexpected token '<', "<html>
+  1 failed
+== E-M2 (browser): page silently drops every 50th event
+1
+  ✘  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (3.3s)
+    SyntaxError: Unexpected token '<', "<html>
+  1 failed

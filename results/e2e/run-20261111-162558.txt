@@ -1,0 +1,48 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (23.8s)
+  ✓  2 consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points (21.8s)
+  ✘  3 consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points (17.3s)
+  ✘  4 consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points (21.7s)
+  ✓  5 consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points (21.1s)
+
+
+  1) consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m3[39m
+    Received:    [31m2[39m
+
+      137 |     expect(sum.stats.retries).toBeGreaterThan(0);
+      138 |     // 6. the chaos was real: several cuts actually hit an open stream, and some responses were lost after processing
+    > 139 |     expect(disruptions.filter((d) => !d.includes("open=0")).length).toBeGreaterThanOrEqual(3);
+          |                                                                     ^
+      140 |     expect((evidence.chaos as any).sim.lost).toBeGreaterThan(0);
+      141 |   });
+      142 | }
+
+        at /Users/disa/std/soup-task/web/e2e/consistency.spec.ts:139:69
+
+  2) consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m3[39m
+    Received:    [31m2[39m
+
+      137 |     expect(sum.stats.retries).toBeGreaterThan(0);
+      138 |     // 6. the chaos was real: several cuts actually hit an open stream, and some responses were lost after processing
+    > 139 |     expect(disruptions.filter((d) => !d.includes("open=0")).length).toBeGreaterThanOrEqual(3);
+          |                                                                     ^
+      140 |     expect((evidence.chaos as any).sim.lost).toBeGreaterThan(0);
+      141 |   });
+      142 | }
+
+        at /Users/disa/std/soup-task/web/e2e/consistency.spec.ts:139:69
+
+  2 failed
+    consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points 
+    consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points 
+  3 passed (1.8m)

@@ -1,0 +1,32 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points (1.5s)
+
+
+  1) chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 2[39m
+    [31m+ Received  + 2[39m
+
+    [2m  Object {[22m
+    [32m-   "max": 59.332576617480136,[39m
+    [32m-   "min": 39.55505107832009,[39m
+    [31m+   "max": 149,[39m
+    [31m+   "min": 0,[39m
+    [2m  }[22m
+
+      49 |   await expect(page.getByTestId("chart").locator("canvas")).toHaveCount(1);
+      50 |   await page.waitForTimeout(500);
+    > 51 |   expect(await win()).toEqual(z);                                                    // same window on screen, not reset to 0..149
+         |                       ^
+      52 |   await chart.focus(); await page.keyboard.press("End");
+      53 |   expect(Number(/step (\d+)/.exec(await readout.innerText())![1])).toBe(hi);
+      54 |
+
+        at /Users/disa/std/soup-task/web/e2e/chart-interaction.spec.ts:51:23
+
+  1 failed
+    chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points 

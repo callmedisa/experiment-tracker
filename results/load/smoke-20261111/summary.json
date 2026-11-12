@@ -1,0 +1,104 @@
+{
+  "args": {
+    "base": "http://localhost:8080",
+    "runs": 5,
+    "rate": 10,
+    "duration": 30,
+    "slow_readers": 1,
+    "drain": 60,
+    "out": "results/load/smoke-20261111"
+  },
+  "started_at_epoch": 1794409910.9106162,
+  "producers_finished_after_s": 32.3,
+  "total_s": 32.8,
+  "events_intended": 1260,
+  "events_stored": 1260,
+  "throughput_events_per_s_over_ingest_window": 39.0,
+  "ingest_requests": 44,
+  "ingest_latency_ms_ok": {
+    "n": 44,
+    "p50": 21.3402500085067,
+    "p95": 29.60324997548014,
+    "p99": 82.71316697937436,
+    "max": 82.71316697937436,
+    "mean": 22.68898579429581
+  },
+  "ingest_latency_ms_all_attempts": {
+    "n": 44,
+    "p50": 21.3402500085067,
+    "p95": 29.60324997548014,
+    "p99": 82.71316697937436,
+    "max": 82.71316697937436,
+    "mean": 22.68898579429581
+  },
+  "ingest_errors": {},
+  "ingest_retries": 0,
+  "ingest_gave_up": 0,
+  "ingest_p95_per_minute_ms": {
+    "0": 29.60324997548014
+  },
+  "stream_delay_ms_normal_readers": {
+    "n": 1260,
+    "p50": 23.66304100723937,
+    "p95": 40.47520802123472,
+    "p99": 89.63991599739529,
+    "max": 90.07350000320002,
+    "mean": 24.53502561945084
+  },
+  "lost_on_ingest_total": 0,
+  "duplicates_in_db_total": 0,
+  "lost_at_readers_total": 0,
+  "duplicate_deliveries_total": 0,
+  "readers_that_never_saw_closed": 0,
+  "reader_reconnects_total": 1,
+  "runs_not_contiguous": [],
+  "runs_list_latency_ms": {
+    "n": 24,
+    "p50": 17.064792016753927,
+    "p95": 34.44529097760096,
+    "p99": 39.17404101230204,
+    "max": 39.17404101230204,
+    "mean": 16.729157916415716
+  },
+  "runs_list_non200": 0,
+  "resources": {
+    "soup-task-api-1": {
+      "samples": 4,
+      "cpu_pct_mean": 1.815,
+      "cpu_pct_max": 3.58,
+      "mem_mb_first": 55.27,
+      "mem_mb_max": 58.75,
+      "mem_mb_last": 58.75
+    },
+    "soup-task-web-1": {
+      "samples": 4,
+      "cpu_pct_mean": 0.01,
+      "cpu_pct_max": 0.04,
+      "mem_mb_first": 9.117,
+      "mem_mb_max": 9.336,
+      "mem_mb_last": 9.336
+    },
+    "soup-task-chaos-1": {
+      "samples": 4,
+      "cpu_pct_mean": 0.0,
+      "cpu_pct_max": 0.0,
+      "mem_mb_first": 20.21,
+      "mem_mb_max": 20.21,
+      "mem_mb_last": 20.21
+    },
+    "soup-task-postgres-1": {
+      "samples": 4,
+      "cpu_pct_mean": 1.765,
+      "cpu_pct_max": 3.43,
+      "mem_mb_first": 138.2,
+      "mem_mb_max": 160.1,
+      "mem_mb_last": 159.5
+    }
+  },
+  "pg_connections": {
+    "max": 7,
+    "mean": 5.75,
+    "active_max": 1
+  },
+  "containers": "/soup-task-api-1 restarts=0 oom=false\n/soup-task-postgres-1 restarts=0 oom=false\n/soup-task-web-1 restarts=0 oom=false"
+}

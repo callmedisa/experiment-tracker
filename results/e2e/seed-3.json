@@ -1,0 +1,74 @@
+{
+  "seed": 3,
+  "flaky": {
+    "reset": 0.12,
+    "lost": 0.12
+  },
+  "run_id": "run_CpEPvYdUxe04GnJN7pRR6P",
+  "disruptions": [
+    "drop(open=3) @2927ms",
+    "block 2s+drop(open=1) @4950ms",
+    "block 1s+drop(open=1) @9995ms"
+  ],
+  "sim_exit": 0,
+  "sim_log": [
+    "RUN run_CpEPvYdUxe04GnJN7pRR6P",
+    "DONE {\"stats\": {\"batches\": 51, \"retries\": 11, \"accepted\": 954, \"duplicates\": 66}, \"unique_points\": 840, \"resends\": 5, \"resplits\": 9}"
+  ],
+  "db": {
+    "count": 840,
+    "checksum": "854aced18676bdf1659a8a0a6df2b366a3cc0a3f0d7cc60352bf319d08d4078b",
+    "last_seq": 840,
+    "duplicates_ignored": 310,
+    "status": "finished"
+  },
+  "page": {
+    "count": 840,
+    "checksum": "854aced18676bdf1659a8a0a6df2b366a3cc0a3f0d7cc60352bf319d08d4078b",
+    "last_seq": 840,
+    "missing": [],
+    "closed": true,
+    "history": [
+      "connecting",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live",
+      "reconnecting",
+      "catching_up",
+      "live"
+    ]
+  },
+  "sim": {
+    "unique_points": 840,
+    "stats": {
+      "batches": 51,
+      "retries": 11,
+      "accepted": 954,
+      "duplicates": 66
+    },
+    "batches": 37,
+    "same_batch_resends": 5,
+    "resplit_resends": 9,
+    "held_back_late": 70
+  },
+  "chaos": {
+    "sim": {
+      "accepted": 65,
+      "dropped": 0,
+      "blocked": 0,
+      "reset": 5,
+      "lost": 7
+    },
+    "browser": {
+      "accepted": 9,
+      "dropped": 5,
+      "blocked": 4,
+      "reset": 0,
+      "lost": 0
+    }
+  }
+}

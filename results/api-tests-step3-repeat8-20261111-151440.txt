@@ -1,0 +1,17 @@
+full suite repeated 8x:
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.11s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.29s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.22s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.35s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.13s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.14s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.24s
+FAILED tests/test_stream.py::test_integrity_matches_an_independent_computation_and_seqs_have_no_missing
+1 failed, 81 passed in 12.21s

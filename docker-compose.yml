@@ -1,0 +1,60 @@
+# postgres + api + web (nginx: static app + /api gateway). The chaos proxy comes with the E2E step.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: tracker
+      POSTGRES_PASSWORD: tracker
+      POSTGRES_DB: tracker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracker -d tracker"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  api:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://tracker:tracker@postgres:5432/tracker
+      SERVER_PEPPER: ${SERVER_PEPPER:-dev-pepper-change-me}
+      # Rate limits (defaults from TZ_dev.md §5). Override in the environment; record values in results/.
+      RL_PROJECTS_PER_MIN: ${RL_PROJECTS_PER_MIN:-20}
+      RL_SESSION_PER_MIN: ${RL_SESSION_PER_MIN:-10}
+      RL_AUTH_FAIL_PER_MIN: ${RL_AUTH_FAIL_PER_MIN:-10}
+      RL_INGEST_PER_S: ${RL_INGEST_PER_S:-200}
+      FAULT_HOOKS: ${FAULT_HOOKS:-0}   # test-only; must be 0 for load/verdict runs
+      RESYNC_THRESHOLD: ${RESYNC_THRESHOLD:-10000}
+      REVALIDATE_S: ${REVALIDATE_S:-2}
+      STATS_INTERVAL_S: ${STATS_INTERVAL_S:-5}
+      TRUSTED_PROXY_HOPS: ${TRUSTED_PROXY_HOPS:-1}   # the web gateway sets X-Forwarded-For; port 8000 is for local tests only
+    ports:
+      - "8000:8000"
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        VITE_TEST_HOOKS: ${VITE_TEST_HOOKS:-0}
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+  chaos:
+    # Fault injection for the E2E tests. browser -> :8081 -> web -> api ; simulator -> :8082 -> api. Control API on :8099.
+    build: ./chaos
+    environment:
+      LISTENERS: browser:8081:web:80,sim:8082:api:8000
+      CONTROL_PORT: "8099"
+    depends_on:
+      - web
+      - api
+    ports:
+      - "8081:8081"
+      - "8082:8082"
+      - "8099:8099"
+volumes:
+  pgdata:

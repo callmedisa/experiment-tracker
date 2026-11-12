@@ -1,0 +1,83 @@
+ Container soup-task-postgres-1  Running
+.......................F.........................................        [100%]
+=================================== FAILURES ===================================
+_______ test_foreign_missing_and_malformed_run_ids_are_indistinguishable _______
+
+client = <httpx.AsyncClient object at 0xffff7fc0cec0>
+proj = <conftest.Project object at 0xffff7fc86300>
+proj_factory = <function proj_factory.<locals>._f at 0xffff7fa48220>
+
+    async def test_foreign_missing_and_malformed_run_ids_are_indistinguishable(client, proj, proj_factory):
+        other, other_run = await proj_factory(client)
+        await sign_in(client, proj.read_key)
+        probes = [other_run, "run_" + "A" * 22, "run_short", "../etc/passwd", "1", "x" * 500, "run_%00"]
+        seen = []
+        for rid in probes:
+            for req in (lambda i: client.get(f"/runs/{i}"),
+                        lambda i: client.post(f"/runs/{i}/finish", json={"status": "finished"}, headers=proj.ingest),
+                        lambda i: post_batch(client, proj, i, "b", [pt()])):
+                r = await req(rid)
+>               assert r.status_code == 404, (rid, r.text)
+E               AssertionError: ('run_%00', '{"code":"internal_error","message":"Something went wrong","request_id":"33228cda5da14245"}')
+E               assert 500 == 404
+E                +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_auth.py:274: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-11 10:00:58,614 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-11 10:00:58,619 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:65 FAULT_HOOKS are ENABLED: test use only
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-11 10:00:58,620 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+2026-11-11 10:00:58,624 INFO httpx HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+2026-11-11 10:00:58,626 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-11 10:00:58,628 INFO httpx HTTP Request: GET http://test/runs/run_pFsePqmWQL8pAWmpP6KghN "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,630 INFO httpx HTTP Request: POST http://test/runs/run_pFsePqmWQL8pAWmpP6KghN/finish "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,631 INFO httpx HTTP Request: POST http://test/runs/run_pFsePqmWQL8pAWmpP6KghN/metrics "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,632 INFO httpx HTTP Request: GET http://test/runs/run_AAAAAAAAAAAAAAAAAAAAAA "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,633 INFO httpx HTTP Request: POST http://test/runs/run_AAAAAAAAAAAAAAAAAAAAAA/finish "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,634 INFO httpx HTTP Request: POST http://test/runs/run_AAAAAAAAAAAAAAAAAAAAAA/metrics "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,635 INFO httpx HTTP Request: GET http://test/runs/run_short "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,636 INFO httpx HTTP Request: POST http://test/runs/run_short/finish "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,637 INFO httpx HTTP Request: POST http://test/runs/run_short/metrics "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,637 INFO httpx HTTP Request: GET http://test/etc/passwd "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,637 INFO httpx HTTP Request: POST http://test/etc/passwd/finish "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,637 INFO httpx HTTP Request: POST http://test/etc/passwd/metrics "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,638 INFO httpx HTTP Request: GET http://test/runs/1 "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,639 INFO httpx HTTP Request: POST http://test/runs/1/finish "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,640 INFO httpx HTTP Request: POST http://test/runs/1/metrics "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,641 INFO httpx HTTP Request: GET http://test/runs/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,642 INFO httpx HTTP Request: POST http://test/runs/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/finish "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,643 INFO httpx HTTP Request: POST http://test/runs/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/metrics "HTTP/1.1 404 Not Found"
+2026-11-11 10:00:58,644 ERROR tracker unhandled DBAPIError request_id=33228cda5da14245
+2026-11-11 10:00:58,644 INFO httpx HTTP Request: GET http://test/runs/run_%00 "HTTP/1.1 500 Internal Server Error"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs/run_pFsePqmWQL8pAWmpP6KghN "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_pFsePqmWQL8pAWmpP6KghN/finish "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_pFsePqmWQL8pAWmpP6KghN/metrics "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs/run_AAAAAAAAAAAAAAAAAAAAAA "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_AAAAAAAAAAAAAAAAAAAAAA/finish "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_AAAAAAAAAAAAAAAAAAAAAA/metrics "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs/run_short "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_short/finish "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/run_short/metrics "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/etc/passwd "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/etc/passwd/finish "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/etc/passwd/metrics "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs/1 "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/1/finish "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/1/metrics "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/finish "HTTP/1.1 404 Not Found"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/runs/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/metrics "HTTP/1.1 404 Not Found"
+ERROR    tracker:errors.py:52 unhandled DBAPIError request_id=33228cda5da14245
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/runs/run_%00 "HTTP/1.1 500 Internal Server Error"
+=========================== short test summary info ============================
+FAILED tests/test_auth.py::test_foreign_missing_and_malformed_run_ids_are_indistinguishable
+1 failed, 64 passed in 2.04s
+

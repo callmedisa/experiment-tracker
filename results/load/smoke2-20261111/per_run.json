@@ -1,0 +1,112 @@
+[
+  {
+    "run": "run_J9avHtu9w929X8fNheiOEI",
+    "intended": 370,
+    "stored": 370,
+    "distinct": 370,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_7IUkaI0iO8jwfATzydELRF",
+    "intended": 360,
+    "stored": 360,
+    "distinct": 360,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_63xPyV9UXRdZQwH18dVP0I",
+    "intended": 380,
+    "stored": 380,
+    "distinct": 380,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_vD3OeAfU4wARRm80bvQqSu",
+    "intended": 380,
+    "stored": 380,
+    "distinct": 380,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_nTNSBQctQwb6r1sMNoKBcg",
+    "intended": 380,
+    "stored": 380,
+    "distinct": 380,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_p6gb3uZ2h2LTcoeKmY9Wiz",
+    "intended": 380,
+    "stored": 380,
+    "distinct": 380,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_zolsLHtJMae3PccXJvU2UN",
+    "intended": 390,
+    "stored": 390,
+    "distinct": 390,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_RgczejY8LGVtmfHIOEh6Fr",
+    "intended": 360,
+    "stored": 360,
+    "distinct": 360,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_13WRj9H0X08U28IHO1FEmx",
+    "intended": 380,
+    "stored": 380,
+    "distinct": 380,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_jZ4ydTvDZkIwpv6sFenWpZ",
+    "intended": 400,
+    "stored": 400,
+    "distinct": 400,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  }
+]

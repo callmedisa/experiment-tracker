@@ -1,0 +1,15 @@
+
+Running 8 tests using 1 worker
+
+  ✓  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (18.9s)
+  ✓  2 consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points (17.3s)
+  ✓  3 consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points (15.3s)
+  ✓  4 consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points (20.5s)
+  ✓  5 consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points (18.9s)
+  ✓  6 consistency.spec.ts:54:3 › seed 6: page == database after cut connections, lost responses, duplicates and late points (15.8s)
+  ✓  7 consistency.spec.ts:54:3 › seed 7: page == database after cut connections, lost responses, duplicates and late points (17.6s)
+  ✓  8 consistency.spec.ts:54:3 › seed 8: page == database after cut connections, lost responses, duplicates and late points (18.8s)
+
+  Slow test file: consistency.spec.ts (2.4m)
+  Consider splitting slow test files to speed up parallel execution
+  8 passed (2.4m)

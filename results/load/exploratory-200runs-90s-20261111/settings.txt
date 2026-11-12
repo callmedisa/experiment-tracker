@@ -1,0 +1,2 @@
+EXPLORATORY, not the spec workload: 200 runs x 10 events/s = 2000 events/s for 90 s, same stack and settings as the final run (see ../run-*-final/settings.txt). The load generator (single Python process, one core) may itself become the bottleneck at this rate.
+pre-existing metric_events=729324

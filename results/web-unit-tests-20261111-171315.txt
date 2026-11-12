@@ -1,0 +1,12 @@
+
+ RUN  v2.1.9 /Users/disa/std/soup-task/web
+
+ ✓ test/connection.test.ts (10 tests) 4ms
+ ✓ test/runData.test.ts (5 tests) 3ms
+ ✓ test/checksum.test.ts (6 tests) 11ms
+
+ Test Files  3 passed (3)
+      Tests  21 passed (21)
+   Start at  17:13:15
+   Duration  254ms (transform 70ms, setup 0ms, collect 96ms, tests 17ms, environment 0ms, prepare 129ms)
+

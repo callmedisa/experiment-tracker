@@ -1,0 +1,15 @@
+# smoke test against docker compose (default settings: FAULT_HOOKS=0, RL_PROJECTS_PER_MIN=20, RL_AUTH_FAIL_PER_MIN=10)
+project ok: smoke-test | key lens: 40 40
+run created: {"id":"run_p2zDYhMnfYCOncs1
+batch:
+HTTP/1.1 200 OK
+x-request-id: 4b8be33fa53c42f8
+cache-control: private, no-store
+vary: Cookie, Authorization
+{"accepted":2,"duplicates":0,"first_seq":1,"last_seq":2}
+X-Fault header with hooks off (expect 200):
+200
+11 bad keys in a row (limit 10/min; expect ten 401 then 429):
+401 401 401 401 401 401 401 401 401 401 429 
+alembic version:
+0001

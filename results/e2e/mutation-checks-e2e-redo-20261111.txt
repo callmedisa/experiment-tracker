@@ -1,0 +1,53 @@
+== (redo; the first attempt in mutation-checks-e2e-20261111.txt was invalid: the API container had crashed on a malformed env var)
+== E-M1 (server): replay after a reconnect skips one event: 'seq > after' -> 'seq > after + 1'
+1
+api up: 404
+  ✘  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (16.1s)
+    TimeoutError: page.waitForFunction: Timeout 15000ms exceeded.
+  1 failed
+== E-M2 (browser): page silently drops every 50th event
+1
+api up: 404
+  ✓  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (19.7s)
+  1 passed (20.4s)
+== E-M1 again, full error
+Running 1 test using 1 worker
+  ✘  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (57.5s)
+  1) consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points 
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   1,[39m
+    [31m+ ][39m
+      125 |     expect(db.map((r) => [r.point_id, r.metric, r.step, r.hex]).sort()).toEqual(sum.intended);
+      126 |     // 2. the page equals the database
+    > 127 |     expect(pageState.missing).toEqual([]);
+          |                               ^
+      128 |     expect(pageState.count).toBe(db.length);
+      129 |     expect(pageState.lastSeq).toBe(db.length);
+      130 |     expect(pageState.checksum).toBe(dbChecksum);
+        at /Users/disa/std/soup-task/web/e2e/consistency.spec.ts:127:31
+  Slow test file: consistency.spec.ts (57.5s)
+  Consider splitting slow test files to speed up parallel execution
+  1 failed
+    consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points 
+== E-M2' (browser): RunData.apply silently ignores every 50th seq, for every path (stream, snapshot, gap fill)
+1
+Running 1 test using 1 worker
+  ✘  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (57.7s)
+  1) consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points 
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+    [32m- Expected  -  1[39m
+    [31m+ Received  + 18[39m
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   50,[39m
+    [31m+   100,[39m
+    [31m+   150,[39m
+    [31m+   200,[39m
+    [31m+   250,[39m
+    [31m+   300,[39m
+    [31m+   350,[39m
+    [31m+   400,[39m

@@ -1,0 +1,124 @@
+ Container soup-task-postgres-1  Running
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-8.4.2, pluggy-1.7.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+tracker settings used by this run: session_ttl_s=43200, cookie_secure=False, stale_after_s=300, max_body_bytes=1000000, max_points=1000, rl_projects_per_min=100000, rl_session_per_min=100000, rl_auth_fail_per_min=100000, rl_ingest_per_s=100000, trusted_proxy_hops=0, allowed_origins=(), fault_hooks=True
+database: tracker_test (fresh, created by the test session)
+rootdir: /app
+configfile: pytest.ini
+testpaths: tests
+plugins: asyncio-1.4.1.post1, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 65 items
+
+tests/test_auth.py::test_create_project_returns_both_keys_in_the_specified_format PASSED [  1%]
+tests/test_auth.py::test_project_name_rules PASSED                       [  3%]
+tests/test_auth.py::test_keys_are_stored_only_as_hmac_hashes PASSED      [  4%]
+tests/test_auth.py::test_bad_keys_all_look_the_same PASSED               [  6%]
+tests/test_auth.py::test_ingest_key_cannot_sign_in_and_read_key_cannot_ingest PASSED [  7%]
+tests/test_auth.py::test_ingest_routes_ignore_cookies PASSED             [  9%]
+tests/test_auth.py::test_sign_in_sets_a_strict_httponly_cookie_and_whoami_works PASSED [ 10%]
+tests/test_auth.py::test_session_cookie_value_is_not_stored_in_the_database PASSED [ 12%]
+tests/test_auth.py::test_no_cookie_and_expired_session PASSED            [ 13%]
+tests/test_auth.py::test_sign_out_needs_csrf_and_kills_the_session PASSED [ 15%]
+tests/test_auth.py::test_csrf_rules_for_cookie_mutations PASSED          [ 16%]
+tests/test_auth.py::test_revoked_read_key_ends_its_sessions PASSED       [ 18%]
+tests/test_auth.py::test_keys_list_never_contains_secrets PASSED         [ 20%]
+tests/test_auth.py::test_create_key_returns_the_secret_once_and_it_works PASSED [ 21%]
+tests/test_auth.py::test_rotate_revokes_old_key_immediately_and_new_key_works PASSED [ 23%]
+tests/test_auth.py::test_revoke_ingest_key PASSED                        [ 24%]
+tests/test_auth.py::test_cannot_revoke_the_last_active_read_key PASSED   [ 26%]
+tests/test_auth.py::test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys FAILED [ 27%]
+tests/test_auth.py::test_rotating_the_only_read_key_is_allowed PASSED    [ 29%]
+tests/test_auth.py::test_foreign_and_malformed_key_ids_are_plain_404 PASSED [ 30%]
+tests/test_auth.py::test_last_used_at_is_written_at_most_once_a_minute PASSED [ 32%]
+tests/test_auth.py::test_authenticated_and_error_responses_are_never_cacheable PASSED [ 33%]
+tests/test_auth.py::test_error_bodies_have_the_uniform_shape PASSED      [ 35%]
+tests/test_auth.py::test_foreign_missing_and_malformed_run_ids_are_indistinguishable PASSED [ 36%]
+tests/test_auth.py::test_get_run_shape_and_stale PASSED                  [ 38%]
+tests/test_auth.py::test_rate_limit_on_project_creation PASSED           [ 40%]
+tests/test_auth.py::test_failed_key_lookups_are_limited_per_ip PASSED    [ 41%]
+tests/test_auth.py::test_good_keys_do_not_consume_the_failure_budget PASSED [ 43%]
+tests/test_auth.py::test_session_attempts_are_limited PASSED             [ 44%]
+tests/test_auth.py::test_ingest_rate_limit_is_per_project PASSED         [ 46%]
+tests/test_auth.py::test_trusted_proxy_setting_uses_forwarded_for PASSED [ 47%]
+tests/test_ingest.py::test_accepts_batch_and_assigns_consecutive_seq PASSED [ 49%]
+tests/test_ingest.py::test_second_batch_continues_numbering PASSED       [ 50%]
+tests/test_ingest.py::test_ts_is_optional_and_never_replaced_by_server_time PASSED [ 52%]
+tests/test_ingest.py::test_batch_retry_returns_original_and_stores_nothing PASSED [ 53%]
+tests/test_ingest.py::test_batch_retry_many_times_counts_every_retry PASSED [ 55%]
+tests/test_ingest.py::test_batch_retry_after_run_closed_still_gets_original_answer PASSED [ 56%]
+tests/test_ingest.py::test_same_batch_id_with_different_points_is_batch_conflict PASSED [ 58%]
+tests/test_ingest.py::test_batch_id_is_scoped_to_the_run PASSED          [ 60%]
+tests/test_ingest.py::test_resplit_batch_under_new_batch_id_is_deduped_by_point_id PASSED [ 61%]
+tests/test_ingest.py::test_fully_duplicate_batch_has_no_seq_range PASSED [ 63%]
+tests/test_ingest.py::test_same_point_repeated_inside_one_batch PASSED   [ 64%]
+tests/test_ingest.py::test_point_conflict_rejects_whole_batch_and_stores_nothing PASSED [ 66%]
+tests/test_ingest.py::test_point_conflict_on_metric_or_step_change_with_custom_id PASSED [ 67%]
+tests/test_ingest.py::test_conflict_inside_one_batch PASSED              [ 69%]
+tests/test_ingest.py::test_custom_point_ids_may_share_metric_and_step PASSED [ 70%]
+tests/test_ingest.py::test_minus_zero_is_not_silently_treated_as_same_as_zero PASSED [ 72%]
+tests/test_ingest.py::test_is_late_across_batches_and_within_a_batch PASSED [ 73%]
+tests/test_ingest.py::test_is_late_is_decided_per_metric PASSED          [ 75%]
+tests/test_ingest.py::test_late_point_still_gets_a_new_seq PASSED        [ 76%]
+tests/test_ingest.py::test_duplicate_does_not_change_late_state PASSED   [ 78%]
+tests/test_ingest.py::test_concurrent_distinct_batches_keep_seq_contiguous_and_blocks_unbroken PASSED [ 80%]
+tests/test_ingest.py::test_concurrent_identical_batch_is_stored_exactly_once PASSED [ 81%]
+tests/test_ingest.py::test_concurrent_overlapping_batches_under_different_ids_do_not_duplicate_or_leave_holes PASSED [ 83%]
+tests/test_ingest.py::test_concurrent_conflicting_writers_one_wins_others_get_409 PASSED [ 84%]
+tests/test_ingest.py::test_failure_mid_batch_stores_nothing_and_keeps_seq_contiguous PASSED [ 86%]
+tests/test_ingest.py::test_response_lost_after_commit_then_retry_does_not_double_count PASSED [ 87%]
+tests/test_ingest.py::test_many_random_failures_never_break_contiguity PASSED [ 89%]
+tests/test_ingest.py::test_fault_header_is_ignored_when_hooks_are_disabled PASSED [ 90%]
+tests/test_ingest.py::test_nan_and_infinity_are_rejected_naming_the_field PASSED [ 92%]
+tests/test_ingest.py::test_rejects_bad_shapes PASSED                     [ 93%]
+tests/test_ingest.py::test_batch_size_limits PASSED                      [ 95%]
+tests/test_ingest.py::test_closed_run_rejects_metrics PASSED             [ 96%]
+tests/test_ingest.py::test_batch_racing_a_finish_is_all_or_nothing PASSED [ 98%]
+tests/test_ingest.py::test_run_id_format_and_creation PASSED             [100%]
+
+=================================== FAILURES ===================================
+_______ test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys _______
+
+client = <httpx.AsyncClient object at 0xffff89d555b0>
+proj = <conftest.Project object at 0xffff89d58b90>
+
+    async def test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys(client, proj):
+        await sign_in(client, proj.read_key)
+        second = (await client.post("/keys", json={"label": "second", "scope": "read"}, headers=CSRF)).json()
+        rs = await asyncio.gather(
+            client.post(f"/keys/{proj.read_key_id}/revoke", headers=CSRF),
+            client.post(f"/keys/{second['id']}/revoke", headers=CSRF))
+>       assert sorted(r.status_code for r in rs) == [200, 409]
+E       AssertionError: assert [200, 401] == [200, 409]
+E         
+E         At index 1 diff: 401 != 409
+E         
+E         Full diff:
+E           [
+E               200,
+E         -     409,...
+E         
+E         ...Full output truncated (4 lines hidden), use '-vv' to show
+
+tests/test_auth.py:196: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+2026-11-11 10:02:04,810 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+2026-11-11 10:02:04,816 INFO httpx HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+------------------------------ Captured log setup ------------------------------
+WARNING  tracker:main.py:65 FAULT_HOOKS are ENABLED: test use only
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/projects "HTTP/1.1 201 Created"
+----------------------------- Captured stderr call -----------------------------
+2026-11-11 10:02:04,819 INFO httpx HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+2026-11-11 10:02:04,821 INFO httpx HTTP Request: POST http://test/keys "HTTP/1.1 201 Created"
+2026-11-11 10:02:04,825 INFO httpx HTTP Request: POST http://test/keys/cac64c92-dc81-4076-8886-4d0dc51dd59c/revoke "HTTP/1.1 200 OK"
+2026-11-11 10:02:04,826 INFO httpx HTTP Request: POST http://test/keys/3ee2c366-c550-4143-a343-b5a1e6fb7467/revoke "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call -------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/session "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/cac64c92-dc81-4076-8886-4d0dc51dd59c/revoke "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/keys/3ee2c366-c550-4143-a343-b5a1e6fb7467/revoke "HTTP/1.1 401 Unauthorized"
+=========================== short test summary info ============================
+FAILED tests/test_auth.py::test_two_concurrent_revokes_cannot_remove_the_last_two_read_keys
+========================= 1 failed, 64 passed in 2.06s =========================
+

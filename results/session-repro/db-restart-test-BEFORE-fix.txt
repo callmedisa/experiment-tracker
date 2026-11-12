@@ -1,0 +1,25 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_signed_in_session_survives_a_postgres_restart ______________
+
+stack_ok = None
+
+    def test_signed_in_session_survives_a_postgres_restart(stack_ok):
+        p = Proj(GATEWAY)
+        assert p.signed.get("/session").status_code == 200
+        subprocess.run(["docker", "compose", "restart", "postgres"], cwd=REPO, check=True, capture_output=True)
+        for _ in range(60):                                                  # wait until postgres accepts connections again
+            if subprocess.run(["docker", "compose", "exec", "-T", "postgres", "pg_isready", "-U", "tracker"], cwd=REPO, capture_output=True).returncode == 0:
+                break
+            time.sleep(1)
+        time.sleep(1)
+        r = p.signed.get("/session")                                         # the FIRST request after the restart, on a pool that holds dead connections
+>       assert r.status_code == 200, f"{r.status_code} {r.text[:200]}"
+E       AssertionError: 500 {"code":"internal_error","message":"Something went wrong","request_id":"f72fcc1dfba34a84"}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/stack/test_zz_db_restart.py:21: AssertionError
+=========================== short test summary info ============================
+FAILED tests/stack/test_zz_db_restart.py::test_signed_in_session_survives_a_postgres_restart
+1 failed in 1.53s

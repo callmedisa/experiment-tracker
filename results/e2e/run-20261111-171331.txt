@@ -1,0 +1,18 @@
+
+Running 11 tests using 1 worker
+
+  ✓  1 consistency.spec.ts:54:3 › seed 1: page == database after cut connections, lost responses, duplicates and late points (17.7s)
+  ✓  2 consistency.spec.ts:54:3 › seed 2: page == database after cut connections, lost responses, duplicates and late points (16.5s)
+  ✓  3 consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points (15.4s)
+  ✓  4 consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points (20.5s)
+  ✓  5 consistency.spec.ts:54:3 › seed 5: page == database after cut connections, lost responses, duplicates and late points (18.1s)
+  ✓  6 consistency.spec.ts:54:3 › seed 6: page == database after cut connections, lost responses, duplicates and late points (17.4s)
+  ✓  7 consistency.spec.ts:54:3 › seed 7: page == database after cut connections, lost responses, duplicates and late points (19.0s)
+  ✓  8 consistency.spec.ts:54:3 › seed 8: page == database after cut connections, lost responses, duplicates and late points (19.3s)
+  ✓  9 silent-failures.spec.ts:20:1 › duplicates: the same batch again shows a toast, counts exactly, and a conflicting resend stores nothing (2.3s)
+  ✓  10 silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database (1.4s)
+  ✓  11 silent-failures.spec.ts:72:1 › old key after rotation: REST is 401 and the open page is signed out within seconds (2.5s)
+
+  Slow test file: consistency.spec.ts (2.4m)
+  Consider splitting slow test files to speed up parallel execution
+  11 passed (2.5m)

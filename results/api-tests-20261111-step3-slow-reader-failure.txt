@@ -1,0 +1,54 @@
+ Container soup-task-postgres-1  Running
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_slow_reader_gets_resync_and_ingestion_is_not_slowed ___________
+
+live = <function live.<locals>._start at 0xffffb1fd85e0>
+
+    async def test_slow_reader_gets_resync_and_ingestion_is_not_slowed(live):
+        app, url, c, p, rid = await setup(live, resync_threshold=2000, stream_page=500)
+        assert (await sign_in(reader, p.read_key)).status_code == 200
+        # baseline ingest time without any reader
+        base_rid = (await c.post("/runs", json={"name": "base"}, headers=p.ingest)).json()["id"]
+        t0 = time.monotonic()
+        for i in range(6):
+            await c.post(f"/runs/{base_rid}/metrics", headers=p.ingest, json={"batch_id": f"x{i}",
+                         "points": [pt("loss", i * 1000 + j, 0.1) for j in range(1000)]})
+        base = time.monotonic() - t0
+        async with Stream(reader, f"/runs/{rid}/stream") as s:
+            assert (await s.next())[0] == "stats"
+            # the reader now stops reading while 40,000 events arrive
+            t0 = time.monotonic()
+            for i in range(40):
+                r = await c.post(f"/runs/{rid}/metrics", headers=p.ingest, json={"batch_id": f"b{i}",
+                                 "points": [pt("loss", i * 1000 + j, 0.1) for j in range(1000)]})
+                assert r.status_code == 200
+            with_reader = (time.monotonic() - t0) / 40
+            # now read everything it was sent
+            seqs, resync = [], None
+            while True:
+                e = await s.next(15)
+                if e is None:
+                    break
+                if e[0] == "metric":
+                    seqs.append(e[2]["seq"])
+                if e[0] == "resync":
+                    resync = e[2]
+                    break
+        assert resync is not None, f"no resync; reader got {len(seqs)} events"
+        assert seqs == list(range(1, len(seqs) + 1)), "events before resync must be a gap-free prefix"
+        assert len(seqs) < 40000
+        # ingestion with a stuck reader must not be much slower per batch than without one
+>       assert with_reader < (base / 6) * 3 + 0.05, (with_reader, base / 6)
+E       AssertionError: (0.3093914189000316, 0.019396812500114418)
+E       assert 0.3093914189000316 < (((0.1163808750006865 / 6) * 3) + 0.05)
+
+tests/test_stream.py:223: AssertionError
+----------------------------- Captured stderr call -----------------------------
+2026-11-11 10:12:31,204 WARNING tracker FAULT_HOOKS are ENABLED: test use only
+------------------------------ Captured log call -------------------------------
+WARNING  tracker:main.py:69 FAULT_HOOKS are ENABLED: test use only
+=========================== short test summary info ============================
+FAILED tests/test_stream.py::test_slow_reader_gets_resync_and_ingestion_is_not_slowed
+1 failed, 16 deselected in 13.21s
+

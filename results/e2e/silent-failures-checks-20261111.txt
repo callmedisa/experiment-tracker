@@ -1,0 +1,27 @@
+== baseline run with annotations (json reporter)
+passed duplicates: the same batch again shows a toast, counts exact | [] 3092 ms
+passed overflow: a reader that falls more than 10,000 events behind | ['13,000 events ingested in 468 ms while the reader was away; history: connecting > live > offline > catching_up > resync > connecting > live'] 1457 ms
+passed old key after rotation: REST is 401 and the open page is sig | ['page signed out 2.0 s after rotation'] 2511 ms
+== X-M1 (config): RESYNC_THRESHOLD=1000000 (server never asks for resync)
+  ✘  1 silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database (1.7m)
+    TimeoutError: page.waitForFunction: Timeout 90000ms exceeded.
+  1 failed
+== X-M2 (config): REVALIDATE_S=100000 (open streams never re-check their key)
+  ✘  1 silent-failures.spec.ts:72:1 › old key after rotation: REST is 401 and the open page is signed out within seconds (15.8s)
+    TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
+  1 failed
+== restore defaults
+  3 passed (7.4s)
+== after the render-throttling fix: X-M1 again (RESYNC_THRESHOLD=1000000)
+  ✘  1 silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database (2.1s)
+  1) silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database 
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+    Expected value: [32m"resync"[39m
+    Received array: [31m["connecting", "live", "offline", "catching_up", "live"][39m
+    > 64 |   expect(s.history).toContain("resync");
+  1 failed
+    silent-failures.spec.ts:49:1 › overflow: a reader that falls more than 10,000 events behind gets a resync, recovers, and matches the database 
+== restore defaults, all three
+passed duplicates: the same batch again shows a toast, co | [] 3352 ms
+passed overflow: a reader that falls more than 10,000 eve | ['13,000 events ingested in 540 ms while the reader was away; history: connecting > live > offline > catching_up > resync > connecting > live'] 1565 ms
+passed old key after rotation: REST is 401 and the open p | ['page signed out 2.0 s after rotation'] 2563 ms

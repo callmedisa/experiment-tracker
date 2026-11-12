@@ -1,0 +1,57 @@
+[
+  {
+    "run": "run_PNTL6lPCNzMJniVUjBf3FE",
+    "intended": 240,
+    "stored": 240,
+    "distinct": 240,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_6o68p21N1Lm8zOR5l9Uz0g",
+    "intended": 240,
+    "stored": 240,
+    "distinct": 240,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_0InwSA0FWG5WwDcccg7qRz",
+    "intended": 260,
+    "stored": 260,
+    "distinct": 260,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_bMWJ1a9DFXJbqA29wfGt1I",
+    "intended": 260,
+    "stored": 260,
+    "distinct": 260,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  },
+  {
+    "run": "run_3PXFO91bzeald91yhDgC4h",
+    "intended": 260,
+    "stored": 260,
+    "distinct": 260,
+    "contiguous": true,
+    "lost_on_ingest": 0,
+    "stored_not_intended": 0,
+    "status": "finished",
+    "duplicates_ignored": 0
+  }
+]

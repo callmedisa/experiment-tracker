@@ -1,0 +1,11 @@
+full suite repeated 10x (summary lines only):
+65 passed in 2.04s
+65 passed in 2.02s
+65 passed in 2.24s
+65 passed in 2.03s
+65 passed in 2.13s
+65 passed in 2.06s
+65 passed in 2.10s
+65 passed in 2.08s
+65 passed in 2.07s
+65 passed in 2.05s

@@ -1,0 +1,26 @@
+== S1: replay with seq >= cursor (duplicate on resume)
+FAILED tests/test_stream.py::test_stats_first_then_replay_then_live_and_only_metric_has_id
+FAILED tests/test_stream.py::test_last_event_id_header_and_query_wins
+FAILED tests/test_stream.py::test_late_flag_is_delivered
+FAILED tests/test_stream.py::test_closed_comes_after_the_last_event
+FAILED tests/test_stream.py::test_slow_reader_gets_resync_and_ingestion_is_not_slowed
+FAILED tests/test_stream.py::test_no_events_lost_or_duplicated_across_random_disconnects
+FAILED tests/test_stream.py::test_events_paging_and_limits
+7 failed, 10 passed in 10.21s
+== S2: never revalidate session
+== S2: never revalidate session
+== S3: no resync on lag
+== S4: no stats before replay
+== (redo; first attempt printed nothing because macOS has no 'timeout')
+== S2: never revalidate session
+FAILED tests/test_stream.py::test_revoking_the_key_closes_open_streams
+FAILED tests/test_stream.py::test_rotating_the_key_and_session_expiry_close_open_streams
+2 failed, 15 passed in 16.96s
+(exit/timeouts shown above if any)
+== S3: no resync on lag
+== S3 (redo with deadline in test): no resync on lag
+FAILED tests/test_stream.py::test_slow_reader_gets_resync_and_ingestion_is_not_slowed
+1 failed, 2 passed, 14 deselected in 43.08s
+== S4: no stats before replay
+FAILED tests/test_stream.py::test_stats_first_then_replay_then_live_and_only_metric_has_id
+1 failed, 2 passed, 14 deselected in 3.25s

@@ -1,0 +1,74 @@
+[
+  {
+    "reader": "reader-0",
+    "run": "run_PNTL6lPCNzMJniVUjBf3FE",
+    "slow": false,
+    "received_unique": 240,
+    "received_raw": 240,
+    "stored": 240,
+    "lost": 0,
+    "duplicate_deliveries": 0,
+    "reconnects": 0,
+    "saw_closed": true
+  },
+  {
+    "reader": "reader-1",
+    "run": "run_6o68p21N1Lm8zOR5l9Uz0g",
+    "slow": false,
+    "received_unique": 240,
+    "received_raw": 240,
+    "stored": 240,
+    "lost": 0,
+    "duplicate_deliveries": 0,
+    "reconnects": 0,
+    "saw_closed": true
+  },
+  {
+    "reader": "reader-2",
+    "run": "run_0InwSA0FWG5WwDcccg7qRz",
+    "slow": false,
+    "received_unique": 260,
+    "received_raw": 260,
+    "stored": 260,
+    "lost": 0,
+    "duplicate_deliveries": 0,
+    "reconnects": 0,
+    "saw_closed": true
+  },
+  {
+    "reader": "reader-3",
+    "run": "run_bMWJ1a9DFXJbqA29wfGt1I",
+    "slow": false,
+    "received_unique": 260,
+    "received_raw": 260,
+    "stored": 260,
+    "lost": 0,
+    "duplicate_deliveries": 0,
+    "reconnects": 1,
+    "saw_closed": true
+  },
+  {
+    "reader": "reader-4",
+    "run": "run_3PXFO91bzeald91yhDgC4h",
+    "slow": false,
+    "received_unique": 260,
+    "received_raw": 260,
+    "stored": 260,
+    "lost": 0,
+    "duplicate_deliveries": 0,
+    "reconnects": 0,
+    "saw_closed": true
+  },
+  {
+    "reader": "slow-0",
+    "run": "run_PNTL6lPCNzMJniVUjBf3FE",
+    "slow": true,
+    "received_unique": 240,
+    "received_raw": 240,
+    "stored": 240,
+    "lost": 0,
+    "duplicate_deliveries": 0,
+    "reconnects": 0,
+    "saw_closed": true
+  }
+]

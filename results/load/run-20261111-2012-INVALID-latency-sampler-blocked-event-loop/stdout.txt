@@ -1,0 +1,27 @@
+{
+ "events_intended": 297620,
+ "events_stored": 297620,
+ "ingest_latency_ms_ok": {
+  "n": 9976,
+  "p50": 16.941165988100693,
+  "p95": 204.29370799683966,
+  "p99": 257.2033329925034,
+  "max": 3112.279833003413,
+  "mean": 56.27014331635937
+ },
+ "ingest_errors": {},
+ "stream_delay_ms_normal_readers": {
+  "n": 297620,
+  "p50": 19.350374990608543,
+  "p95": 251.30912501481362,
+  "p99": 331.1692909919657,
+  "max": 3191.4066250028554,
+  "mean": 69.29284577012615
+ },
+ "lost_on_ingest_total": 0,
+ "lost_at_readers_total": 0,
+ "duplicate_deliveries_total": 0,
+ "duplicates_in_db_total": 0,
+ "runs_not_contiguous": []
+}
+exit=0
