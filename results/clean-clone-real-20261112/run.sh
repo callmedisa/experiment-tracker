@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /private/tmp/claude-501/-Users-disa--claude-spares-spare-GKZI32/f2674275-2a1e-4ece-82fc-f2267e7e5036/scratchpad/real-clone-1
+cd <repo-clone>
 step() { echo; echo "######## $(date +%H:%M:%S) $1"; }
 step "make setup"; make setup 2>&1 | tail -15
 step "quickstart: create project via API (UI step), then the python one-liner from the README"

@@ -58,7 +58,7 @@ Resolved since the first version of this list (see JOURNAL): `container-type` vs
 - The lost browser session is unexplained (JOURNAL, "Lost browser session"); I found and fixed a different bug (500 after a Postgres restart) while looking.
 - The public default SERVER_PEPPER is only warned about, not refused: a stack started without `make pepper` runs with it.
 - Expired session rows are never deleted (unbounded growth of the sessions table); the retention of runs and events is also unbounded.
-- Local path `/Users/disa` appears in 5 raw result files (never edited, as required); the repository is committed with them.
+- Local absolute paths were removed from 12 raw result files (placeholders `<repo>`, `<repo-clone>`; 16 replacements); that is the only edit ever made to raw outputs, see JOURNAL. Earlier I wrote "5 files"; that count was wrong (it was 9 files with the user path, 3 more with the temporary clone path). The git author of the two commits is the owner's configured name and e-mail (not changed).
 - Not built: downsampling, Docs page, 404/500/429 artwork, y/wheel/touch zoom, mouse-hover readout.
 
 ## Process notes

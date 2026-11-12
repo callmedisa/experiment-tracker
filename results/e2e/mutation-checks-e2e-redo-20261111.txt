@@ -28,7 +28,7 @@ Running 1 test using 1 worker
       128 |     expect(pageState.count).toBe(db.length);
       129 |     expect(pageState.lastSeq).toBe(db.length);
       130 |     expect(pageState.checksum).toBe(dbChecksum);
-        at /Users/disa/std/soup-task/web/e2e/consistency.spec.ts:127:31
+        at <repo>/web/e2e/consistency.spec.ts:127:31
   Slow test file: consistency.spec.ts (57.5s)
   Consider splitting slow test files to speed up parallel execution
   1 failed

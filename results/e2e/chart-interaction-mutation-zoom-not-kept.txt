@@ -26,7 +26,7 @@ Running 1 test using 1 worker
       53 |   expect(Number(/step (\d+)/.exec(await readout.innerText())![1])).toBe(hi);
       54 |
 
-        at /Users/disa/std/soup-task/web/e2e/chart-interaction.spec.ts:51:23
+        at <repo>/web/e2e/chart-interaction.spec.ts:51:23
 
   1 failed
     chart-interaction.spec.ts:4:1 › drag zooms, zoom survives new data, Reset zoom restores; arrows step through points 

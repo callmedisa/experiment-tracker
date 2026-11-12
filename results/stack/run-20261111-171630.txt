@@ -1,6 +1,6 @@
 ============================= test session starts ==============================
-platform darwin -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- /Users/disa/std/soup-task/.venv/bin/python
-rootdir: /Users/disa/std/soup-task
+platform darwin -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- <repo>/.venv/bin/python
+rootdir: <repo>
 plugins: anyio-4.16.0
 collecting ... collected 11 items
 

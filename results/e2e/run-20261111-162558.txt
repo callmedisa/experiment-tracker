@@ -23,7 +23,7 @@ Running 5 tests using 1 worker
       141 |   });
       142 | }
 
-        at /Users/disa/std/soup-task/web/e2e/consistency.spec.ts:139:69
+        at <repo>/web/e2e/consistency.spec.ts:139:69
 
   2) consistency.spec.ts:54:3 › seed 4: page == database after cut connections, lost responses, duplicates and late points 
 
@@ -40,7 +40,7 @@ Running 5 tests using 1 worker
       141 |   });
       142 | }
 
-        at /Users/disa/std/soup-task/web/e2e/consistency.spec.ts:139:69
+        at <repo>/web/e2e/consistency.spec.ts:139:69
 
   2 failed
     consistency.spec.ts:54:3 › seed 3: page == database after cut connections, lost responses, duplicates and late points 

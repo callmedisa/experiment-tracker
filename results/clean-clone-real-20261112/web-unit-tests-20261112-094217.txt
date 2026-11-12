@@ -1,5 +1,5 @@
 
- RUN  v2.1.9 /private/tmp/claude-501/-Users-disa--claude-spares-spare-GKZI32/f2674275-2a1e-4ece-82fc-f2267e7e5036/scratchpad/real-clone-1/web
+ RUN  v2.1.9 <repo-clone>/web
 
  ✓ test/chartNav.test.ts (6 tests) 2ms
  ✓ test/runData.test.ts (5 tests) 2ms

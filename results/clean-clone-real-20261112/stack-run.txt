@@ -1,6 +1,6 @@
 ============================= test session starts ==============================
-platform darwin -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- /private/tmp/claude-501/-Users-disa--claude-spares-spare-GKZI32/f2674275-2a1e-4ece-82fc-f2267e7e5036/scratchpad/real-clone-1/.venv/bin/python
-rootdir: /private/tmp/claude-501/-Users-disa--claude-spares-spare-GKZI32/f2674275-2a1e-4ece-82fc-f2267e7e5036/scratchpad/real-clone-1
+platform darwin -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- <repo-clone>/.venv/bin/python
+rootdir: <repo-clone>
 plugins: anyio-4.16.0
 collecting ... collected 12 items
 

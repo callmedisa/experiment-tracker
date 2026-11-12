@@ -1,5 +1,5 @@
 
- RUN  v2.1.9 /Users/disa/std/soup-task/web
+ RUN  v2.1.9 <repo>/web
 
  ✓ test/connection.test.ts (10 tests) 4ms
  ✓ test/runData.test.ts (5 tests) 2ms
