@@ -20,6 +20,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import os
 import random
 import statistics
 import subprocess
@@ -27,6 +28,9 @@ import time
 from pathlib import Path
 
 import httpx
+
+# docker compose names containers <project>-<service>-1, and the project name is the repo folder unless overridden
+PROJECT = os.environ.get("COMPOSE_PROJECT_NAME") or Path(__file__).resolve().parent.parent.name
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -208,7 +212,7 @@ async def sampler(out_csv, stop):
             s, conns, active = await asyncio.to_thread(sample)
             for line in s.stdout.strip().split("\n"):
                 name, cpu, mem = line.split(",")
-                if "soup-task" in name:
+                if name.startswith(PROJECT + "-"):
                     rows.append({"t": t, "name": name, "cpu_pct": float(cpu.rstrip("%")), "mem_used": mem.split("/")[0].strip(), "pg_connections": int(conns), "pg_active": int(active)})
         except Exception as e:  # noqa: BLE001
             rows.append({"t": t, "error": repr(e)})
@@ -316,7 +320,7 @@ async def main():
                         "mem_mb_first": mems[0], "mem_mb_max": max(mems), "mem_mb_last": mems[-1]}
     pg = [row["pg_connections"] for row in res if "pg_connections" in row]
     pga = [row["pg_active"] for row in res if "pg_active" in row]
-    inspect = sh_cmd(["docker", "inspect", "-f", "{{.Name}} restarts={{.RestartCount}} oom={{.State.OOMKilled}}", "soup-task-api-1", "soup-task-postgres-1", "soup-task-web-1"]).stdout.strip()
+    inspect = sh_cmd(["docker", "inspect", "-f", "{{.Name}} restarts={{.RestartCount}} oom={{.State.OOMKilled}}", f"{PROJECT}-api-1", f"{PROJECT}-postgres-1", f"{PROJECT}-web-1"]).stdout.strip()
     summary = {
         "args": vars(args), "started_at_epoch": start_wall, "producers_finished_after_s": round(t_prod_done, 1), "total_s": round(t_total, 1),
         "events_intended": sum(len(v) for v in sh.intended.values()), "events_stored": sum(d["count"] for d in db.values()),

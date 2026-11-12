@@ -1,7 +1,7 @@
 # Tracker
 
 A small experiment tracker: a training script sends metrics, a web page shows them live, and the page can prove that what it shows
-is what the server stored (Verify, checksum). Built for the Soup take-home; the written deliverables are `DESIGN.md`, `NOTE.md`,
+is what the server stored (Verify, checksum). A take-home project. The written documents are `DESIGN.md`, `NOTE.md`,
 `SURPRISE.md`, `AI_LOG.md` and `JOURNAL.md`. Raw test output is in `results/`.
 
 ## Quickstart
@@ -61,6 +61,6 @@ events of a run when it opens; the E2E and load tests ran on one laptop with Doc
 Running the test suites rewrites some committed files in `results/` (`e2e/seed-*.json`, `stack/timing-*`, `ui/*.png`) with the new run's output; `git diff results/` shows the difference between the run in this repository and yours.
 
 **The only edit made to raw outputs in `results/`:** in 12 files the machine-specific absolute paths were replaced by placeholders
-(`/Users/<user>/…/soup-task` became `<repo>`, the temporary clone directory became `<repo-clone>`) so the repository does not carry the
+(`/Users/<user>/…/<project>` became `<repo>`, the temporary clone directory became `<repo-clone>`) so the repository does not carry the
 author's local user name. Nothing else in those files was changed (16 replacements; file list in the JOURNAL entry "Local paths removed from raw outputs").
 Paths of the system Python (`/Library/Frameworks/…`) were left as they are.
